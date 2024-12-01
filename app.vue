@@ -19,6 +19,10 @@ export default {
 
 <style lang="scss">
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .page {
     margin: 20px;
     padding: 20px;
