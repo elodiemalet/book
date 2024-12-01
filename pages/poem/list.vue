@@ -1,77 +1,95 @@
 <template>
-    <button class="no-print" @click="downloadBook">Download PDF</button>
-
-    <div class="print">
-        <div v-for="poem in book.poems"
-             :key="poem"
-             class="page poem"
+    <div class="flex flex-wrap justify-center h-full">
+        <div
+            v-for="(post, i) in posts"
+            :key="post.id"
+            class="page poem flex-1 h-[calc(100vh-10rem)] max-h-[297mm] p-4"
         >
-            <NuxtLink :to="{name: 'poem-id', params: {id: poem.id}}">
-                <h2>{{ poem.title }}</h2>
-            </NuxtLink>
-            <p>{{ poem.content }}</p>
+            <h2>{{ post.postTitle }}</h2>
+            <p>{{ post.content }}</p>
+            <p>{{ post.date.toLocaleDateString('fr') }} - {{ post.author }}</p>
+            <footer>
+                <p>{{ i + 1 + (page - 1) * limit }} </p>
+            </footer>
         </div>
     </div>
+    <BasePagination
+        :page="page"
+        :countPage="countPage"
+        :limit="limit"
+        @prevPage="page--"
+        @nextPage="page++"
+        @page="page = $event"
+    />
 </template>
-<script>
 
-import {useBookStore} from "~/stores/bookStore.ts";
+<script lang="ts">
+
+import {usePostStore} from "~/stores/postStore.js";
+import {useCounter} from "@vueuse/shared";
+import PostModel from "~/models/PostModel.js";
+import PageThanks from "~/components/bookPages/PageThanks.vue";
+import PagePresentation from "~/components/bookPages/PageCover.vue";
+import BasePagination from "~/components/BasePagination.vue";
 
 export default {
+    components: {BasePagination, PagePresentation, PageThanks},
     data() {
         return {
-            search: ''
+            token: null,
+            posts: [] as any,
+            loaded: false,
+            count: 1,
+            page: 1,
+            limit: 2,
+            filters: {
+                year: null
+            },
+            totalRecords: 0
         }
     },
     setup() {
-        const bookStore = useBookStore()
-
-        bookStore.$subscribe((state) => {
-            localStorage.setItem('bookStore', JSON.stringify(state.events.newValue))
-        }, {flush: 'sync'})
+        const postStore = usePostStore()
 
         return {
-            bookStore,
-            book: computed(() => bookStore.book)
+            postStore,
         }
     },
+    computed: {
+        countPage() {
+            if (this.totalRecords === 0) {
+                return 0
+            }
+            return Math.ceil(this.totalRecords / this.limit)
+        }
+    },
+    watch: {
+        async page() {
+            await this.getPosts()
+        },
+        async limit() {
+            await this.getPosts()
+        },
+    },
     async mounted() {
-        await this.bookStore.fetchBooks()
+
+        this.token = this.$route?.query?.token
+        await this.getPosts()
+        this.loaded = true
+
     },
     methods: {
-        async downloadBook() {
-            try {
-                const {data, error} = await useFetch('/api/generate-pdf', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: {
-                        endpoint: 'book',
-                        token: 'mon-token-perso',
-                    },
-                    responseType: 'blob',
-                });
+        useCounter,
+        async getPosts() {
+            await this.postStore.fetchPosts(this.token, this.page, this.limit, this.filters)
+            const posts = this.postStore.posts
+            this.totalRecords = await this.postStore.countPosts(this.token, this.filters)
 
-                if (error.value) {
-                    throw new Error(error.value);
-                }
-
-                const blob = data.value;
-
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'Book.pdf');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
-
-            } catch (error) {
-                console.error('Erreur lors de la génération du PDF:', error);
-            }
-
+            this.posts = posts.map((post: PostInterface) => {
+                return PostModel.hydrate(
+                    post
+                )
+            })
         }
     }
 }
