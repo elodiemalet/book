@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    font-size: 2.5rem;
+    line-height: 2.7rem;
+  }
+
+  h2 {
+    font-size: 1.7rem;
+    line-height: 1.9rem;
+    margin-bottom: 40px;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    line-height: 1.5rem;
+  }
+}
+
+html {
+  font-size: 16px;
+  line-height: 20px;
+  @apply dark:bg-gray-600 dark:text-white bg-gray-50 text-gray-900;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Cormorant, serif;
+  font-weight: 500;
+}
+
+.main {
+  @apply max-w-[450mm];
+}
+
+.page-book {
+  font-family: Cormorant, serif;
+  font-weight: 500;
+  min-width: 210mm;
+  width: 210mm;
+  max-width: 210mm;
+  min-height: 297mm;
+  height: 297mm;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.page {
+  font-family: Cormorant, serif;
+  font-weight: 400;
+  color: black;
+  background: white;
+  padding: 40px 130px 40px 150px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  position: relative;
+
+  header {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    padding-left: 160px;
+    width: 100%;
+    text-align: left;
+  }
+
+  footer {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.page:not(:last-of-type) {
+  page-break-after: always;
+}
+
+@media print {
+  html, body {
+    background: transparent;
+  }
+  .page {
+    margin: 0;
+    border: none;
+    width: 210mm;
+    height: 297mm;
+  }
+
+  .no-print, .no-print * {
+    display: none !important;
+  }
+}
