@@ -14,7 +14,7 @@ export const usePostStore = defineStore('postStore', {
     actions: {
         async fetchPosts(token: string | null = null, page: number = 1, limit: number = 10, filters: any = null) {
 
-            let query = queryContent<PostModel>('text_post');
+            let query = queryContent<PostModel>('posts');
             if (token) {
                 // @todo get user selected ids
                 // query.where({id: {$in: [1]}})
@@ -31,12 +31,12 @@ export const usePostStore = defineStore('postStore', {
 
         },
         async fetchPostById(id: number) {
-            const query = queryContent<PostModel>('text_post');
+            const query = queryContent<PostModel>('posts');
             query.where({id})
             this.posts = await query.find()
         },
         async countPosts(token: string | null = null, filters: any = null) {
-            let query = queryContent<PostModel>('text_post');
+            let query = queryContent<PostModel>('posts');
             if (token) {
                 // @todo get user selected ids
                 // query.where({id: {$in: [1]}})
