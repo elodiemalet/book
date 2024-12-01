@@ -3,8 +3,7 @@
         <base-menu/>
     </header>
     <NuxtPage/>
-
-
+    <UNotifications/>
 </template>
 <script lang="ts">
 import BaseMenu from "~/components/BaseMenu.vue";
