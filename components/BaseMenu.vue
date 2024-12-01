@@ -7,14 +7,17 @@
                         <div class="flex space-x-4">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                             <NuxtLink
-                                class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
+                                active-class="active-link"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                                 to="/">Accueil
                             </NuxtLink>
                             <NuxtLink
+                                active-class="active-link"
                                 class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                                 to="/poem/list">Liste des poèmes
                             </NuxtLink>
                             <NuxtLink
+                                active-class="active-link"
                                 class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                                 to="/book">Livre
                             </NuxtLink>
@@ -120,3 +123,11 @@ export default defineComponent({
 })
 
 </script>
+
+<style scoped lang="scss">
+
+.active-link {
+    @apply bg-gray-900 text-white;
+}
+
+</style>
