@@ -1,0 +1,83 @@
+<template>
+    <div class="flex justify-between w-full gap-4 border-t border-gray-200">
+        <div class="pagination-item">
+            <button @click="prevPage()">Previous</button>
+        </div>
+        <div class="flex gap-4 ">
+            <div
+                class="pagination-item"
+                :class="pageNumber === page ? 'selected' : ''"
+                v-for="pageNumber in paginationPages"
+                @click="$emit('page', pageNumber)"
+            >
+                {{ pageNumber }}
+            </div>
+        </div>
+        <div class="pagination-item">
+            <button @click="nextPage()">Next</button>
+        </div>
+    </div>
+</template>
+<script lang="ts">
+import {defineComponent} from 'vue'
+
+export default defineComponent({
+    props: {
+        page: {
+            type: Number,
+            required: true
+        },
+        countPage: {
+            type: Number,
+            required: true
+        },
+        limit: {
+            type: Number,
+            default: 10,
+        }
+    },
+    computed: {
+        paginationPages() {
+            const pages = []
+            for (let i = 1; i <= this.countPage; i++) {
+                pages.push(i)
+            }
+            if (pages.length > 6) {
+                const firstPages = pages.slice(0, 3)
+                const lastPages = pages.slice(-3)
+                return [...firstPages, '...', ...lastPages]
+            }
+
+            return pages
+        }
+    },
+    emits: ['prevPage', 'nextPage', 'page'],
+    methods: {
+        prevPage() {
+            if (this.page > 1) {
+                this.$emit('prevPage')
+            }
+        },
+        nextPage() {
+            if (this.page < this.countPage) {
+                this.$emit('nextPage')
+            }
+        }
+    }
+
+})
+</script>
+
+<style scoped lang="scss">
+
+.pagination-item {
+    @apply border-t border-transparent hover:border-gray-200 cursor-pointer p-3;
+
+    &.selected {
+        @apply border-t border-blue-500 text-blue-500;
+    }
+
+
+}
+
+</style>
