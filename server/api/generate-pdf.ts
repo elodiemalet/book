@@ -17,7 +17,8 @@ export default defineEventHandler(async (event/**/) => {
 
         // Generate the PDF
         const pdfBuffer = await page.pdf({
-            format: 'A4',
+            width: '152.4mm',
+            height: '228.6mm',
             printBackground: true,
         });
 

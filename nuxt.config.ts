@@ -8,8 +8,8 @@ export default defineNuxtConfig({
         '@nuxt/ui'
     ],
     css: [
+        '~/assets/styles/fonts.css',
         '~/assets/styles/main.scss',
-        'vue-toast-notification/dist/theme-default.css',
     ],
     postcss: {
         plugins: {
