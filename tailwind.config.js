@@ -9,7 +9,14 @@ export default {
         "./error.vue",
     ],
     theme: {
-        extend: {},
+        extend: {
+            width: {
+                a4: '152.4mm',
+            },
+            height: {
+                a4: '228.6mm',
+            },
+        },
         screens: {
             'sm': '640px',
             'md': '768px',

@@ -2,37 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+}
+
 html {
-  @apply bg-gray-600;
+  @apply dark:bg-gray-600 dark:text-white bg-gray-50 text-gray-900;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Cormorant, serif;
 }
 
 .main {
   @apply max-w-[450mm];
 }
 
-.page-a4 {
-  min-width: 210mm;
-  width: 210mm;
-  min-height: 297mm;
-  max-width: 210mm;
-  height: 297mm;
+.page-book {
+  font-family: Cormorant, serif;
+  min-width: 152.4mm;
+  width: 152.4mm;
+  max-width: 152.4mm;
+  min-height: 228.6mm;
+  height: 228.6mm;
   margin: 0;
   padding: 0;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .page {
+  font-family: Cormorant, serif;
   color: black;
   background: white;
-  margin: 20px;
-  padding: 20px;
-  border: 1px solid #ccc;
+  padding: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   position: relative;
 
   footer {
     position: absolute;
-    bottom: 0;
-    width: 100%;
+    bottom: 15px;
+    width: calc(100% - 80px);
     text-align: center;
   }
 }
@@ -48,8 +68,8 @@ html {
   .page {
     margin: 0;
     border: none;
-    width: 210mm;
-    height: 297mm;
+    width: 152.4mm;
+    height: 228.6mm;
   }
 
   .no-print, .no-print * {
