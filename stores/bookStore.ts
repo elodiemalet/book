@@ -1,8 +1,8 @@
-import BookModel, {Poem} from "~/models/BookModel";
+import BookEntity, {PoemEntity} from "~/entities/BookEntity";
 
 export const useBookStore = defineStore('bookStore', {
     state: () => ({
-        book: {} as BookModel
+        book: {} as BookEntity
     }),
     getters: {
         getPoemById: (state) => (id: number) => {
@@ -13,14 +13,14 @@ export const useBookStore = defineStore('bookStore', {
     actions: {
         async fetchBooks(token: string) {
 
-            const query = queryContent<Poem>('book', 'poem');
+            const query = queryContent<PoemEntity>('book', 'poem');
             if (token) {
                 // @todo get user selected ids
                 // query.where({id: {$in: [1]}})
             }
 
             const poems = await query.find()
-            this.book = new BookModel(poems)
+            this.book = new BookEntity(poems)
         }
     }
 })

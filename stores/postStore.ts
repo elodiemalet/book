@@ -1,9 +1,9 @@
-import PostModel from "~/models/PostModel";
+import PostEntity from "~/entities/PostEntity";
 import type {QueryBuilder} from "@nuxt/content";
 
 export const usePostStore = defineStore('postStore', {
     state: () => ({
-        posts: [] as PostModel[],
+        posts: [] as PostEntity[],
     }),
     getters: {
         getPostById: (state) => (id: number) => {
@@ -12,9 +12,9 @@ export const usePostStore = defineStore('postStore', {
 
     },
     actions: {
-        async fetchPosts(token: string | null = null, page: number = 1, limit: number = 10, filters: any = null) {
+        async fetchPosts(token: string | null = null, page: number = 1, limit: number = 0, filters: any = null) {
 
-            let query = queryContent<PostModel>('posts');
+            let query = queryContent<PostEntity>('posts');
             if (token) {
                 // @todo get user selected ids
                 // query.where({id: {$in: [1]}})
@@ -24,19 +24,21 @@ export const usePostStore = defineStore('postStore', {
 
             query.sort({timestamp: 1})
 
-            query.limit(limit)
-            query.skip((page - 1) * limit)
+            if (limit) {
+                query.limit(limit)
+                query.skip((page - 1) * limit)
+            }
 
             this.posts = await query.find()
 
         },
         async fetchPostById(id: number) {
-            const query = queryContent<PostModel>('posts');
+            const query = queryContent<PostEntity>('posts');
             query.where({id})
             this.posts = await query.find()
         },
         async countPosts(token: string | null = null, filters: any = null) {
-            let query = queryContent<PostModel>('posts');
+            let query = queryContent<PostEntity>('posts');
             if (token) {
                 // @todo get user selected ids
                 // query.where({id: {$in: [1]}})
@@ -46,7 +48,7 @@ export const usePostStore = defineStore('postStore', {
 
             return await query.count()
         },
-        filterQuery(query: QueryBuilder<PostModel>, filters: any): QueryBuilder<PostModel> {
+        filterQuery(query: QueryBuilder<PostEntity>, filters: any): QueryBuilder<PostEntity> {
             if (filters) {
                 if (filters.year) {
                     const date = new Date(`${filters.year}-01-01`).getTime()

@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-wrap justify-center h-full">
+    <div class="flex flex-wrap gap-4 justify-center h-full">
         <div
             v-for="(post, i) in posts"
             :key="post.id"
-            class="page poem flex-1 h-[calc(100vh-10rem)] max-h-[297mm] p-4"
+            class="page page-book poem flex-1 h-[calc(100vh-10rem)] max-h-[228.6mm] p-4"
         >
             <h2>{{ post.postTitle }}</h2>
             <p>{{ post.content }}</p>
@@ -27,13 +27,11 @@
 
 import {usePostStore} from "~/stores/postStore.js";
 import {useCounter} from "@vueuse/shared";
-import PostModel from "~/models/PostModel.js";
-import PageThanks from "~/components/bookPages/PageThanks.vue";
-import PagePresentation from "~/components/bookPages/PageCover.vue";
+import PostEntity, {type PostEntityInterface} from "~/entities/PostEntity.js";
 import BasePagination from "~/components/BasePagination.vue";
 
 export default {
-    components: {BasePagination, PagePresentation, PageThanks},
+    components: {BasePagination},
     data() {
         return {
             token: null,
@@ -49,6 +47,7 @@ export default {
         }
     },
     setup() {
+        console.log('setup')
         const postStore = usePostStore()
 
         return {
@@ -72,7 +71,7 @@ export default {
         },
     },
     async mounted() {
-
+        console.log('poem list')
         this.token = this.$route?.query?.token
         await this.getPosts()
         this.loaded = true
@@ -85,8 +84,8 @@ export default {
             const posts = this.postStore.posts
             this.totalRecords = await this.postStore.countPosts(this.token, this.filters)
 
-            this.posts = posts.map((post: PostInterface) => {
-                return PostModel.hydrate(
+            this.posts = posts.map((post: PostEntityInterface) => {
+                return PostEntity.hydrate(
                     post
                 )
             })

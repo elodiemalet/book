@@ -1,4 +1,4 @@
-export interface PostInterface {
+export interface PostEntityInterface {
     id: number;
     postTitle: string;
     author: string;
@@ -10,7 +10,7 @@ export interface PostInterface {
     [Symbol.iterator](): Iterator<string>;
 }
 
-export default class PostModel implements PostInterface {
+export default class PostEntity implements PostEntityInterface {
     public id: number;
     public postTitle: string;
     public author: string;
@@ -29,8 +29,8 @@ export default class PostModel implements PostInterface {
         this.attachments = attachments;
     }
 
-    public static hydrate(data: PostInterface) {
-        return new PostModel(
+    public static hydrate(data: PostEntityInterface) {
+        return new PostEntity(
             data.id,
             data.postTitle,
             data.author,

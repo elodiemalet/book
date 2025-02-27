@@ -1,4 +1,4 @@
-export interface PoemInterface {
+export interface PoemEntityInterface {
     id: number;
     title: string;
     author: string;
@@ -7,11 +7,11 @@ export interface PoemInterface {
     [Symbol.iterator](): Iterator<string>;
 }
 
-export interface BookInterface {
-    poems: PoemInterface[];
+export interface BookEntityInterface {
+    poems: PoemEntityInterface[];
 }
 
-export class Poem implements PoemInterface {
+export class PoemEntity implements PoemEntityInterface {
     public id: number;
     public title: string;
     public author: string;
@@ -32,10 +32,10 @@ export class Poem implements PoemInterface {
     }
 }
 
-export default class BookModel implements BookInterface {
-    public poems: PoemInterface[];
+export default class BookEntity implements BookEntityInterface {
+    public poems: PoemEntityInterface[];
 
-    constructor(poems: PoemInterface[]) {
-        this.poems = poems.map(poem => new Poem(poem.id, poem.title, poem.author, poem.content));
+    constructor(poems: PoemEntityInterface[]) {
+        this.poems = poems.map(poem => new PoemEntity(poem.id, poem.title, poem.author, poem.content));
     }
 }
