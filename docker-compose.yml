@@ -1,0 +1,40 @@
+#version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: mon_mot_de_passe
+      POSTGRES_DB: livre
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - nuxt-postgres-network
+
+  nuxt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nuxt-container
+    volumes:
+      - .:/app
+    command: sh -c "yarn && yarn dev"
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    depends_on:
+      - postgres
+    networks:
+      - nuxt-postgres-network
+
+networks:
+  nuxt-postgres-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
