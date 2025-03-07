@@ -3,7 +3,7 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres-container
+    container_name: nuxt-postgres-container
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: mon_mot_de_passe
@@ -14,22 +14,35 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - nuxt-postgres-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user --dbname=livre -h 127.0.0.1 || exit 1" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   nuxt:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: nuxt-container
+    build: .
+    #      context: .
+    #      dockerfile: Dockerfile
+    container_name: nuxt-node-container
     volumes:
       - .:/app
-    command: sh -c "yarn && yarn dev"
+      - /app/node_modules
+      - /app/.nuxt
+    command: sh -c "npm run init-db && npm run dev"
     ports:
       - "3000:3000"
       - "4000:4000"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - nuxt-postgres-network
+    environment:
+      DB_HOST: postgres
+      DB_USER: user
+      DB_PASSWORD: mon_mot_de_passe
+      DB_NAME: livre
 
 networks:
   nuxt-postgres-network:

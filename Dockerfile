@@ -2,15 +2,20 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+# Copie des fichiers de package
+COPY package.json ./
 
-RUN rm -rf node_modules
-RUN yarn --pure-lockfile
+RUN if [ -f package-lock.json ]; then rm package-lock.json; fi
 
-COPY . .
+RUN rm -rf node_modules && \
+npm install
+
+# Copie des sources
+# COPY . .
+
+# Build votre appli Nuxt
+# RUN npm run build
 
 EXPOSE 3000 4000
 
-RUN yarn run build
-
-CMD [ "yarn", "run", "start" ]
+CMD [ "npm", "run", "dev" ]
