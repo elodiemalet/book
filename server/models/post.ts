@@ -1,6 +1,26 @@
 import {Model, DataTypes, type Sequelize} from 'sequelize';
 import db from "~/server/utils/db";
 
+import * as Yup from "yup";
+
+export interface PostInterface {
+    id: number;
+    postTitle: string;
+    author: string;
+    content: string;
+    attachments: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export function getPostSchemaValidator() {
+    return Yup.object().shape({
+        postTitle: Yup.string().required('Post title is required'),
+        author: Yup.string().required('Author is required'),
+        content: Yup.string().required('Content is required'),
+    });
+}
+
 export default class Post extends Model {
     public id!: number;
     public postTitle!: string;
@@ -16,7 +36,7 @@ export default class Post extends Model {
 Post.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },

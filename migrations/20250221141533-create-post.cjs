@@ -30,6 +30,12 @@ module.exports = {
                 type: Sequelize.DATE
             }
         });
+
+        await queryInterface.addConstraint('Posts', {
+            fields: ['postTitle', 'createdAt'],
+            type: 'unique',
+            name: 'post_unique'
+        });
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('Posts');

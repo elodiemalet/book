@@ -1,3 +1,5 @@
+import type {PostInterface} from "~/server/models/post";
+
 export interface PostEntityInterface {
     id: number;
     postTitle: string;
@@ -37,6 +39,16 @@ export default class PostEntity implements PostEntityInterface {
             data.content,
             data.timestamp,
             data.attachments
+        );
+    }
+
+    public static hydrateFromDatabase(data: PostInterface) {
+        return new PostEntity(
+            data.id,
+            data.postTitle,
+            data.author,
+            data.content,
+            new Date(data.createdAt).getTime(),
         );
     }
 
