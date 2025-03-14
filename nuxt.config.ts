@@ -12,9 +12,11 @@ export default defineNuxtConfig({
         },
     },
     modules: [
-        '@nuxt/content',
-        '@pinia/nuxt',
-        '@nuxt/ui'
+      '@nuxt/content',
+      '@pinia/nuxt',
+      '@nuxt/ui',
+      'nuxt-auth-utils',
+      '@vueuse/nuxt',
     ],
     css: [
         '~/assets/styles/fonts.css',
