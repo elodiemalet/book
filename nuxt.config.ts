@@ -19,7 +19,7 @@ export default defineNuxtConfig({
       '@vueuse/nuxt',
     ],
     css: [
-        '~/assets/styles/fonts.css',
+        '~/assets/styles/fonts.scss',
         '~/assets/styles/main.scss',
     ],
     postcss: {
