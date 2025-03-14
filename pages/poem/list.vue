@@ -5,7 +5,7 @@
             :key="post.id"
             class="page page-book poem flex-1 h-[calc(100vh-10rem)] max-h-[228.6mm] p-4"
         >
-            <h2>{{ post.postTitle }}</h2>
+            <h2 class="title">{{ post.postTitle }}</h2>
             <p>{{ post.content }}</p>
             <p>{{ post.date.toLocaleDateString('fr') }} - {{ post.author }}</p>
             <footer>
@@ -23,7 +23,7 @@
     />
     <div
         v-if="poems.length">
-        <h2>Liste des poèmes</h2>
+        <h2 class="title">Liste des poèmes</h2>
         <div class="grid grid-cols-2 gap-4 justify-items-center bg-gray-200">
             <BasePage v-for="(poem, i) in poems" :key="i">
                 <p>{{ poem.postTitle }}</p>
@@ -40,7 +40,7 @@ import {usePostStore} from "~/stores/postStore.js";
 import {useCounter} from "@vueuse/shared";
 import PostEntity, {type PostEntityInterface} from "~/entities/PostEntity.js";
 import BasePagination from "~/components/BasePagination.vue";
-import BasePage from "~/components/bookPages/BasePage.vue";
+import BasePage from "~/components/poems/bookPages/BasePage.vue";
 import type {PostInterface} from "~/server/models/post";
 
 export default {

@@ -4,15 +4,15 @@
         <BasePage/>
         <BasePage>
             <!--            Page de faux-titre : Contient simplement le titre du recueil ou une citation évocatrice.-->
-            <h1>Recueil de Poèmes</h1>
-            <h3></h3>
-            <h4>2019 - 2024</h4>
+            <h1 class="title">Recueil de Poèmes</h1>
+            <h3 class="title"></h3>
+            <h4 class="title">2019 - 2024</h4>
 
         </BasePage>
         <BasePage>
 
             <!--            Dédicace : Une page où l’auteur peut dédier le recueil à une personne ou exprimer un hommage.-->
-            <h2>Dédicace</h2>
+            <h2 class="title">Dédicace</h2>
             
             <div>
                 <img src="/images/fleur.png"/>
@@ -21,7 +21,7 @@
         </BasePage>
         <BasePage>
 
-            <h2>Préface</h2>
+            <h2 class="title">Préface</h2>
             <p class="text-left">
                 Ce recueil de poèmes est le fruit de plusieurs années de travail.
             </p>
@@ -61,13 +61,13 @@
 </template>
 
 <script lang="ts">
-import CoverPage from "~/components/bookPages/preliminaryPages/CoverPage.vue";
+import CoverPage from "~/components/poems/bookPages/preliminaryPages/CoverPage.vue";
 import {usePostStore} from "~/stores/postStore";
 import PostEntity, {type PostEntityInterface} from "~/entities/PostEntity";
-import PoemPage from "~/components/bookPages/PoemPage.vue";
-import BasePage from "~/components/bookPages/BasePage.vue";
-import ThanksPage from "~/components/bookPages/concludingPages/ThanksPage.vue";
-import EndPage from "~/components/bookPages/concludingPages/EndPage.vue";
+import PoemPage from "~/components/poems/bookPages/PoemPage.vue";
+import BasePage from "~/components/poems/bookPages/BasePage.vue";
+import ThanksPage from "~/components/poems/bookPages/concludingPages/ThanksPage.vue";
+import EndPage from "~/components/poems/bookPages/concludingPages/EndPage.vue";
 
 export default {
     components: {

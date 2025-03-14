@@ -8,9 +8,9 @@
             <img
                 class="m-auto w-[200px] mb-[50px]"
                 src="/images/fleur.png">
-            <h1 class="uppercase mb-[50px]">Recueil de Poèmes</h1>
-            <h3></h3>
-            <h4>2019 - 2024</h4>
+            <h1 class="title uppercase mb-[50px]">Recueil de Poèmes</h1>
+            <h3 class="title"></h3>
+            <h4 class="title">2019 - 2024</h4>
         </div>
     </div>
 </template>

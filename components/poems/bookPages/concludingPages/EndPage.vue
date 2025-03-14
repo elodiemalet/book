@@ -9,7 +9,7 @@
         </div>
 
         <div class="h-3/5">
-            <h2 class="whitespace mb-10">
+            <h2 class="title whitespace mb-10">
                 Laissez-vous emporter par les mots...
             </h2>
 
