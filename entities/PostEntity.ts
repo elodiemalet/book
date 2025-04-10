@@ -62,4 +62,8 @@ export default class PostEntity implements PostEntityInterface {
         yield JSON.stringify(this.attachments);
     }
 
+    public static create(postTitle: string = '', author: string = '', content: string = '', attachments?: any[]) {
+        return new PostEntity(0, postTitle, author, content, new Date().getTime(), attachments);
+    }
+
 }

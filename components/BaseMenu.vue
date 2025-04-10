@@ -14,7 +14,7 @@
                             <NuxtLink
                                 active-class="active-link"
                                 class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                                to="/poem/list">Liste des poèmes
+                                to="/poem">Liste des poèmes
                             </NuxtLink>
                             <NuxtLink
                                 active-class="active-link"
@@ -70,7 +70,7 @@
                 </NuxtLink>
                 <NuxtLink
                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                    to="/poem/list">Liste des poèmes
+                    to="/poem">Liste des poèmes
                 </NuxtLink>
                 <NuxtLink
                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
