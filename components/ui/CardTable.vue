@@ -15,10 +15,11 @@
                         </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
-                        <tr v-for="row in rows" :key="row">
-                            <td v-for="column in columns" :key="column.key"
+                        <tr v-for="(row,index) in rows" :key="index">
+                            <td v-for="(column, indexCol) in columns" :key="indexCol"
                                 class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-                            >{{ row[column.key] }}
+                            >
+                                {{ row[column.key] }}
                             </td>
                         </tr>
                         </tbody>
@@ -30,15 +31,27 @@
 </template>
 
 <script lang="ts">
+
+interface Row {
+    [key: string]: any;
+}
+
+interface Column {
+    name: string;
+    key: string;
+    bold?: boolean;
+    type?: string;
+}
+
 export default {
     name: "CardTable",
     props: {
         columns: {
-            type: Array,
+            type: Array as PropType<Column[]>,
             default: () => [],
         },
         rows: {
-            type: Array,
+            type: Array as PropType<Row[]>,
             default: () => [],
         },
     },

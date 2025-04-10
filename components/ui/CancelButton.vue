@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import BaseButton from "~/components/Ui/BaseButton.vue";
+import BaseButton from "~/components/ui/BaseButton.vue";
 
 export default defineComponent({
     name: "CancelButton",

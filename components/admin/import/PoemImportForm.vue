@@ -51,12 +51,12 @@
 
 <script lang="ts">
 
-import BaseButton from "~/components/Ui/BaseButton.vue";
-import BaseBanner from "~/components/Ui/BaseBanner.vue";
-import BaseDropzone from "~/components/Ui/BaseDropzone.vue";
+import BaseButton from "~/components/ui/BaseButton.vue";
+import BaseBanner from "~/components/ui/BaseBanner.vue";
+import BaseDropzone from "~/components/ui/BaseDropzone.vue";
 import type {FileEntity} from "~/entities/FileEntity";
-import CardTable from "~/components/Ui/CardTable.vue";
-import CancelButton from "~/components/Ui/CancelButton.vue";
+import CardTable from "~/components/ui/CardTable.vue";
+import CancelButton from "~/components/ui/CancelButton.vue";
 
 export default defineComponent({
     name: "PoemImportForm",
