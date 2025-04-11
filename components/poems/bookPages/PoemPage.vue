@@ -33,11 +33,10 @@
                 v-for="contentLine in contentLines"
                 :key="contentLine"
                 :class="contentSplit(contentLine)?.length > 1 ? 'grid grid-cols-2 gap-6' : ''"
-
             >
                 <div class="min-h-4 first-letter:uppercase"
                      v-for="contentLinePart in contentSplit(contentLine)">
-                    {{ contentLinePart }}
+                    <span v-html="contentLinePart"></span>
                 </div>
             </div>
         </div>

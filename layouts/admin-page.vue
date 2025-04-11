@@ -1,9 +1,9 @@
 <template>
     <main>
         <template v-if="$slots.title">
-            <AdminPageHeading class="px-4 sm:px-6 lg:px-8">
             <AdminPageHeading
                 :edit-url="editUrl"
+                :add-url="addUrl"
                 class="px-4 sm:px-6 lg:px-8">
                 <slot name="title"/>
             </AdminPageHeading>
@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import AdminPageHeading from "~/components/admin/ui/AdminPageHeading.vue";
 
+const addUrl: string = useState<string>("addUrl")?.value ?? '';
 const editUrl: string = useState<string>("editUrl")?.value ?? '';
 
 

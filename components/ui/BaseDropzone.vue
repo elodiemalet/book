@@ -8,16 +8,26 @@
             ref="dropZoneRef"
             :class="{'bg-gray-200': isOverDropZone}"
             class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-            <div class="text-center">
+            <div class="flex flex-col items-center justify-center gap-2">
                 <div class="mt-4 flex text-sm/6 text-gray-600">
                     <label for="file-upload"
-                           class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                        <span>Upload a file</span>
-                        <input id="file-upload" name="file-upload" type="file" class="sr-only"/>
+                           class="relative ">
+                        <span
+                            class=" cursor-pointer rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                            Télécharger un fichier
+                        </span>
+                        <input
+                            id="file-upload"
+                            name="file-upload"
+                            type="file"
+                            class="sr-only"
+                            :accept="accept.join('|')"
+                            @change="addFile"
+                        />
                     </label>
-                    <p class="pl-1">or drag and drop</p>
                 </div>
-                <p class="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                <p class="text-xs/5 text-gray-600"> ou faites glisser et déposez vos fichiers {{ types }} jusqu'à
+                    {{ maxSizeMb }}</p>
             </div>
         </div>
         <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
@@ -79,12 +89,17 @@ export default defineComponent({
             default: () => [],
         }
     },
+    computed: {
+        maxSizeMb() {
+            return Math.round(this.maxSize / 1024 / 1024 * 10) / 10 + 'MB'
+        },
+        types() {
+            return this.accept.join(', ').replace('application/', '').toUpperCase()
+        }
+    },
     setup(props) {
         const dropZoneRef = ref<HTMLElement | null>(null);
-        const fileList = computed({
-            get: () => props.files,
-            set: (newValue) => emit('update:files', newValue)
-        });
+        const fileList = ref<FileEntity[]>(props.files);
 
         const onDrop = (files: File[] | null) => {
             if (files) {
@@ -122,6 +137,18 @@ export default defineComponent({
         },
         removeFile(file: FileEntity) {
             this.fileList = this.fileList.filter(f => f.id !== file.id)
+        },
+        addFile(event: Event) {
+            const file = (event.target as HTMLInputElement).files?.[0];
+            if (file) {
+                if (file.size > this.maxSize) {
+                    alert('File too large')
+                    return
+                }
+                const id = file.name + new Date().getTime();
+                const fileEntity = new FileEntity(id, file.name, file.size, file.type, file);
+                this.fileList.push(fileEntity)
+            }
         }
     }
 })

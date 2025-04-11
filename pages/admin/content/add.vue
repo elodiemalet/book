@@ -1,8 +1,7 @@
 <template>
     <NuxtLayout name="admin-page">
-        <template #title>Edition du contenu</template>
+        <template #title>Ajouter un contenu</template>
         <BaseForm
-            v-if="post"
             @cancel="cancel"
             @submit="submit"
         >
@@ -19,54 +18,34 @@
         </BaseForm>
     </NuxtLayout>
 </template>
-
 <script lang="ts">
+
 import BaseForm from "~/components/ui/form/BaseForm.vue";
 import BaseInput from "~/components/ui/form/BaseInput.vue";
-import {type PostEntityInterface} from "~/entities/PostEntity";
+import PostEntity, {type PostEntityInterface} from "~/entities/PostEntity";
 import TextEditor from "~/components/ui/form/TextEditor.vue";
 
 export default {
     components: {TextEditor, BaseForm, BaseInput},
-    async setup() {
+    setup() {
         const toast = useToast()
-        const route = useRoute()
-
         return {
-            id: route.params.id,
-            toast,
+            toast
         }
     },
     data() {
         return {
-            post: null as PostEntityInterface | null,
+            test: '',
+            post: PostEntity.create() as PostEntityInterface,
+            token: null,
         }
-    },
-    async created() {
-        const {data, error} = await useFetch(`/api/post/${this.id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        if (error.value) {
-            this.toast.add({
-                id: 'error',
-                icon: 'i-material-symbols-file-download-off',
-                title: 'Erreur lors de la récupération du contenu',
-                color: 'red',
-
-            });
-            return
-        }
-        this.post = data.value as PostEntityInterface
     },
     methods: {
         async cancel() {
             await navigateTo('/admin/content')
         },
         async submit() {
-            const {error} = await useFetch('/api/post', {
+            const {data, error} = await useFetch('/api/post', {
                 method: 'POST',
                 body: JSON.stringify(this.post),
                 headers: {
@@ -78,7 +57,7 @@ export default {
                 this.toast.add({
                     id: 'error',
                     icon: 'i-material-symbols-file-download-off',
-                    title: 'Erreur lors de la modification du contenu',
+                    title: 'Erreur lors de la création du contenu',
                     color: 'red',
 
                 });
@@ -94,4 +73,5 @@ export default {
         }
     }
 }
+
 </script>

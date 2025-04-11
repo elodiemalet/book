@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-between w-full gap-4 border-t border-gray-200">
         <div class="pagination-item">
-            <button @click="prevPage()">Previous</button>
+            <div @click="prevPage">Previous</div>
         </div>
         <div class="flex gap-4 ">
             <div
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="pagination-item">
-            <button @click="nextPage()">Next</button>
+            <div @click="nextPage">Next</div>
         </div>
     </div>
 </template>

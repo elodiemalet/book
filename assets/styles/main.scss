@@ -60,6 +60,30 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
+.page-preview {
+  font-family: Cormorant, serif;
+  font-weight: 400;
+
+  min-width: 210mm;
+  width: 210mm;
+  max-width: 210mm;
+
+  min-height: 297mm;
+  white-space: pre-line;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+
+  background: white;
+
+  padding: 40px 130px 40px 150px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  p {
+    min-height: 1.5rem;
+    line-height: 1.5rem;
+  }
+}
+
 .page {
   font-family: Cormorant, serif;
   font-weight: 400;

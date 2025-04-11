@@ -172,7 +172,7 @@
                 </div>
             </div>
 
-            <main class="py-10 bg-white h-full">
+            <main class="py-10 bg-white min-h-full">
                 <slot/>
             </main>
         </div>
@@ -194,7 +194,7 @@ import {
 
 import {
     Bars3Icon,
-    BellIcon,
+    BellIcon, BookOpenIcon,
     CalendarIcon,
     ChartPieIcon,
     Cog6ToothIcon,
@@ -239,6 +239,7 @@ export default {
         return {
             navigation: [
                 {name: 'Accueil', href: '/admin', icon: HomeIcon, current: true},
+                {name: 'Mon livre', href: '/admin/book', icon: BookOpenIcon, current: false},
                 {name: 'Contenus', href: '/admin/content', icon: ListBulletIcon, current: false},
                 {name: 'Importer du contenu', href: '/admin/import', icon: ArrowsUpDownIcon, current: false},
                 {name: 'Rapports', href: '/admin/report', icon: ChartPieIcon, current: false},

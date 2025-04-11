@@ -1,7 +1,7 @@
 import type {PostInterface} from "~/server/models/post";
 
 export interface PostEntityInterface {
-    id: number;
+    id: number | null;
     postTitle: string;
     author: string;
     content: string;
@@ -13,7 +13,7 @@ export interface PostEntityInterface {
 }
 
 export default class PostEntity implements PostEntityInterface {
-    public id: number;
+    public id: number | null;
     public postTitle: string;
     public author: string;
     public content: string;
@@ -21,7 +21,7 @@ export default class PostEntity implements PostEntityInterface {
     public date: Date;
     public attachments?: any[];
 
-    constructor(id: number, postTitle: string, author: string, content: string, timestamp: number, attachments?: any[]) {
+    constructor(id: number | null, postTitle: string, author: string, content: string, timestamp: number, attachments?: any[]) {
         this.id = id;
         this.postTitle = postTitle;
         this.author = author;
@@ -53,7 +53,7 @@ export default class PostEntity implements PostEntityInterface {
     }
 
     * [Symbol.iterator]() {
-        yield this.id.toString();
+        yield this.id?.toString() ?? '';
         yield this.postTitle;
         yield this.author;
         yield this.content;
@@ -63,7 +63,6 @@ export default class PostEntity implements PostEntityInterface {
     }
 
     public static create(postTitle: string = '', author: string = '', content: string = '', attachments?: any[]) {
-        return new PostEntity(0, postTitle, author, content, new Date().getTime(), attachments);
+        return new PostEntity(null, postTitle, author, content, new Date().getTime(), attachments);
     }
-
 }

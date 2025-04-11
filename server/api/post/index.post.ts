@@ -2,16 +2,54 @@ import Post from "~/server/models/post";
 
 export default defineEventHandler(async (event/**/) => {
 
-    try {
-        return await Post.create({
-            postTitle: "Hello World",
-            author: "John Doe",
-            content: "This is my first blog post!",
-            attachments: "https://www.example.com/image.jpg"
+    const {user} = await requireUserSession(event)
+
+    const body = await readBody(event)
+
+    if (!body.postTitle || !body.content) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: 'Invalid request body'
         })
+    }
+
+    if (body.id === undefined || body.id === null) {
+        try {
+            return await Post.create({
+                postTitle: body.postTitle,
+                author: user.name,
+                content: body.content,
+            })
+        } catch (error) {
+            return error
+        }
+
+    }
+
+    let post = await Post.findByPk(body.id)
+    if (!post) {
+        throw createError({
+            statusCode: 404,
+            statusMessage: 'Post not found'
+        })
+    }
+
+    try {
+        await Post.update(
+            {
+                postTitle: body.postTitle,
+                content: body.content,
+            },
+            {
+                where: {
+                    id: body.id
+                }
+            }
+        );
+        return await Post.findByPk(body.id);
     } catch (error) {
-        console.log(error)
         return error
     }
+
 
 })
