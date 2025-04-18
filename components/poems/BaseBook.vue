@@ -29,12 +29,9 @@
 
 <script lang="ts">
 
-import {usePostStore} from "~/stores/postStore.js";
-import {useCounter} from "@vueuse/shared";
-import PostEntity, {type PostEntityInterface} from "~/entities/PostEntity.js";
+import {type PostEntityInterface} from "~/entities/PostEntity.js";
 import BasePagination from "~/components/BasePagination.vue";
 import BasePage from "~/components/poems/bookPages/BasePage.vue";
-import type {PostInterface} from "~/server/models/post";
 
 export default {
     components: {BasePage, BasePagination},
@@ -48,6 +45,10 @@ export default {
             type: Number,
             default: 0,
         },
+        limit: {
+            type: Number,
+            default: 2,
+        },
     },
     data() {
         return {
@@ -55,17 +56,9 @@ export default {
             loaded: false,
             count: 1,
             page: 1,
-            limit: 2,
             filters: {
                 year: null
             }
-        }
-    },
-    setup() {
-        const postStore = usePostStore()
-
-        return {
-            postStore,
         }
     },
     computed: {

@@ -4,19 +4,16 @@ export default defineNuxtConfig({
     devtools: {enabled: true},
     content: {
         watch: {
-            ws: {
-                hostname: "0.0.0.0",
-                port: 4000,
-                showURL: false
-            }
+            enabled: true,
+            port: 4000,
+            showURL: false
         },
     },
     modules: [
-      '@nuxt/content',
-      '@pinia/nuxt',
-      '@nuxt/ui',
-      'nuxt-auth-utils',
-      '@vueuse/nuxt',
+        '@pinia/nuxt',
+        '@nuxt/ui',
+        'nuxt-auth-utils',
+        '@vueuse/nuxt',
     ],
     css: [
         '~/assets/styles/fonts.scss',

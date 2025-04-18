@@ -62,12 +62,12 @@
 
 <script lang="ts">
 import CoverPage from "~/components/poems/bookPages/preliminaryPages/CoverPage.vue";
-import {usePostStore} from "~/stores/postStore";
-import PostEntity, {type PostEntityInterface} from "~/entities/PostEntity";
 import PoemPage from "~/components/poems/bookPages/PoemPage.vue";
 import BasePage from "~/components/poems/bookPages/BasePage.vue";
 import ThanksPage from "~/components/poems/bookPages/concludingPages/ThanksPage.vue";
 import EndPage from "~/components/poems/bookPages/concludingPages/EndPage.vue";
+import type {PostInterface} from "~/server/models/post";
+import PostEntity from "~/entities/PostEntity";
 
 export default {
     components: {
@@ -79,19 +79,11 @@ export default {
     },
     data() {
         return {
-            token: null,
             posts: [] as any,
             loaded: false,
             pageStart: 6,
             totalPages: 0,
             maxLines: 42,
-        }
-    },
-    setup() {
-        const postStore = usePostStore()
-
-        return {
-            postStore,
         }
     },
     watch: {
@@ -103,52 +95,20 @@ export default {
         },
     },
     async mounted() {
-
-        this.token = this.$route?.query?.token
         await this.getPosts()
         this.totalPages = Math.ceil(this.posts.length)
         this.loaded = true
-
     },
     methods: {
         async getPosts() {
-            await this.postStore.fetchPosts(this.token)
-            const posts = this.postStore.posts
-
-
-            posts.map((post: PostEntityInterface) => {
-                // cut each 15 lines in the content
-                const parts = post.content.split('\n')
-                if (parts.length <= this.maxLines) {
-                    this.posts.push(PostEntity.hydrate(
-                        post
-                    ))
-                    return
-                }
-
-
-                const content = parts.reduce((acc: any[], line, index) => {
-                    if (index % this.maxLines === 0) {
-                        acc.push('')
-                    }
-                    acc[acc.length - 1] += line + '\n'
-                    return acc
-                }, [])
-
-
-                content.forEach((contentSplited, index) => {
-
-                    const postModel = PostEntity.hydrate(
-                        {
-                            ...post,
-                            content: contentSplited,
-                        }
-                    )
-
-                    this.posts.push(postModel)
+            await fetch('/api/post')
+                .then(response => response.json())
+                .then(data => {
+                    this.posts = data.rows.map((post: PostInterface) => {
+                        return PostEntity.hydrateFromDatabase(post)
+                    })
                 })
-            })
-        },
+        }
     }
 }
 

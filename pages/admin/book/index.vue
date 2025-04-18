@@ -5,6 +5,7 @@
             v-if="posts.length"
             :totalRecords="totalRecords"
             :posts="posts"
+            :limit="limit"
             @page="setPage"
             @limit="limit = $event"
         />
@@ -27,7 +28,7 @@ export default {
             loaded: false,
             count: 1,
             page: 1,
-            limit: 2,
+            limit: 1,
             filters: {
                 year: null
             },

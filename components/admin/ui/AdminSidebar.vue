@@ -243,6 +243,7 @@ export default {
                 {name: 'Contenus', href: '/admin/content', icon: ListBulletIcon, current: false},
                 {name: 'Importer du contenu', href: '/admin/import', icon: ArrowsUpDownIcon, current: false},
                 {name: 'Rapports', href: '/admin/report', icon: ChartPieIcon, current: false},
+                {name: 'Mon site', href: '/', icon: ArrowsUpDownIcon, current: false},
             ],
             searchActive: false,
             searchValue: '',

@@ -8,8 +8,6 @@ export interface PostEntityInterface {
     timestamp: number;
     date: Date;
     attachments?: any[];
-
-    [Symbol.iterator](): Iterator<string>;
 }
 
 export default class PostEntity implements PostEntityInterface {
