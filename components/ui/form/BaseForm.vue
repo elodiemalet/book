@@ -23,8 +23,8 @@
 </template>
 <script lang="ts">
 import {defineComponent} from "vue";
-import BaseButton from "~/components/ui/BaseButton.vue";
-import CancelButton from "~/components/ui/CancelButton.vue";
+import BaseButton from "~/components/ui/buttons/BaseButton.vue";
+import CancelButton from "~/components/ui/buttons/CancelRoundButton.vue";
 
 export default defineComponent({
     name: "BaseForm",

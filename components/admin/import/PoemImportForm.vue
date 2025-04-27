@@ -8,7 +8,7 @@
             <base-dropzone
                 label="Fichier JSON"
                 :max-size="1024 * 1024 * 10"
-                :max-files="2"
+                :max-files="10"
                 :accept="['application/json']"
                 v-model:files="files"
             />
@@ -51,12 +51,12 @@
 
 <script lang="ts">
 
-import BaseButton from "~/components/ui/BaseButton.vue";
+import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 import BaseBanner from "~/components/ui/BaseBanner.vue";
 import BaseDropzone from "~/components/ui/BaseDropzone.vue";
 import type {FileEntity} from "~/entities/FileEntity";
 import CardTable from "~/components/ui/CardTable.vue";
-import CancelButton from "~/components/ui/CancelButton.vue";
+import CancelButton from "~/components/ui/buttons/CancelRoundButton.vue";
 
 export default defineComponent({
     name: "PoemImportForm",
@@ -65,7 +65,7 @@ export default defineComponent({
         return {
             file: null,
             files: [],
-            resultImportedDatas: []
+            resultImportedDatas: [] as any[]
         }
     },
     setup() {

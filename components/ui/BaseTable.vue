@@ -62,7 +62,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseButton from "~/components/ui/BaseButton.vue";
+import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 
 interface Row {
     [key: string]: any;

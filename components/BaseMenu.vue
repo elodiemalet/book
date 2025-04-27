@@ -126,6 +126,7 @@ export default defineComponent({
                 if (error.value) {
                     this.toast.add({
                         id: 'error',
+                        color: 'red',
                         icon: 'i-material-symbols-file-download-off',
                         title: 'Erreur lors de la génération du PDF',
                     });
@@ -152,6 +153,7 @@ export default defineComponent({
                 } catch (error) {
                     this.toast.add({
                         id: 'error',
+                        color: 'red',
                         icon: 'i-material-symbols-file-download-off',
                         title: 'Erreur lors de la génération du PDF',
                     });

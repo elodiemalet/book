@@ -57,7 +57,7 @@
 
 <script>
 import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/vue/20/solid'
-import BaseButton from "~/components/ui/BaseButton.vue";
+import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 
 export default {
     components: {BaseButton, ChevronLeftIcon, ChevronRightIcon},

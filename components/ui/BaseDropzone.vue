@@ -100,12 +100,35 @@ export default defineComponent({
     setup(props) {
         const dropZoneRef = ref<HTMLElement | null>(null);
         const fileList = ref<FileEntity[]>(props.files);
+        const toast = useToast()
+
+        watch(
+            () => props.files,
+            (newFiles) => {
+                fileList.value = newFiles;
+            },
+            {immediate: true}
+        );
 
         const onDrop = (files: File[] | null) => {
             if (files) {
                 files.forEach(file => {
+                    if (fileList.value.length >= props.maxFiles) {
+                        toast.add({
+                            id: 'error',
+                            title: 'Erreur lors du téléchargement du fichier',
+                            color: 'red',
+                            icon: 'i-material-symbols-file-download-off',
+                        });
+                        return
+                    }
                     if (file.size > props.maxSize) {
-                        alert('File too large')
+                        toast.add({
+                            id: 'error',
+                            title: 'Erreur lors du téléchargement du fichier',
+                            color: 'red',
+                            icon: 'i-material-symbols-file-download-off',
+                        });
                         return
                     }
                     const id = file.name + new Date().getTime();
