@@ -1,13 +1,11 @@
 <template>
     <div v-if="loaded" class="flex flex-col items-center w-full ">
         <CoverPage/>
-        <BasePage/>
         <BasePage>
             <!--            Page de faux-titre : Contient simplement le titre du recueil ou une citation évocatrice.-->
             <h1 class="title">Recueil de Poèmes</h1>
             <h3 class="title"></h3>
             <h4 class="title">2019 - 2024</h4>
-
         </BasePage>
         <BasePage>
 
@@ -38,24 +36,18 @@
 
 
         </BasePage>
-        <BasePage/>
-
-        <template
+        <PoemPage
             v-for="(post, i) in posts"
             :key="post.id"
-        >
-            <PoemPage
-                :id="post.id"
-                :next-page-id="posts[i + 1]?.id"
-                :prev-page-id="posts[i - 1]?.id"
-                :title="post.postTitle"
-                :content="post.content"
-                :page="i + pageStart"
-                :date="post.date"
-                :author="post.author"
-            />
-        </template>
-        <BasePage/>
+            :id="post.id"
+            :next-page-id="posts[i + 1]?.id"
+            :prev-page-id="posts[i - 1]?.id"
+            :title="post.postTitle"
+            :content="post.content"
+            :page="i + pageStart"
+            :date="post.date"
+            :author="post.author"
+        />
         <EndPage/>
     </div>
 </template>
@@ -78,6 +70,8 @@ export default {
         ThanksPage
     },
     data() {
+        const bookStore = useBookStore();
+        bookStore.fetchImagePages()
         return {
             posts: [] as any,
             loaded: false,
@@ -94,14 +88,14 @@ export default {
             await this.getPosts()
         },
     },
-    async mounted() {
-        await this.getPosts()
+    mounted() {
+        this.getPosts()
         this.totalPages = Math.ceil(this.posts.length)
         this.loaded = true
     },
     methods: {
-        async getPosts() {
-            await fetch('/api/post')
+        getPosts() {
+            fetch('/api/post')
                 .then(response => response.json())
                 .then(data => {
                     this.posts = data.rows.map((post: PostInterface) => {

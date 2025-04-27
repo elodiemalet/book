@@ -1,20 +1,34 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-    <div class="w-a4 h-a4 bg-[#FCFCF9] text-center flex flex-col justify-center">
+    <div class="w-a4 h-a4 bg-[#FCFCF9] text-center flex flex-col justify-center overflow-hidden relative">
         <div>
             <img
-                class="m-auto w-[200px] mb-[50px]"
-                src="/images/fleur.png">
-            <h1 class="title uppercase mb-[50px]">Recueil de Poèmes</h1>
-            <h3 class="title"></h3>
-            <h4 class="title">2019 - 2024</h4>
+                class="m-auto"
+                :src="coverPage?.url"
+                :alt="coverPage?.name"
+            >
+            <div class="absolute bottom-10 left-0 right-0">
+                <h3 class="title">{{ author }}</h3>
+                <h4 class="title">{{ year }}</h4>
+            </div>
         </div>
     </div>
 </template>
 
-<style scoped>
+<script lang="ts">
 
-</style>
+import type {AttachmentEntityInterface} from "~/entities/AttachmentEntity";
+
+export default {
+    name: "CoverPage",
+    data() {
+        const bookStore = useBookStore();
+        return {
+            coverPage: computed(() => bookStore.getImagePageByType('cover')),
+            images: [] as AttachmentEntityInterface[],
+            author: 'John Doe',
+            year: '2019 - 2024',
+        }
+    },
+}
+
+</script>

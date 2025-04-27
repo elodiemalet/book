@@ -1,26 +1,23 @@
 import BookEntity, {PoemEntity} from "~/entities/BookEntity";
+import {AttachmentEntity, type AttachmentEntityInterface} from "~/entities/AttachmentEntity";
 
 export const useBookStore = defineStore('bookStore', {
     state: () => ({
-        book: {} as BookEntity
+        imagePages: [] as AttachmentEntityInterface[],
     }),
     getters: {
-        getPoemById: (state) => (id: number) => {
-            return state.book?.poems?.find(poem => poem.id === id);
+        getImagePageByType: (state) => (type: string) => {
+            return state.imagePages.find(image => image.pageType === type);
         }
-
     },
     actions: {
-        async fetchBooks(token: string) {
-
-            const query = queryContent<PoemEntity>('book', 'poem');
-            if (token) {
-                // @todo get user selected ids
-                // query.where({id: {$in: [1]}})
+        async fetchImagePages() {
+            console.log('fetchImagePages')
+            const {data, error} = await useFetch<AttachmentEntityInterface[]>(`/api/image`)
+            if (error.value || !data.value) {
+                return
             }
-
-            const poems = await query.find()
-            this.book = new BookEntity(poems)
+            this.imagePages = data.value
         }
     }
 })
