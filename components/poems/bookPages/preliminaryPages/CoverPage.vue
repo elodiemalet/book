@@ -7,10 +7,6 @@
                 :src="coverPage?.url"
                 :alt="coverPage?.name"
             >
-            <div class="absolute bottom-10 left-0 right-0">
-                <h3 class="title">{{ author }}</h3>
-                <h4 class="title">{{ year }}</h4>
-            </div>
         </div>
     </div>
 </template>
