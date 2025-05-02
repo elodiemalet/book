@@ -151,36 +151,35 @@ export default {
         modalImage(type: string) {
             return this.images.find(image => image.pageType === type) || null
         },
-        async saveFiles(files: File[], pageType: string) {
+        saveFiles(files: File[], pageType: string) {
             const entity = files[0] as any;
             const file = entity.file as File;
             console.log(file);
             const formData = new FormData();
             formData.append('file', file, file.name);
             formData.append('data', pageType);
-            const {data, error} = await useFetch('/api/import/image', {
+            $fetch('/api/import/image', {
                 method: 'POST',
                 body: formData
-            });
+            })
+                .then(data => {
+                    console.log(data);
+                    this.images = data as AttachmentEntityInterface[]
 
-            if (error.value) {
-                this.toast.add({
-                    id: 'error',
-                    icon: 'i-material-symbols-file-download-off',
-                    title: 'Erreur lors de l\'enregistrement de l\'image',
-                    color: 'red',
-
+                    this.toast.add({
+                        id: 'success',
+                        icon: 'i-material-symbols-file-download',
+                        title: 'L\'image a été enregistrée avec succès',
+                    });
+                })
+                .catch(error => {
+                    this.toast.add({
+                        id: 'error',
+                        icon: 'i-material-symbols-file-download-off',
+                        title: 'Erreur lors de l\'enregistrement de l\'image',
+                        color: 'red'
+                    });
                 });
-                return
-            }
-
-            this.images = data.value as AttachmentEntityInterface[]
-
-            this.toast.add({
-                id: 'success',
-                icon: 'i-material-symbols-file-download',
-                title: 'L\'image a été enregistrée avec succès',
-            });
 
         },
     }
