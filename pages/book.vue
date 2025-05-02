@@ -60,6 +60,7 @@ import ThanksPage from "~/components/poems/bookPages/concludingPages/ThanksPage.
 import EndPage from "~/components/poems/bookPages/concludingPages/EndPage.vue";
 import type {PostInterface} from "~/server/models/post";
 import PostEntity from "~/entities/PostEntity";
+import {useBookStore} from "~/stores/bookStore";
 
 export default {
     components: {
@@ -68,6 +69,11 @@ export default {
         BasePage,
         CoverPage,
         ThanksPage
+    },
+    setup() {
+        definePageMeta({
+            middleware: ['protect-book'],
+        })
     },
     data() {
         const bookStore = useBookStore();

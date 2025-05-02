@@ -2,6 +2,13 @@
 export default defineNuxtConfig({
     compatibilityDate: '2024-04-03',
     devtools: {enabled: true},
+    runtimeConfig: {
+        pdfApiToken: process.env.PDF_API_TOKEN,
+        public: {
+            // exposé au client
+            pdfApiToken: process.env.PDF_API_TOKEN
+        }
+    },
     content: {
         watch: {
             enabled: true,

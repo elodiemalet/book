@@ -1,5 +1,4 @@
-import BookEntity, {PoemEntity} from "~/entities/BookEntity";
-import {AttachmentEntity, type AttachmentEntityInterface} from "~/entities/AttachmentEntity";
+import {type AttachmentEntityInterface} from "~/entities/AttachmentEntity";
 
 export const useBookStore = defineStore('bookStore', {
     state: () => ({
@@ -12,7 +11,6 @@ export const useBookStore = defineStore('bookStore', {
     },
     actions: {
         async fetchImagePages() {
-            console.log('fetchImagePages')
             const {data, error} = await useFetch<AttachmentEntityInterface[]>(`/api/image`)
             if (error.value || !data.value) {
                 return

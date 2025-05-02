@@ -40,6 +40,8 @@
 
 <script lang="ts">
 
+import {useBookStore} from "~/stores/bookStore";
+
 export default {
     name: "EndPage",
     data() {
@@ -51,17 +53,3 @@ export default {
 }
 
 </script>
-
-export default {
-name: "EndPage",
-data() {
-const bookStore = useBookStore();
-return {
-coverPage: computed(() => bookStore.getImagePageByType('cover')),
-}
-},
-}
-
-<style scoped>
-
-</style>

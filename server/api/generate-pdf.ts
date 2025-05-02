@@ -7,9 +7,18 @@ export default defineEventHandler(async (event/**/) => {
     const body = await readBody(event)
 
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
         const page = await browser.newPage();
-        const token = body.token || 'montoken';
+        const token = body.token;
+
+
+        if (token !== useRuntimeConfig().pdfApiToken) {
+            event.node.res.statusCode = 401
+            return {error: 'Unauthorized'}
+        }
 
         const url = `${protocol}://${host}/book?token=${token}`;
 

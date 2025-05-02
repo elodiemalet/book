@@ -2,9 +2,9 @@
     <header class="no-print">
         <base-menu/>
     </header>
-    <div class="main mx-auto"
+    <div class="main"
          :class="{ 'dark': isDarkMode }
-">
+    ">
         <slot/>
     </div>
     <UNotifications/>
