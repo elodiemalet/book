@@ -1,7 +1,8 @@
 <template>
     <button
         type="button"
-        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:bg-indigo-500 disabled:cursor-not-allowed"
+        class="rounded-md  px-3 py-2 font-semibold shadow-xs disabled:cursor-not-allowed"
+        :class="outlined ? 'border text-purple-800 border-purple-600 bg-white hover:bg-purple-50' : 'bg-purple-600 hover:bg-purple-500 text-white'"
         @click="$emit('click')"
     >
         <slot></slot>
@@ -12,5 +13,11 @@
 export default defineComponent({
     name: "BaseButton",
     emits: ['click'],
+    props: {
+        outlined: {
+            type: Boolean,
+            default: false,
+        }
+    }
 })
 </script>

@@ -17,7 +17,7 @@ export default {
             white: '#FFFFFF',
 
             slate: {
-                50: '#f8fafc',
+                50: 'oklch(98.4% 0.003 247.858)',
                 100: '#f1f5f9',
                 200: '#e2e8f0',
                 300: '#cbd5e1',
@@ -198,6 +198,19 @@ export default {
                 900: '#164e63',
                 950: '#083344',
             },
+            blue: {
+                50: '#ecfeff',
+                100: '#cffafe',
+                200: '#a5f3fc',
+                300: '#67e8f9',
+                400: '#22d3ee',
+                500: '#06b6d4',
+                600: '#0891b2',
+                700: '#0e7490',
+                800: '#155e75',
+                900: '#164e63',
+                950: '#083344',
+            },
             sky: {
                 50: '#f0f9ff',
                 100: '#e0f2fe',
@@ -212,17 +225,17 @@ export default {
                 950: '#082f49',
             },
             blue: {
-                50: '#f0f9ff',  // => rgb(240 249 255)
-                100: '#e0f2fe',  // => rgb(224 242 254)
-                200: '#bae6fd',  // => rgb(186 230 253)
-                300: '#7dd3fc',  // => rgb(125 211 252)
-                400: '#38bdf8',  // => rgb(56 189 248)
-                500: '#0ea5e9',  // => rgb(14 165 233)
-                600: '#0284c7',  // => rgb(2 132 199)
-                700: '#0369a1',  // => rgb(3 105 161)
-                800: '#075985',  // => rgb(7 89 133)
-                900: '#0c4a6e',  // => rgb(12 74 110)
-                950: '#082f49',  // => rgb(8 47 73)
+                50: 'oklch(97% 0.014 254.604)',
+                100: 'oklch(93.2% 0.032 255.585)',
+                200: 'oklch(88.2% 0.059 254.128)',
+                300: 'oklch(80.9% 0.105 251.813)',
+                400: 'oklch(70.7% 0.165 254.624)',
+                500: 'oklch(62.3% 0.214 259.815)',
+                600: 'oklch(54.6% 0.245 262.881)',
+                700: 'oklch(48.8% 0.243 264.376)',
+                800: 'oklch(42.4% 0.199 265.638)',
+                900: 'oklch(42.4% 0.199 265.638)',
+                950: 'oklch(28.2% 0.091 267.935)',
             },
             indigo: {
                 50: '#eef2ff',
@@ -305,11 +318,48 @@ export default {
         },
 
         extend: {
+            backgroundImage: {
+                'pattern-gradient': 'url(/images/background-img.png)',
+                'fleur': 'url(/images/fleur.png)',
+            },
             width: {
                 a4: '152.4mm',
             },
             height: {
                 a4: '228.6mm',
+            },
+            fontSize: {
+                xs: ['0.75rem', {lineHeight: '1rem'}],
+                sm: ['0.875rem', {lineHeight: '1.5rem'}],
+                base: ['1rem', {lineHeight: '2rem'}],
+                lg: ['1.125rem', {lineHeight: '2rem'}],
+                xl: ['1.25rem', {lineHeight: '2rem'}],
+                '2xl': ['1.375rem', {lineHeight: '2rem'}],
+                '3xl': ['1.5rem', {lineHeight: '2rem'}],
+                '4xl': ['2rem', {lineHeight: '2.5rem'}],
+                '5xl': ['3.5rem', {lineHeight: '1'}],
+                '6xl': ['4rem', {lineHeight: '1'}],
+                '7xl': ['4.5rem', {lineHeight: '1'}],
+                '8xl': ['6rem', {lineHeight: '1'}],
+                '9xl': ['8rem', {lineHeight: '1'}],
+            },
+            borderRadius: {
+                '4xl': '2rem',
+                '5xl': '3rem',
+                '6xl': '5rem',
+            },
+            fontFamily: {
+                display: [
+                    'Cabinet Grotesk',
+                    'Satoshi',
+                    'ui-sans-serif',
+                    'system-ui',
+                    'sans-serif',
+                    'Apple Color Emoji',
+                    'Segoe UI Emoji',
+                    'Segoe UI Symbol',
+                    'Noto Color Emoji',
+                ],
             },
         },
         screens: {
@@ -318,7 +368,8 @@ export default {
             'lg': '1024px',
             'xl': '1280px',
             'page': '450mm',
-        }
+        },
+        a4: '152.4mm',
     },
     plugins: [],
 }

@@ -9,6 +9,24 @@ export default defineNuxtConfig({
             pdfApiToken: process.env.PDF_API_TOKEN
         }
     },
+    app: {
+        head: {
+            link: [
+                {
+                    rel: 'preconnect',
+                    href: 'https://cdn.fontshare.com',
+                },
+                {
+                    rel: 'stylesheet',
+                    href: 'https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700&display=swap',
+                },
+                {
+                    rel: 'stylesheet',
+                    href: 'https://api.fontshare.com/v2/css?f[]=satoshi@800,500,700&display=swap',
+                },
+            ],
+        },
+    },
     content: {
         watch: {
             enabled: true,
@@ -16,14 +34,10 @@ export default defineNuxtConfig({
             showURL: false
         },
     },
-    modules: [
-        '@pinia/nuxt',
-        '@nuxt/ui',
-        'nuxt-auth-utils',
-        '@vueuse/nuxt',
-    ],
+    modules: ['@pinia/nuxt', '@nuxt/ui', 'nuxt-auth-utils', '@vueuse/nuxt', '@nuxtjs/tailwindcss'],
     css: [
         '~/assets/styles/fonts.scss',
+        '~/assets/styles/tailwind.css',
         '~/assets/styles/main.scss',
     ],
     postcss: {
