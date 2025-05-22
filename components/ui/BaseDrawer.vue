@@ -1,15 +1,16 @@
 <template>
     <TransitionRoot as="template" :show="open">
-        <Dialog class="relative z-[50] " @close="close">
+        <DialogComponent class="relative z-[50] " @close="close">
             <div class="fixed inset-0"/>
             <div class="fixed inset-0 overflow-hidden">
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
-                        <TransitionChild as="template"
-                                         enter="transform transition ease-in-out duration-500 sm:duration-700"
-                                         enter-from="translate-x-full" enter-to="translate-x-0"
-                                         leave="transform transition ease-in-out duration-500 sm:duration-700"
-                                         leave-from="translate-x-0" leave-to="translate-x-full">
+                        <TransitionChild
+                            as="template"
+                            enter="transform transition ease-in-out duration-500 sm:duration-700"
+                            enter-from="translate-x-full" enter-to="translate-x-0"
+                            leave="transform transition ease-in-out duration-500 sm:duration-700"
+                            leave-from="translate-x-0" leave-to="translate-x-full">
                             <DialogPanel class="pointer-events-auto w-screen max-w-2xl">
                                 <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                                     <div class="flex-1">
@@ -24,8 +25,9 @@
                                                         <slot name="description"/>
                                                     </p>
                                                 </div>
-                                                <div class="flex h-7 items-center cursor-pointer"
-                                                     @click="close">
+                                                <div
+                                                    class="flex h-7 items-center cursor-pointer"
+                                                    @click="close">
                                                     <div class="relative text-gray-400 hover:text-gray-500">
                                                         <span class="absolute -inset-2.5"/>
                                                         <span class="sr-only">Close panel</span>
@@ -46,18 +48,18 @@
                     </div>
                 </div>
             </div>
-        </Dialog>
+        </DialogComponent>
     </TransitionRoot>
 </template>
 
 <script lang="ts">
 
-import {Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
+import {Dialog as DialogComponent, DialogPanel, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue';
 import {XMarkIcon} from "@heroicons/vue/24/outline";
 
 export default {
     name: "BaseDrawer",
-    components: {DialogTitle, Dialog, DialogPanel, TransitionChild, TransitionRoot, XMarkIcon},
+    components: {DialogTitle, DialogComponent, DialogPanel, TransitionChild, TransitionRoot, XMarkIcon},
     props: {
         open: {
             type: Boolean,
@@ -67,10 +69,10 @@ export default {
     emits: ['update:open', 'close'],
     methods: {
         close() {
-            this.$emit('update:open', false)
-            this.$emit('close')
+            this.$emit('update:open', false);
+            this.$emit('close');
         }
     }
-}
+};
 
 </script>

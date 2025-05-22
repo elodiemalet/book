@@ -5,9 +5,10 @@
         </div>
         <div class="flex gap-4 ">
             <div
+                v-for="(pageNumber, index) in paginationPages"
+                :key="index"
                 class="pagination-item"
                 :class="pageNumber === page ? 'selected' : ''"
-                v-for="pageNumber in paginationPages"
                 @click="$emit('page', pageNumber)"
             >
                 {{ pageNumber }}
@@ -19,7 +20,7 @@
     </div>
 </template>
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
 
 export default defineComponent({
     props: {
@@ -36,36 +37,36 @@ export default defineComponent({
             default: 10,
         }
     },
+    emits: ['prevPage', 'nextPage', 'page'],
     computed: {
         paginationPages() {
-            const pages = []
+            const pages = [];
             for (let i = 1; i <= this.countPage; i++) {
-                pages.push(i)
+                pages.push(i);
             }
             if (pages.length > 6) {
-                const firstPages = pages.slice(0, 3)
-                const lastPages = pages.slice(-3)
-                return [...firstPages, '...', ...lastPages]
+                const firstPages = pages.slice(0, 3);
+                const lastPages = pages.slice(-3);
+                return [...firstPages, '...', ...lastPages];
             }
 
-            return pages
+            return pages;
         }
     },
-    emits: ['prevPage', 'nextPage', 'page'],
     methods: {
         prevPage() {
             if (this.page > 1) {
-                this.$emit('prevPage')
+                this.$emit('prevPage');
             }
         },
         nextPage() {
             if (this.page < this.countPage) {
-                this.$emit('nextPage')
+                this.$emit('nextPage');
             }
         }
     }
 
-})
+});
 </script>
 
 <style scoped lang="scss">
@@ -74,9 +75,8 @@ export default defineComponent({
     @apply border-t border-transparent hover:border-gray-200 cursor-pointer p-3;
 
     &.selected {
-        @apply border-t border-blue-500 text-blue-500;
+        @apply border-t border-cyan-500 text-cyan-500;
     }
-
 
 }
 

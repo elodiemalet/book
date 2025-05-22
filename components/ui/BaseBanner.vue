@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+    <div class="bg-cyan-100 border-t border-b border-cyan-500 text-cyan-700 px-4 py-3" role="alert">
         <p class="font-bold">{{ title }}</p>
         <p class="text-sm">
             <slot>{{ message }}</slot>
@@ -14,10 +14,12 @@ export default {
     props: {
         title: {
             type: String,
+            default: '',
         },
         message: {
             type: String,
+            default: '',
         }
     }
-}
+};
 </script>

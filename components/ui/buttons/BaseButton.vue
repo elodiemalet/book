@@ -5,19 +5,19 @@
         :class="outlined ? 'border text-purple-800 border-purple-600 bg-white hover:bg-purple-50' : 'bg-purple-600 hover:bg-purple-500 text-white'"
         @click="$emit('click')"
     >
-        <slot></slot>
+        <slot/>
     </button>
 </template>
 
 <script lang="ts">
 export default defineComponent({
     name: "BaseButton",
-    emits: ['click'],
     props: {
         outlined: {
             type: Boolean,
             default: false,
         }
-    }
-})
+    },
+    emits: ['click']
+});
 </script>

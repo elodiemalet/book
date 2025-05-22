@@ -13,7 +13,7 @@
             <h2 class="title">Dédicace</h2>
             
             <div>
-                <img src="/images/fleur.png"/>
+                <img src="/images/fleur.png">
             </div>
 
         </BasePage>
@@ -34,12 +34,11 @@
                 J'espère que vous prendrez autant de plaisir à les lire qu’il en a eu à les écrire.
             </p>
 
-
         </BasePage>
         <PoemPage
             v-for="(post, i) in posts"
-            :key="post.id"
             :id="post.id"
+            :key="post.id"
             :next-page-id="posts[i + 1]?.id"
             :prev-page-id="posts[i - 1]?.id"
             :title="post.postTitle"
@@ -56,7 +55,6 @@
 import CoverPage from "~/components/poems/bookPages/preliminaryPages/CoverPage.vue";
 import PoemPage from "~/components/poems/bookPages/PoemPage.vue";
 import BasePage from "~/components/poems/bookPages/BasePage.vue";
-import ThanksPage from "~/components/poems/bookPages/concludingPages/ThanksPage.vue";
 import EndPage from "~/components/poems/bookPages/concludingPages/EndPage.vue";
 import type {PostInterface} from "~/server/models/post";
 import PostEntity from "~/entities/PostEntity";
@@ -68,36 +66,35 @@ export default {
         PoemPage,
         BasePage,
         CoverPage,
-        ThanksPage
     },
     setup() {
         definePageMeta({
             middleware: ['protect-book'],
-        })
+        });
     },
     data() {
         const bookStore = useBookStore();
-        bookStore.fetchImagePages()
+        bookStore.fetchImagePages();
         return {
             posts: [] as any,
             loaded: false,
             pageStart: 6,
             totalPages: 0,
             maxLines: 42,
-        }
+        };
     },
     watch: {
         async page() {
-            await this.getPosts()
+            await this.getPosts();
         },
         async limit() {
-            await this.getPosts()
+            await this.getPosts();
         },
     },
     mounted() {
-        this.getPosts()
-        this.totalPages = Math.ceil(this.posts.length)
-        this.loaded = true
+        this.getPosts();
+        this.totalPages = Math.ceil(this.posts.length);
+        this.loaded = true;
     },
     methods: {
         getPosts() {
@@ -105,12 +102,12 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.posts = data.rows.map((post: PostInterface) => {
-                        return PostEntity.hydrateFromDatabase(post)
-                    })
-                })
+                        return PostEntity.hydrateFromDatabase(post);
+                    });
+                });
         }
     }
-}
+};
 
 </script>
 

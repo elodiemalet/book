@@ -4,9 +4,6 @@
         aria-labelledby="author-title"
         class="relative scroll-mt-14 pt-8 pb-3 sm:scroll-mt-32 sm:pt-10 sm:pb-16 lg:pt-16"
     >
-        <div class="absolute inset-x-0 top-1/2 bottom-0 mask-[linear-gradient(transparent,white)] text-slate-900/10">
-            <GridPattern x="50%" y="100%"/>
-        </div>
         <div class="relative mx-auto max-w-5xl pt-16 sm:px-6">
             <div class="bg-slate-50 pt-px sm:rounded-6xl">
                 <div
@@ -16,14 +13,14 @@
                         :src="authorImage"
                         :alt="authorImageAlt"
                         sizes="(min-width: 1024px) 18rem, (min-width: 768px) 16rem, 11rem"
-                    />
+                    >
                 </div>
                 <div class="px-4 py-10 sm:px-10 sm:py-16 md:py-20 lg:px-20 lg:py-32">
-                    <SectionHeading :number="5" id="author-title">
+                    <SectionHeading id="author-title" :number="5">
                         Author
                     </SectionHeading>
                     <p class="mt-8 font-display text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
-                        <span class="block text-blue-600">Elodie Malet –</span> Développeuse freelance fullstack &
+                        <span class="block text-cyan-600">Elodie Malet –</span> Développeuse freelance fullstack &
                         créatrice d’outils web sur mesure.
                     </p>
                     <p class="mt-4 text-lg tracking-tight text-slate-700">
@@ -47,19 +44,18 @@
     </section>
 </template>
 <script lang="ts">
-import GridPattern from "~/components/ui/pattern/GridPattern.vue";
 import SectionHeading from "~/components/ui/content/SectionHeading.vue";
 
 export default defineComponent({
     name: 'Author',
-    components: {SectionHeading, GridPattern},
+    components: {SectionHeading},
     setup() {
-        const authorImage = '/images/avatars/author.png'
-        const authorImageAlt = computed(() => 'Author image')
+        const authorImage = '/images/avatars/author.png';
+        const authorImageAlt = computed(() => 'Author image');
         return {
             authorImage,
             authorImageAlt
-        }
+        };
     }
-})
+});
 </script>

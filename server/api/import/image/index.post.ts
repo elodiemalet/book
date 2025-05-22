@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 404,
             statusMessage: 'No file uploaded',
-        })
+        });
     }
 
     const type = firstFile.type || '';
@@ -21,10 +21,10 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 400,
             statusMessage: 'Invalid file type',
-        })
+        });
     }
 
-    const sizeInBytes = (firstFile.data as Buffer).length
+    const sizeInBytes = (firstFile.data as Buffer).length;
 
     const filePath = join('/uploads', firstFile.filename!);
 
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
             throw createError({
                 statusCode: 500,
                 statusMessage: 'Error writing file to disk',
-            })
+            });
         }
     });
 
@@ -69,4 +69,4 @@ export default defineEventHandler(async (event) => {
 
     return Attachment.findAll();
 
-})
+});

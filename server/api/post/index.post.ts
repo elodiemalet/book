@@ -2,15 +2,15 @@ import Post from "~/server/models/post";
 
 export default defineEventHandler(async (event/**/) => {
 
-    const {user} = await requireUserSession(event)
+    const {user} = await requireUserSession(event);
 
-    const body = await readBody(event)
+    const body = await readBody(event);
 
     if (!body.postTitle || !body.content) {
         throw createError({
             statusCode: 400,
             statusMessage: 'Invalid request body'
-        })
+        });
     }
 
     if (body.id === undefined || body.id === null) {
@@ -19,19 +19,19 @@ export default defineEventHandler(async (event/**/) => {
                 postTitle: body.postTitle,
                 author: user.name,
                 content: body.content,
-            })
+            });
         } catch (error) {
-            return error
+            return error;
         }
 
     }
 
-    let post = await Post.findByPk(body.id)
+    const post = await Post.findByPk(body.id);
     if (!post) {
         throw createError({
             statusCode: 404,
             statusMessage: 'Post not found'
-        })
+        });
     }
 
     try {
@@ -48,8 +48,7 @@ export default defineEventHandler(async (event/**/) => {
         );
         return await Post.findByPk(body.id);
     } catch (error) {
-        return error
+        return error;
     }
 
-
-})
+});

@@ -3,8 +3,8 @@ import puppeteer from "puppeteer";
 
 export default defineEventHandler(async (event/**/) => {
     const protocol = event.node.req.headers?.['x-forwarded-proto'] || 'http';
-    const host = event.node.req.headers?.host
-    const body = await readBody(event)
+    const host = event.node.req.headers?.host;
+    const body = await readBody(event);
 
     try {
         const browser = await puppeteer.launch({
@@ -14,10 +14,9 @@ export default defineEventHandler(async (event/**/) => {
         const page = await browser.newPage();
         const token = body.token;
 
-
         if (token !== useRuntimeConfig().pdfApiToken) {
-            event.node.res.statusCode = 401
-            return {error: 'Unauthorized'}
+            event.node.res.statusCode = 401;
+            return {error: 'Unauthorized'};
         }
 
         const url = `${protocol}://${host}/book?token=${token}`;

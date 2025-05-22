@@ -14,5 +14,5 @@ import ArrowDownIcon from "@heroicons/vue/24/outline/ArrowDownIcon";
 export default {
     components: {ArrowDownIcon}
 
-}
+};
 </script>

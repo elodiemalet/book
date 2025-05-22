@@ -29,16 +29,16 @@ export default defineComponent({
     data() {
         return {
             showAll: false
-        }
+        };
     },
     computed: {
         contents() {
-            const contents = Object.entries(this.tableOfContents)
+            const contents = Object.entries(this.tableOfContents);
             if (this.showAll) {
-                return this.tableOfContents
+                return this.tableOfContents;
             }
-            return Object.fromEntries(contents.slice(0, 1))
+            return Object.fromEntries(contents.slice(0, 1));
         },
     }
-})
+});
 </script>

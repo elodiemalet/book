@@ -4,38 +4,33 @@
     >
         <div
             v-for="(post, i) in posts"
-            :key="post.id"
+            :key="i"
             class="page-preview flex-1 h-fit p-4"
         >
             <h2 class="title">{{ post.postTitle }}</h2>
-            <span
-                class="p-4"
-                v-html="post.content">
-
-            </span>
+            <SafeHtml :raw-html="post.content" class="p-4"/>
             <p>{{ post.date.toLocaleDateString('fr') }} - {{ post.author }}</p>
 
         </div>
     </div>
     <BasePagination
         :page="page"
-        :countPage="countPage"
+        :count-page="countPage"
         :limit="limit"
-        @prevPage="prevPage"
-        @nextPage="nextPage"
+        @prev-page="prevPage"
+        @next-page="nextPage"
         @page="setPage"
     />
 </template>
 
 <script lang="ts">
 
-import {type PostEntityInterface} from "~/entities/PostEntity.js";
+import type {PostEntityInterface} from "~/entities/PostEntity.js";
 import BasePagination from "~/components/BasePagination.vue";
-import BasePage from "~/components/poems/bookPages/BasePage.vue";
+import SafeHtml from "~/components/layout/SafeHtml.vue";
 
 export default {
-    components: {BasePage, BasePagination},
-    emits: ['page', 'limit'],
+    components: {SafeHtml, BasePagination},
     props: {
         posts: {
             type: Array as PropType<PostEntityInterface[]>,
@@ -50,6 +45,7 @@ export default {
             default: 2,
         },
     },
+    emits: ['page', 'limit'],
     data() {
         return {
             poems: [] as any,
@@ -59,29 +55,29 @@ export default {
             filters: {
                 year: null
             }
-        }
+        };
     },
     computed: {
         countPage() {
             if (this.totalRecords === 0) {
-                return 0
+                return 0;
             }
-            return Math.ceil(this.totalRecords / this.limit)
+            return Math.ceil(this.totalRecords / this.limit);
         }
     },
     methods: {
         prevPage() {
-            this.page--
-            this.$emit('page', this.page)
+            this.page--;
+            this.$emit('page', this.page);
         },
         nextPage() {
-            this.page++
-            this.$emit('page', this.page)
+            this.page++;
+            this.$emit('page', this.page);
         },
         setPage(page: number) {
-            this.page = page
-            this.$emit('page', page)
+            this.page = page;
+            this.$emit('page', page);
         },
     }
-}
+};
 </script>

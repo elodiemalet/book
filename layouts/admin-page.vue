@@ -19,5 +19,4 @@ import AdminPageHeading from "~/components/admin/ui/AdminPageHeading.vue";
 const addUrl: string = useState<string>("addUrl")?.value ?? '';
 const editUrl: string = useState<string>("editUrl")?.value ?? '';
 
-
 </script>

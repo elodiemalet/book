@@ -6,7 +6,7 @@
                 :src="endPage?.url"
                 :alt="endPage?.name"
                 class="m-auto"
-            />
+            >
         </div>
     </div>
 </template>
@@ -21,8 +21,8 @@ export default {
         const bookStore = useBookStore();
         return {
             endPage: computed(() => bookStore.getImagePageByType('back_cover')),
-        }
+        };
     },
-}
+};
 
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <login-form
+    <LoginForm
         v-model:credentials="credentials"
         @submit="submit"
     />
@@ -22,7 +22,7 @@ export default {
             },
             user: null as User | null,
             loggedIn: false,
-        }
+        };
     },
     mounted() {
         this.refreshSession();
@@ -50,15 +50,13 @@ export default {
                     color: 'red',
 
                 });
-                return
+                return;
             }
 
             const {fetch: refreshSession} = useUserSession();
             await refreshSession();
-            await navigateTo('/admin')
+            await navigateTo('/admin');
         }
     }
-}
+};
 </script>
-
-

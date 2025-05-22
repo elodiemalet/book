@@ -25,8 +25,8 @@ export default {
             images: [] as AttachmentEntityInterface[],
             author: 'John Doe',
             year: '2019 - 2024',
-        }
+        };
     },
-}
+};
 
 </script>

@@ -22,5 +22,5 @@ export default {
             default: 5,
         },
     },
-}
+};
 </script>

@@ -21,12 +21,12 @@
                             alt=""
                             width="48"
                             height="48"
-                        />
+                        >
                     </div>
                     <div class="ml-4">
-                        <span class="text-base/6 font-medium tracking-tight text-blue-700">
+                        <span class="text-base/6 font-medium tracking-tight text-cyan-700">
                             {{ author.name }}
-                         - </span>
+                            - </span>
                         <span class="mt-1 text-sm text-slate-600">{{ author.role }}</span>
                     </div>
                 </figcaption>
@@ -36,7 +36,6 @@
 </template>
 <script lang="ts">
 import Container from "~/components/ui/content/Container.vue";
-import GridPattern from "~/components/ui/pattern/GridPattern.vue";
 import StarRating from "~/components/ui/content/StarRating.vue";
 
 export default {
@@ -44,7 +43,6 @@ export default {
     components: {
         StarRating,
         Container,
-        GridPattern,
     },
     props: {
         author: {

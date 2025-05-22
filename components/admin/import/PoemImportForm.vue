@@ -5,12 +5,12 @@
                 <h3 class="text-base/7 font-semibold text-gray-900">Import</h3>
                 <p class="mt-1 text-sm/6 text-gray-600">Importez un fichier JSON contenant les textes à importer</p>
             </div>
-            <base-dropzone
+            <BaseDropzone
+                v-model:files="files"
                 label="Fichier JSON"
                 :max-size="1024 * 1024 * 10"
                 :max-files="10"
                 :accept="['application/json']"
-                v-model:files="files"
             />
             <div class="mt-2 flex items-center justify-end gap-x-6">
                 <CancelButton
@@ -29,11 +29,9 @@
     <div
         v-if="resultImportedDatas.length > 0"
         class="rounded-lg px-4 sm:px-6 lg:px-8 shadow-sm bg-gray-100 ring-1 ring-gray-950/10 py-10 mt-8 ">
-        <template>
-            <div class="border-b border-gray-200 pb-5">
-                <h3 class="text-base font-semibold text-gray-900">Résultat de l'import</h3>
-            </div>
-        </template>
+        <div class="border-b border-gray-200 pb-5">
+            <h3 class="text-base font-semibold text-gray-900">Résultat de l'import</h3>
+        </div>
 
         <CardTable
             :columns="[
@@ -52,7 +50,6 @@
 <script lang="ts">
 
 import BaseButton from "~/components/ui/buttons/BaseButton.vue";
-import BaseBanner from "~/components/ui/BaseBanner.vue";
 import BaseDropzone from "~/components/ui/BaseDropzone.vue";
 import type {FileEntity} from "~/entities/FileEntity";
 import CardTable from "~/components/ui/CardTable.vue";
@@ -60,19 +57,19 @@ import CancelButton from "~/components/ui/buttons/CancelRoundButton.vue";
 
 export default defineComponent({
     name: "PoemImportForm",
-    components: {CancelButton, CardTable, BaseDropzone, BaseBanner, BaseButton},
+    components: {CancelButton, CardTable, BaseDropzone, BaseButton},
+    setup() {
+        const toast = useToast();
+        return {
+            toast
+        };
+    },
     data() {
         return {
             file: null,
             files: [],
             resultImportedDatas: [] as any[]
-        }
-    },
-    setup() {
-        const toast = useToast()
-        return {
-            toast
-        }
+        };
     },
     methods: {
         async importPoem() {
@@ -83,10 +80,10 @@ export default defineComponent({
                     formData.append('file', file.file);
 
                     const {data, error} = await useFetch('/api/import',
-                        {
-                            method: 'POST',
-                            body: formData,
-                        });
+                                                         {
+                                                             method: 'POST',
+                                                             body: formData,
+                                                         });
 
                     if (error.value) {
                         this.toast.add({
@@ -96,11 +93,11 @@ export default defineComponent({
                             color: 'red',
 
                         });
-                        continue
+                        continue;
                     }
 
-                    const result = {...data.value}
-                    for (const [res, item] of Object.entries(result)) {
+                    const result = {...data.value};
+                    for (const [, item] of Object.entries(result)) {
                         for (const [type, data] of Object.entries(item)) {
                             this.resultImportedDatas.push({
                                 name: file.name,
@@ -108,7 +105,7 @@ export default defineComponent({
                                 success: data.success,
                                 error: data.error,
                                 total: data.total,
-                            })
+                            });
                         }
                     }
                 }
@@ -126,7 +123,6 @@ export default defineComponent({
             this.files = [];
         },
     }
-})
-
+});
 
 </script>

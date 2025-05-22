@@ -23,24 +23,24 @@
 <script lang="ts">
 import BaseForm from "~/components/ui/form/BaseForm.vue";
 import BaseInput from "~/components/ui/form/BaseInput.vue";
-import {type PostEntityInterface} from "~/entities/PostEntity";
+import type {PostEntityInterface} from "~/entities/PostEntity";
 import TextEditor from "~/components/ui/form/TextEditor.vue";
 
 export default {
     components: {TextEditor, BaseForm, BaseInput},
     async setup() {
-        const toast = useToast()
-        const route = useRoute()
+        const toast = useToast();
+        const route = useRoute();
 
         return {
             id: route.params.id,
             toast,
-        }
+        };
     },
     data() {
         return {
             post: null as PostEntityInterface | null,
-        }
+        };
     },
     async created() {
         const {data, error} = await useFetch(`/api/post/${this.id}`, {
@@ -57,13 +57,13 @@ export default {
                 color: 'red',
 
             });
-            return
+            return;
         }
-        this.post = data.value as PostEntityInterface
+        this.post = data.value as PostEntityInterface;
     },
     methods: {
         async cancel() {
-            await navigateTo('/admin/content')
+            await navigateTo('/admin/content');
         },
         async submit() {
             const {error} = await useFetch('/api/post', {
@@ -82,7 +82,7 @@ export default {
                     color: 'red',
 
                 });
-                return
+                return;
             }
 
             this.toast.add({
@@ -90,8 +90,8 @@ export default {
                 icon: 'i-material-symbols-file-download-off',
                 title: 'Contenu créé avec succès',
             });
-            navigateTo('/admin/content')
+            navigateTo('/admin/content');
         }
     }
-}
+};
 </script>

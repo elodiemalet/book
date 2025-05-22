@@ -2,7 +2,7 @@
     <section
         id="free-sample"
         aria-label="Free preview"
-        class="scroll-mt-14 bg-blue-600 sm:scroll-mt-32"
+        class="scroll-mt-14 bg-cyan-600 sm:scroll-mt-32"
     >
         <div class="overflow-hidden relative">
             <GlassImage/>
@@ -28,15 +28,15 @@
                     <div class="mt-4 sm:relative sm:flex sm:items-center sm:py-0.5 sm:pr-2.5">
                         <div class="relative sm:static sm:flex-auto">
                             <input
-                                type="email"
                                 id="email-address"
+                                type="email"
                                 required
                                 aria-label="Email address"
                                 placeholder="Email address"
                                 class="peer relative z-10 w-full appearance-none bg-transparent px-4 py-2 text-base text-white placeholder:text-white/70 focus:outline-hidden sm:py-3"
-                            />
+                            >
                             <div
-                                class="absolute inset-0 rounded-md border border-white/20 peer-focus:border-blue-300 peer-focus:bg-blue-500 peer-focus:ring-1 peer-focus:ring-blue-300 sm:rounded-xl"/>
+                                class="absolute inset-0 rounded-md border border-white/20 peer-focus:border-cyan-300 peer-focus:bg-cyan-500 peer-focus:ring-1 peer-focus:ring-cyan-300 sm:rounded-xl"/>
                         </div>
                         <BaseButton
                             type="submit"
@@ -59,5 +59,5 @@ import GlassImage from "~/components/ui/GlassImage.vue";
 export default {
     name: "FreeSample",
     components: {GlassImage, BaseButton, Container},
-}
+};
 </script>

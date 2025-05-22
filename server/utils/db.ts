@@ -1,5 +1,5 @@
-import {type Dialect, Sequelize} from 'sequelize'
-import configJson from '../../config/config.json'
+import {type Dialect, Sequelize} from 'sequelize';
+import configJson from '../../config/config.json';
 
 type Environments = 'development' | 'test' | 'production';
 const env = (process.env.NODE_ENV as Environments) || 'development';
@@ -20,7 +20,7 @@ const config: DBConfig = configJson as unknown as DBConfig;
 
 // if env is not in, type Environments return
 if (config[env] === undefined) {
-    console.warn(`[WARN] No config for env ${env} found, using development config`)
+    console.warn(`[WARN] No config for env ${env} found, using development config`);
 }
 
 const {username, password, database, host, dialect} = config[env] || config.development;
@@ -34,8 +34,8 @@ const sequelize: Sequelize = new Sequelize(
         dialect: dialect as Dialect,
         port: 5432
     }
-)
+);
 
 export default {
     sequelize,
-}
+};

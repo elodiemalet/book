@@ -1,5 +1,6 @@
 <script setup lang="ts">
 
+import SafeHtml from "~/components/layout/SafeHtml.vue";
 </script>
 
 <template>
@@ -11,20 +12,20 @@
                     v-for="(titleLine, i) in contentSplit(title)"
                     :key="titleLine"
                 >
-                        <span v-if="i === 0">
-                            {{ titleLine }}
-                        </span>
-                        <span v-else class="italic">
-                            ~ {{ titleLine }}
-                        </span>
+                    <span v-if="i === 0">
+                        {{ titleLine }}
+                    </span>
+                    <span v-else class="italic">
+                        ~ {{ titleLine }}
+                    </span>
                 </span>
             </h2>
         </div>
         <header
-            class="text-gray-500 italic flex gap-4 normal-case"
             v-else
+            class="text-gray-500 italic flex gap-4 normal-case"
         >
-            <div v-for="titleLine in contentSplit(title)">
+            <div v-for="titleLine in contentSplit(title)" :key="titleLine">
                 {{ titleLine }}
             </div>
         </header>
@@ -34,15 +35,16 @@
                 :key="contentLine"
                 :class="contentSplit(contentLine)?.length > 1 ? 'grid grid-cols-2 gap-6' : ''"
             >
-                <div class="min-h-4 first-letter:uppercase"
-                     v-for="contentLinePart in contentSplit(contentLine)">
-                    <span v-html="contentLinePart"></span>
+                <div
+                    v-for="contentLinePart in contentSplit(contentLine)" :key="contentLinePart"
+                    class="min-h-4 first-letter:uppercase">
+                    <SafeHtml :raw-html="contentLinePart"/>
                 </div>
             </div>
         </div>
         <div
-            class="mt-10 font-medium text-left pl-10"
             v-if="nextPageId !== id"
+            class="mt-10 font-medium text-left pl-10"
         >
             {{ author }} le {{ dateFormatted }}
         </div>
@@ -53,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
 
 export default defineComponent({
     props: {
@@ -90,11 +92,6 @@ export default defineComponent({
             required: true
         },
     },
-    methods: {
-        contentSplit(contentLine: string) {
-            return contentLine.split('_');
-        }
-    },
     computed: {
         contentLines() {
             //keep the line breaks and the empty lines
@@ -114,11 +111,15 @@ export default defineComponent({
             // Construction de la chaîne finale
             return `${weekdayLong} ${dayString} ${monthLong} ${year}`;
         }
+    },
+    methods: {
+        contentSplit(contentLine: string) {
+            return contentLine.split('_');
+        }
     }
-})
+});
 
 </script>
-
 
 <style scoped>
 

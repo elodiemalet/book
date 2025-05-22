@@ -13,9 +13,9 @@
                     class="flex [counter-increment:section] cursor-pointer"
                 >
                     <a
-                        @click.prevent="goToSection(section.id)"
                         class="flex w-full flex-col items-center justify-center border-b-2 before:mb-2 before:font-mono before:text-sm before:content-[counter(section,decimal-leading-zero)]"
-                        :class="sectionIndex === activeIndex ? 'border-blue-600 bg-white text-blue-600 before:text-blue-600' : 'border-transparent before:text-slate-500 hover:bg-white hover:before:text-slate-900'"
+                        :class="sectionIndex === activeIndex ? 'border-cyan-600 bg-white text-cyan-600 before:text-cyan-600' : 'border-transparent before:text-slate-500 hover:bg-white hover:before:text-slate-900'"
+                        @click.prevent="goToSection(section.id)"
                     >
                         {{ section.title }}
                     </a>
@@ -39,20 +39,17 @@ export default defineComponent({
                 {id: 'author', title: 'Auteur'},
                 {id: 'book', title: 'Obtenir un livre'},
             ],
-        }
+        };
     },
     computed: {
         activeIndex() {
-            return this.$route.hash.slice(1)
+            return this.$route.hash.slice(1);
         },
     },
     methods: {
         goToSection(id: string) {
-            this.$router.push(`#${id}`)
+            this.$router.push(`#${id}`);
         }
     }
 });
 </script>
-
-
-

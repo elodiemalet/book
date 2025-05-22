@@ -6,22 +6,25 @@
                 <div class="overflow-hidden shadow ring-1 ring-black/5 sm:rounded-lg">
                     <table class="min-w-full divide-y divide-gray-300">
                         <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                v-for="column in columns">
-                                {{ column.name }}
-                            </th>
+                            <tr>
+                                <th
+                                    v-for="(column, index) in columns" :key="index"
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    {{ column.name }}
+                                </th>
 
-                        </tr>
+                            </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
-                        <tr v-for="(row,index) in rows" :key="index">
-                            <td v-for="(column, indexCol) in columns" :key="indexCol"
-                                class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-                            >
-                                {{ row[column.key] }}
-                            </td>
-                        </tr>
+                            <tr v-for="(row,index) in rows" :key="index">
+                                <td
+                                    v-for="(column, indexCol) in columns" :key="indexCol"
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
+                                    {{ row[column.key] }}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -73,8 +76,8 @@ export default {
                     role: 'Staff',
                 },
             ],
-        }
+        };
     },
-}
+};
 
 </script>

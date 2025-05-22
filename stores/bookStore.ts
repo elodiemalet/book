@@ -1,4 +1,4 @@
-import {type AttachmentEntityInterface} from "~/entities/AttachmentEntity";
+import type {AttachmentEntityInterface} from "~/entities/AttachmentEntity";
 
 export const useBookStore = defineStore('bookStore', {
     state: () => ({
@@ -11,11 +11,11 @@ export const useBookStore = defineStore('bookStore', {
     },
     actions: {
         async fetchImagePages() {
-            const {data, error} = await useFetch<AttachmentEntityInterface[]>(`/api/image`)
+            const {data, error} = await useFetch<AttachmentEntityInterface[]>(`/api/image`);
             if (error.value || !data.value) {
-                return
+                return;
             }
-            this.imagePages = data.value
+            this.imagePages = data.value;
         }
     }
-})
+});

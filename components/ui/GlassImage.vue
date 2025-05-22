@@ -3,8 +3,7 @@
         <div
             class="glass-effect"
             :style="{ backgroundImage: `url(${imageUrl})` }"
-        >
-        </div>
+        />
     </div>
 </template>
 
@@ -21,7 +20,7 @@ export default defineComponent({
             default: 'background-img',
         },
     },
-})
+});
 
 </script>
 

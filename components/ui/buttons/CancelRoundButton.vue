@@ -3,7 +3,7 @@
         class="!bg-transparent !px-0 !text-gray-900 hover:!text-gray-500 focus:!text-gray-500"
         @click="$emit('click')"
     >
-        <slot></slot>
+        <slot/>
     </BaseButton>
 </template>
 
@@ -14,5 +14,5 @@ export default defineComponent({
     name: "CancelButton",
     components: {BaseButton},
     emits: ['click'],
-})
+});
 </script>

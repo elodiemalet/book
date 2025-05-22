@@ -28,24 +28,24 @@ import TextEditor from "~/components/ui/form/TextEditor.vue";
 export default {
     components: {TextEditor, BaseForm, BaseInput},
     setup() {
-        const toast = useToast()
+        const toast = useToast();
         return {
             toast
-        }
+        };
     },
     data() {
         return {
             test: '',
             post: PostEntity.create() as PostEntityInterface,
             token: null,
-        }
+        };
     },
     methods: {
         async cancel() {
-            await navigateTo('/admin/content')
+            await navigateTo('/admin/content');
         },
         async submit() {
-            const {data, error} = await useFetch('/api/post', {
+            const {error} = await useFetch('/api/post', {
                 method: 'POST',
                 body: JSON.stringify(this.post),
                 headers: {
@@ -61,7 +61,7 @@ export default {
                     color: 'red',
 
                 });
-                return
+                return;
             }
 
             this.toast.add({
@@ -69,9 +69,9 @@ export default {
                 icon: 'i-material-symbols-file-download-off',
                 title: 'Contenu créé avec succès',
             });
-            navigateTo('/admin/content')
+            navigateTo('/admin/content');
         }
     }
-}
+};
 
 </script>

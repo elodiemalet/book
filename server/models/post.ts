@@ -1,4 +1,4 @@
-import {Model, DataTypes, type Sequelize} from 'sequelize';
+import {Model, DataTypes} from 'sequelize';
 import db from "~/server/utils/db";
 
 import * as Yup from "yup";

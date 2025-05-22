@@ -1,5 +1,5 @@
 export default defineEventHandler((event) => {
-    const id = getRouterParam(event, 'id')
+    const id = getRouterParam(event, 'id');
 
     return {
         "id": id,
@@ -13,5 +13,5 @@ export default defineEventHandler((event) => {
             "“’Tis some visitor,” I muttered, “tapping at my chamber door—",
             "Only this and nothing more.”"
         ]
-    }
-})
+    };
+});

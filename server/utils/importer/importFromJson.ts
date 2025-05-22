@@ -23,7 +23,7 @@ async function importPosts(posts: any[]) {
             author: post.author,
             content: post.content,
             attachments: post.attachments,
-        })
+        });
 
         return true;
     }));

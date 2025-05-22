@@ -1,6 +1,6 @@
 <template>
     <div class="page w-a4 h-a4 text-center flex flex-col gap-4 justify-center pb-10">
-        <slot></slot>
+        <slot/>
         <footer v-if="page">
             {{ page }}
         </footer>
@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
 
 export default defineComponent({
     props: {
@@ -17,10 +17,9 @@ export default defineComponent({
             default: null
         }
     }
-})
+});
 
 </script>
-
 
 <style scoped>
 

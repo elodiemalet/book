@@ -9,17 +9,16 @@
         <!-- Détail du message d’erreur -->
         <p class="mb-4">{{ error.message || 'Une erreur est survenue.' }}</p>
         <!-- Lien de retour -->
-        <NuxtLink to="/" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+        <NuxtLink to="/" class="px-4 py-2 rounded bg-cyan-600 text-white hover:bg-cyan-700">
             Retour à l’accueil
         </NuxtLink>
     </div>
 </template>
 
 <script setup lang="ts">
-// Tu reçois un objet `error` avec au minimum `statusCode` et `message`
-const props = defineProps<{
+defineProps<{
     error: { statusCode: number; message: string }
-}>()
+}>();
 </script>
 
 <style scoped>

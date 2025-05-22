@@ -15,14 +15,15 @@
                 :class="{'outline-red-600 text-red-900 ': error}"
                 :placeholder="placeholder"
                 @input="$emit('update:modelValue', $event.target?.value)"
-            />
+            >
             <ExclamationCircleIcon
                 v-if="error"
                 class="pointer-events-none col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end text-red-500 sm:size-4"
                 aria-hidden="true"/>
         </div>
-        <p v-if="error"
-           class="mt-1 text-sm text-red-600">{{ error }}</p>
+        <p
+            v-if="error"
+            class="mt-1 text-sm text-red-600">{{ error }}</p>
     </div>
 </template>
 
@@ -58,6 +59,7 @@ export default {
             type: String,
             default: '',
         },
-    }
-}
+    },
+    emits: ['update:modelValue']
+};
 </script>

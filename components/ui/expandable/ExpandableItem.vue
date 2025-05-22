@@ -8,22 +8,22 @@
             class="mt-8 divide-y divide-slate-300/30 rounded-2xl bg-slate-50 px-6 py-3 text-base tracking-tight sm:px-8 sm:py-7"
         >
             <li
-                v-for="(pageNumber, title) in pages"
+                v-for="(pageNumber, pageTitle) in pages"
                 :key='pageNumber'
                 class="flex justify-between py-3"
-                :aria-label="`${title} on page ${pageNumber}`"
+                :aria-label="`${pageTitle} on page ${pageNumber}`"
             >
                 <span
                     class="font-medium text-slate-900"
                     aria-hidden="true"
                 >
-                  {{ title }}
+                    {{ pageTitle }}
                 </span>
                 <span
                     class="font-mono text-slate-400"
                     aria-hidden="true"
                 >
-    {{ pageNumber }}
+                    {{ pageNumber }}
                 </span>
             </li>
         </ol>
@@ -44,6 +44,6 @@ export default defineComponent({
             required: true
         }
     }
-})
+});
 
 </script>

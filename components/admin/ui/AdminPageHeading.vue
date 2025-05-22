@@ -17,15 +17,17 @@
                     <li>
                         <div class="flex items-center">
                             <ChevronRightIcon class="size-5 shrink-0 text-gray-400" aria-hidden="true"/>
-                            <a href="#"
-                               class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Engineering</a>
+                            <a
+                                href="#"
+                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Engineering</a>
                         </div>
                     </li>
                     <li>
                         <div class="flex items-center">
                             <ChevronRightIcon class="size-5 shrink-0 text-gray-400" aria-hidden="true"/>
-                            <a href="#" aria-current="page"
-                               class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Back End Developer</a>
+                            <a
+                                href="#" aria-current="page"
+                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Back End Developer</a>
                         </div>
                     </li>
                 </ol>
@@ -34,7 +36,7 @@
         <div class="mt-2 md:flex md:items-center md:justify-between">
             <div class="min-w-0 flex-1">
                 <h2 class="text-2xl/7 font-bold text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight py-4 ">
-                    <slot></slot>
+                    <slot/>
                 </h2>
             </div>
             <div class="mt-4 flex space-x-3 shrink-0 md:ml-4 md:mt-0 self-start">
@@ -56,7 +58,7 @@
 </template>
 
 <script>
-import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/vue/20/solid'
+import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/vue/20/solid';
 import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 
 export default {
@@ -75,5 +77,5 @@ export default {
             default: '',
         }
     },
-}
+};
 </script>

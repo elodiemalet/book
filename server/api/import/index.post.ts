@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 404,
             statusMessage: 'No file uploaded',
-        })
+        });
     }
 
     const type = firstFile.type || '';
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 400,
             statusMessage: 'Invalid file type',
-        })
+        });
     }
 
     const json = JSON.parse(firstFile.data.toString('utf8'));
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 400,
             statusMessage: 'Invalid file format',
-        })
+        });
     }
 
     return await importFromJson({data: json});
