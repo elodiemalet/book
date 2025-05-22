@@ -46,14 +46,14 @@
                             <div
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('underline') }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().underline().run()">
+                                @click="editor.chain().focus().toggleUnderline().run()">
                                 <UnderlineIcon class="size-5 " aria-hidden="true"/>
                                 <span class="sr-only">Underline</span>
                             </div>
                             <div
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('strike') }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().strike().run()">
+                                @click="editor.chain().focus().toggleStrike().run()">
                                 <StrikethroughIcon class="size-5 " aria-hidden="true"/>
                                 <span class="sr-only">Strike</span>
                             </div>

@@ -1,4 +1,5 @@
 import Post from "~/server/models/post";
+import sanitize from "dompurify";
 
 export default defineEventHandler(async (event/**/) => {
 
@@ -14,11 +15,14 @@ export default defineEventHandler(async (event/**/) => {
     }
 
     if (body.id === undefined || body.id === null) {
+
+        const content = sanitize(body.content);
+
         try {
             return await Post.create({
                 postTitle: body.postTitle,
                 author: user.name,
-                content: body.content,
+                content: content,
             });
         } catch (error) {
             return error;

@@ -21,7 +21,7 @@ export default {
             return DOMPurify.sanitize(
                 this.rawHtml,
                 {
-                    ALLOWED_TAGS: ['h2', 'p', 'strong', 'em', 'ul', 'li', 'a', 'img'],
+                    ALLOWED_TAGS: ['h1', 'h2', 'h3', 'p', 'strong', 'em', 'ul', 'li', 'a', 'img', 'u', 's'],
                     ALLOWED_ATTR: ['src', 'alt', 'title']
                 }
             );

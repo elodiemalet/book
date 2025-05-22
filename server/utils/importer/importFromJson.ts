@@ -1,4 +1,5 @@
 import Post, {getPostSchemaValidator} from "~/server/models/post";
+import sanitize from "dompurify";
 
 export async function importFromJson(json: any) {
     const {data} = json;
@@ -18,10 +19,12 @@ async function importPosts(posts: any[]) {
             return false;
         }
 
+        const content = sanitize(post.content);
+
         await Post.create({
             postTitle: post.postTitle,
             author: post.author,
-            content: post.content,
+            content: content,
             attachments: post.attachments,
         });
 
