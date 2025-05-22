@@ -2,8 +2,7 @@
     <div
         :class="[
             'relative px-4 py-16 sm:rounded-3xl sm:px-10 md:py-12 lg:px-12 overflow-hidden',
-            featured && !bookImage && 'bg-cyan-600 sm:shadow-lg',
-            featured && bookImage && 'bg-slate-800 sm:shadow-lg',
+            featured && 'bg-cyan-600 sm:shadow-lg',
         ]"
     >
         <div

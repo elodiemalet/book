@@ -31,9 +31,9 @@
                         Je m’implique aussi bien dans la technique que dans la logique métier, avec une vision globale
                         du produit.
                     </p>
-                    <p class="mt-8">
+                    <p class="mt-8 text-slate-700">
                         <span
-                            class="inline-flex items-center text-base font-medium tracking-tight text-slate-900"
+                            class="inline-flex items-center text-base font-medium tracking-tight"
                         >
                             <span class="ml-4">👉 Tu as un projet en tête, même flou ? Parlons-en.</span>
                         </span>

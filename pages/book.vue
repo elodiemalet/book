@@ -13,7 +13,7 @@
             <h2 class="title">Dédicace</h2>
             
             <div>
-                <img src="/images/fleur.png">
+                <img src="/images/fleur.png" alt="Fleur">
             </div>
 
         </BasePage>
