@@ -1,17 +1,12 @@
 import {setHeader} from "h3";
-import puppeteer from "puppeteer";
+import {generatePdfFromEvent} from "~/server/services/bookPdfGenerator";
 
 export default defineEventHandler(async (event/**/) => {
-    const protocol = event.node.req.headers?.['x-forwarded-proto'] || 'http';
-    const host = event.node.req.headers?.host;
+    const protocol: string = event.node.req.headers?.forwarded || 'http';
+    const host = event.node.req.headers?.host || 'localhost';
     const body = await readBody(event);
 
     try {
-        const browser = await puppeteer.launch({
-            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        });
-        const page = await browser.newPage();
         const token = body.token;
 
         if (token !== useRuntimeConfig().pdfApiToken) {
@@ -19,26 +14,19 @@ export default defineEventHandler(async (event/**/) => {
             return {error: 'Unauthorized'};
         }
 
-        const url = `${protocol}://${host}/book?token=${token}`;
-
-        await page.goto(url, {waitUntil: 'networkidle0'});
-
-        // Generate the PDF
-        const pdfBuffer = await page.pdf({
-            format: 'A4',
-            printBackground: true,
-        });
-
-        await browser.close();
+        const pdfBuffer = await generatePdfFromEvent(token, protocol, host);
+        const fileName = `book.pdf`;
 
         // Set response headers for download
         setHeader(event, 'Content-Type', 'application/pdf');
-        setHeader(event, 'Content-Disposition', 'attachment; filename="test.pdf"');
-        console.log('PDF generated successfully');
+        setHeader(event, 'Content-Disposition', `attachment; filename="${fileName}"`);
 
         return pdfBuffer;
-    } catch (error) {
-        console.error('Error generating PDF:', error);
+    } catch {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error generating PDF',
+        });
     }
 
 });

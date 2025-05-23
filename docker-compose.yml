@@ -44,6 +44,16 @@ services:
       DB_PASSWORD: mon_mot_de_passe
       DB_NAME: livre
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    platform: linux/amd64
+    ports:
+      - "8025:8025"   # UI
+      - "1025:1025"   # SMTP
+    networks:
+      - nuxt-postgres-network
+
 networks:
   nuxt-postgres-network:
     driver: bridge

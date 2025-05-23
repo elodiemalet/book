@@ -1,5 +1,6 @@
 import Prospect from "~/server/models/prospect";
 import {z} from "zod";
+import {sendSiteMail} from "~/server/services/sendSiteMail";
 
 const bodySchema = z.object({
     email: z.string().email(),
@@ -17,5 +18,17 @@ export default defineEventHandler(async (event) => {
         });
     });
 
-    return;
+    return sendSiteMail({to: email})
+        .then(() => {
+            return {
+                message: 'Email envoyé avec succès',
+            };
+        })
+        .catch(() => {
+            throw createError({
+                statusCode: 500,
+                statusMessage: 'Erreur lors de l\'envoi de l\'email',
+            });
+        });
+
 });

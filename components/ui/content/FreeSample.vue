@@ -83,7 +83,7 @@ export default {
             if (error.value) {
                 this.toast.add({
                     id: 'error',
-                    icon: 'i-material-symbols-file-download-off',
+                    icon: 'i-material-symbols-send-off',
                     title: 'Une erreur est survenue',
                     color: 'red',
 
@@ -93,8 +93,8 @@ export default {
 
             this.toast.add({
                 id: 'success',
-                icon: 'i-material-symbols-file-download-off',
-                title: 'Prospect créé avec succès',
+                icon: 'i-material-symbols-send',
+                title: 'Votre extrait a été envoyé avec succès',
             });
         },
     }

@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import vue from '@vitejs/plugin-vue';
+
 export default defineNuxtConfig({
     compatibilityDate: '2024-04-03',
     devtools: {enabled: true},
@@ -45,5 +47,17 @@ export default defineNuxtConfig({
             tailwindcss: {},
             autoprefixer: {},
         },
+    },
+    nitro: {
+        sourcemap: false,
+        rollupConfig: {
+            plugins: [vue()]
+        },
+    },
+    ssr: {
+        sourcemap: false
+    },
+    build: {
+        sourcemap: false,
     },
 });
