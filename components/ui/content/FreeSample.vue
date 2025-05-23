@@ -28,7 +28,7 @@
                     <div class="mt-4 sm:relative sm:flex sm:items-center sm:py-0.5 sm:pr-2.5">
                         <div class="relative sm:static sm:flex-auto">
                             <input
-                                id="email-address"
+                                v-model="email"
                                 type="email"
                                 required
                                 aria-label="Email address"
@@ -39,9 +39,9 @@
                                 class="absolute inset-0 rounded-md border border-white/20 peer-focus:border-cyan-300 peer-focus:bg-cyan-500 peer-focus:ring-1 peer-focus:ring-cyan-300 sm:rounded-xl"/>
                         </div>
                         <BaseButton
-                            type="submit"
                             outlined
                             class="mt-4 w-full sm:relative sm:z-10 sm:mt-0 sm:w-auto sm:flex-none"
+                            @click="submit"
                         >
                             Obtenir mon extrait
                         </BaseButton>
@@ -59,5 +59,44 @@ import GlassImage from "~/components/ui/GlassImage.vue";
 export default {
     name: "FreeSample",
     components: {GlassImage, BaseButton, Container},
+    setup() {
+        const toast = useToast();
+        return {
+            toast
+        };
+    },
+    data() {
+        return {
+            email: '',
+        };
+    },
+    methods: {
+        async submit() {
+            const {error} = await useFetch('/api/prospect', {
+                method: 'POST',
+                body: JSON.stringify({email: this.email}),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (error.value) {
+                this.toast.add({
+                    id: 'error',
+                    icon: 'i-material-symbols-file-download-off',
+                    title: 'Une erreur est survenue',
+                    color: 'red',
+
+                });
+                return;
+            }
+
+            this.toast.add({
+                id: 'success',
+                icon: 'i-material-symbols-file-download-off',
+                title: 'Prospect créé avec succès',
+            });
+        },
+    }
 };
 </script>
