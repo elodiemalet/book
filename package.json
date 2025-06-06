@@ -16,6 +16,8 @@
     "lint:fix": "eslint . --ext .js,.ts,.vue --fix"
   },
   "dependencies": {
+    "@extractus/article-extractor": "^8.0.19",
+    "@extractus/feed-extractor": "^7.1.6",
     "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.2.0",
     "@nuxt/eslint-config": "^1.4.1",
@@ -32,6 +34,7 @@
     "@vueuse/nuxt": "^13.0.0",
     "@vueuse/shared": "^12.8.2",
     "dompurify": "^3.2.6",
+    "jsdom": "^26.1.0",
     "mysql2": "^3.13.0",
     "nodemailer": "^7.0.3",
     "nuxt": "^3.17.1",
@@ -41,6 +44,7 @@
     "pinia": "^3.0.2",
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2",
+    "slugify": "^1.6.6",
     "vue": "latest",
     "vue-router": "latest",
     "yup": "^1.6.1",

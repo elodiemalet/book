@@ -14,8 +14,26 @@ body {
   min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 500;
+.page-preview {
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    padding-bottom: 0.5rem;
+    padding-top: 1rem;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    display: flex;
+    margin: 0;
+    flex-direction: column;
+
+    li {
+      padding: 0;
+      margin-bottom: 0;
+    }
+  }
 }
 
 .title {

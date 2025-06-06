@@ -73,3 +73,45 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Database
+
+The database is configured in `server/utils/db.ts`. You can change the database configuration according to your needs.
+
+### Migrations
+
+To create a new migration, run the following command:
+
+```bash
+# npm
+npm run db:migrate:create <name>
+
+# pnpm
+pnpm run db:migrate:create <name>
+
+# yarn
+yarn run db:migrate:create <name>
+
+# bun
+bun run db:migrate:create <name>
+```
+
+This will create a new migration file in the `migrations` directory.
+
+To run the migrations, run the following command:
+
+```bash
+# npm
+npm run db:migrate
+
+# pnpm
+pnpm run db:migrate
+
+# yarn
+yarn run db:migrate
+
+# bun
+bun run db:migrate
+```
+
+This will run all the migrations in the `migrations` directory.

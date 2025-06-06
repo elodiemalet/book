@@ -26,6 +26,7 @@ async function importPosts(posts: any[]) {
             author: post.author,
             content: content,
             attachments: post.attachments,
+            publishDate: post.publishDate,
         });
 
         return true;

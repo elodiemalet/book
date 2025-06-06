@@ -23,6 +23,7 @@ export default defineEventHandler(async (event/**/) => {
                 postTitle: body.postTitle,
                 author: user.name,
                 content: content,
+                publishDate: new Date(),
             });
         } catch (error) {
             return error;

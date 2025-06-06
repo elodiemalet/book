@@ -9,6 +9,8 @@ export interface PostInterface {
     author: string;
     content: string;
     attachments: string;
+    externalId: string;
+    publishDate: Date;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -27,6 +29,8 @@ export default class Post extends Model {
     public author!: string;
     public content!: string;
     public attachments!: string;
+    public externalId!: string;
+    public publishDate!: Date;
 
     // timestamps
     public readonly createdAt!: Date;
@@ -54,6 +58,15 @@ Post.init(
         },
         attachments: {
             type: DataTypes.STRING,
+            allowNull: true,
+        },
+        externalId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            unique: true,
+        },
+        publishDate: {
+            type: DataTypes.DATE,
             allowNull: true,
         },
     },
