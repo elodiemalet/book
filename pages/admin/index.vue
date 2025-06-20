@@ -10,8 +10,8 @@
                         {{ stat.change }}
                     </dd>
                     <dd class="w-full flex-none text-3xl/10 font-medium tracking-tight text-gray-900">{{
-                        stat.value
-                    }}
+                            stat.value
+                        }}
                     </dd>
                 </div>
             </dl>
@@ -36,10 +36,7 @@
                                     {{ action.title }}
                                 </a>
                             </h3>
-                            <p class="mt-2 text-sm text-gray-500">Doloribus dolores nostrum quia qui natus officia quod
-                                et
-                                dolorem.
-                                Sit repellendus qui ut at blanditiis et quo et molestiae.</p>
+                            <p class="mt-2 text-sm text-gray-500">{{ action.description }}</p>
                         </div>
                         <span
                             class="pointer-events-none absolute right-6 top-6 text-gray-300 group-hover:text-gray-400"
@@ -73,28 +70,32 @@ const stats = [
 
 const actions = [
     {
-        title: 'Request time off',
+        title: 'Importat de contenu',
+        description: 'Importez vos fichiers (PDF, Word, Markdown) ou flux RSS en un clic ; notre outil détecte automatiquement chapitres et images pour structurer votre projet.',
         href: '#',
         icon: ClockIcon,
         iconForeground: 'text-teal-700',
         iconBackground: 'bg-teal-50',
     },
     {
-        title: 'Benefits',
+        title: 'Personnalisation',
+        description: 'Choisissez un thème ou appliquez vos propres styles (CSS, polices, marges) via un éditeur WYSIWYG pour un rendu professionnel instantané.',
         href: '#',
         icon: CheckBadgeIcon,
         iconForeground: 'text-purple-700',
         iconBackground: 'bg-purple-50',
     },
     {
-        title: 'Submit an expense',
+        title: 'Métadonnées',
+        description: 'Renseignez titre, auteur, description, couverture et ISBN dans un formulaire unique ; toutes les infos sont intégrées à l’EPUB/MOBI.',
         href: '#',
         icon: ReceiptRefundIcon,
         iconForeground: 'text-rose-700',
         iconBackground: 'bg-rose-50',
     },
     {
-        title: 'Training',
+        title: 'Génération',
+        description: 'Exports EPUB, MOBI et PDF optimisés liseuses et mobiles ; récupérez votre ebook via un lien sécurisé dès la conversion terminée.',
         href: '#',
         icon: AcademicCapIcon,
         iconForeground: 'text-indigo-700',
