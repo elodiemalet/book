@@ -84,11 +84,11 @@ export default {
         };
     },
     watch: {
-        async page() {
-            await this.getPosts();
+        page() {
+            this.getPosts();
         },
-        async limit() {
-            await this.getPosts();
+        limit() {
+            this.getPosts();
         },
     },
     mounted() {
