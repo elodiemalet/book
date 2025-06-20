@@ -135,6 +135,7 @@
                             aria-hidden="true"/>
                     </form>
                     <div class="flex items-center gap-x-4 lg:gap-x-6">
+                        <download-book-button/>
                         <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                             <span class="sr-only">View notifications</span>
                             <BellIcon class="size-6" aria-hidden="true"/>
@@ -149,12 +150,12 @@
                                 <span class="sr-only">Open user menu</span>
                                 <img
                                     class="size-8 rounded-full bg-gray-50"
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                    src="/images/avatars/author.png"
                                     alt="">
                                 <span class="hidden lg:flex lg:items-center">
                                     <span
                                         class="ml-4 font-semibold text-gray-900"
-                                        aria-hidden="true">Tom Cook</span>
+                                        aria-hidden="true">Admin</span>
                                     <ChevronDownIcon class="ml-2 size-5 text-gray-400" aria-hidden="true"/>
                                 </span>
                             </MenuButton>
@@ -172,8 +173,8 @@
                                         <a
                                             :href="item.href"
                                             :class="[active ? 'bg-gray-50 outline-none' : '', 'block px-3 py-1 text-gray-900']">{{
-                                            item.name
-                                        }}</a>
+                                                item.name
+                                            }}</a>
                                     </MenuItem>
                                     <MenuItem>
                                         <p
@@ -223,10 +224,12 @@ import {
     XMarkIcon,
 } from '@heroicons/vue/24/outline';
 import {ArrowsUpDownIcon, ChevronDownIcon, ListBulletIcon, MagnifyingGlassIcon} from '@heroicons/vue/20/solid';
+import DownloadBookButton from "~/components/admin/ui/DownloadBookButton.vue";
 
 export default {
     name: 'AdminSidebar',
     components: {
+        DownloadBookButton,
         DialogComponent,
         DialogPanel,
         AdminMenu,
@@ -260,7 +263,6 @@ export default {
                 {name: 'Mon livre', href: '/admin/book', icon: BookOpenIcon, current: false},
                 {name: 'Contenus', href: '/admin/content', icon: ListBulletIcon, current: false},
                 {name: 'Importer du contenu', href: '/admin/import', icon: ArrowsUpDownIcon, current: false},
-                {name: 'Rapports', href: '/admin/report', icon: ChartPieIcon, current: false},
                 {name: 'Mon site', href: '/', icon: ArrowsUpDownIcon, current: false},
             ],
             searchActive: false,
@@ -275,7 +277,7 @@ export default {
         userLogout() {
             const {clear} = useUserSession();
             clear().then(() => {
-                navigateTo('/login');
+                navigateTo('/admin/login');
             });
         }
     },
