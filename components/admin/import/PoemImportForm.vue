@@ -3,14 +3,14 @@
         <div class="space-y-12">
             <div>
                 <h3 class="text-base/7 font-semibold text-gray-900">Import</h3>
-                <p class="mt-1 text-sm/6 text-gray-600">Importez un fichier JSON contenant les textes à importer</p>
+                <p class="mt-1 text-sm/6 text-gray-600">Importez des fichiers JSON, CSV, texte, HTML, Markdown, ODT ou
+                    MS Word contenant les textes à importer</p>
             </div>
             <BaseDropzone
                 v-model:files="files"
-                label="Fichier JSON"
-                :max-size="1024 * 1024 * 10"
-                :max-files="10"
-                :accept="['application/json']"
+                :max-size="1024 * 50"
+                :max-files="5"
+                :accept="['application/json', 'text/csv', 'text/plain', 'text/html', 'text/markdown', 'application/vnd.oasis.opendocument.text', 'application/msword']"
             />
             <div class="mt-2 flex items-center justify-end gap-x-6">
                 <CancelButton
@@ -19,6 +19,7 @@
                     Annuler
                 </CancelButton>
                 <BaseButton
+                    :loading="loading"
                     @click="importPoem"
                 >
                     Importer
@@ -35,10 +36,9 @@
 
         <CardTable
             :columns="[
-                { name: 'Nom du fichier', key: 'name' },
                 { name: 'Type', key: 'type' },
-                { name: 'Importé(s)', key: 'success' },
-                { name: 'Erreur(s)', key: 'error' },
+                { name: 'Success', key: 'success' },
+                { name: 'Error', key: 'error' },
                 { name: 'Total', key: 'total' },
             ]"
             :rows="resultImportedDatas"
@@ -68,54 +68,56 @@ export default defineComponent({
         return {
             file: null,
             files: [],
-            resultImportedDatas: [] as any[]
+            resultImportedDatas: [] as any[],
+            loading: false,
         };
     },
     methods: {
         async importPoem() {
+            this.loading = true;
             this.resultImportedDatas = [];
             if (this.files.length > 0) {
+                const formData = new FormData();
+
                 for (const file of this.files as FileEntity[]) {
-                    const formData = new FormData();
-                    formData.append('file', file.file);
-
-                    const {data, error} = await useFetch('/api/import',
-                                                         {
-                                                             method: 'POST',
-                                                             body: formData,
-                                                         });
-
-                    if (error.value) {
-                        this.toast.add({
-                            id: 'error',
-                            icon: 'i-material-symbols-file-download-off',
-                            title: 'Erreur lors de l\'importation du fichier',
-                            color: 'red',
-
-                        });
-                        continue;
-                    }
-
-                    const result = {...data.value};
-                    for (const [, item] of Object.entries(result)) {
-                        for (const [type, data] of Object.entries(item)) {
-                            this.resultImportedDatas.push({
-                                name: file.name,
-                                type: type,
-                                success: data.success,
-                                error: data.error,
-                                total: data.total,
-                            });
-                        }
-                    }
+                    formData.append('file' + file.id, file.file);
                 }
 
+                const {data, error} = await useFetch('/api/import',
+                    {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                if (error.value) {
+                    this.toast.add({
+                        id: 'error',
+                        icon: 'i-material-symbols-file-download-off',
+                        title: 'Erreur lors de l\'importation du fichier',
+                        color: 'red',
+
+                    });
+                }
+
+                const result = {...data.value?.result};
+                Object.entries(result).forEach(([, item]) => {
+                    Object.entries(item).forEach(([type, data]) => {
+                        console.log(type, data, item);
+                        this.resultImportedDatas.push({
+                            type: type,
+                            success: data.success,
+                            error: data.error,
+                            total: data.total,
+                        });
+                    })
+                })
+
                 this.files = [];
+                this.loading = false;
 
                 this.toast.add({
                     id: 'success',
-                    icon: 'i-material-symbols-file-download-off',
-                    title: 'Fichier importé avec succès',
+                    title: 'Import terminé',
                 });
             }
         },

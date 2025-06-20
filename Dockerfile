@@ -16,7 +16,9 @@ RUN apk add --no-cache \
     libstdc++ \
     gcompat \
     wget \
-    ca-certificates
+    ca-certificates \
+    pandoc-cli \
+    pandoc-cli-doc
 
 # Copie des fichiers de package
 COPY package.json ./

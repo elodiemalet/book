@@ -33,7 +33,7 @@ const sequelize: Sequelize = new Sequelize(
         host,
         dialect: dialect as Dialect,
         port: 5432
-    }
+    },
 );
 
 export default {

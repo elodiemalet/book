@@ -27,7 +27,7 @@
                 </div>
                 <button
                     type="button"
-                    class="no-print mt-2 text-white bg-gradient-to-br from-purple-600 to-cyan-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg px-3 py-2 text-xs text-left me-2 mb-2"
+                    class="no-print mt-2 text-white bg-gradient-to-br from-purple-600 to-cyan-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg px-3 py-2 text-xs text-left me-2 mb-2"
                     @click="downloadBook">
                     Télécharger le livre
                 </button>
@@ -54,8 +54,8 @@
                                 <a
                                     :href="item.href"
                                     :class="[active ? 'bg-gray-100 outline-none' : '', 'block px-4 py-2 text-sm text-gray-700']">{{
-                                    item.name
-                                }}</a>
+                                        item.name
+                                    }}</a>
                             </MenuItem>
                         </MenuItems>
                     </Transition>

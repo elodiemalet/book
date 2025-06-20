@@ -18,6 +18,7 @@
                             Télécharger un fichier
                         </span>
                         <input
+                            ref="fileInputRef"
                             id="file-upload"
                             name="file-upload"
                             type="file"
@@ -31,6 +32,17 @@
                     {{ maxSizeMb }}</p>
             </div>
         </div>
+        <admin-alert
+            title="Erreur lors du téléchargement du fichier"
+            severity="danger"
+            class="mt-3"
+            v-if="errors.length > 0"
+            @close="errors = []"
+        >
+            <ul class="list-disc list-inside">
+                <li v-for="error in errors" :key="error">{{ error }}</li>
+            </ul>
+        </admin-alert>
         <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             <li v-for="(file, index) in fileList" :key="index" class="col-span-1 flex rounded-md shadow-sm">
                 <div
@@ -64,10 +76,11 @@
 import {useDropZone} from '@vueuse/core';
 import {TrashIcon} from "@heroicons/vue/24/outline";
 import {FileEntity} from "~/entities/FileEntity";
+import AdminAlert from "~/components/admin/ui/AdminAlert.vue";
 
 export default defineComponent({
     name: "BaseDropzone",
-    components: {TrashIcon},
+    components: {AdminAlert, TrashIcon},
     props: {
         accept: {
             type: Array<string>,
@@ -94,16 +107,22 @@ export default defineComponent({
         const dropZoneRef = ref<HTMLElement | null>(null);
         const fileList = ref<FileEntity[]>(props.files);
         const toast = useToast();
+        const fileInputRef = ref<HTMLInputElement | null>(null);
+        const errors = ref<string[]>([]);
 
         watch(
             () => props.files,
             (newFiles) => {
                 fileList.value = newFiles;
+                if (newFiles.length === 0 && fileInputRef.value) {
+                    fileInputRef.value.value = '';
+                }
             },
             {immediate: true}
         );
 
         const onDrop = (files: File[] | null) => {
+            errors.value = [];
             if (files) {
                 files.forEach(file => {
                     if (fileList.value.length >= props.maxFiles) {
@@ -116,12 +135,7 @@ export default defineComponent({
                         return;
                     }
                     if (file.size > props.maxSize) {
-                        toast.add({
-                            id: 'error',
-                            title: 'Erreur lors du téléchargement du fichier',
-                            color: 'red',
-                            icon: 'i-material-symbols-file-download-off',
-                        });
+                        errors.value.push(`Le fichier ${file.name} est trop volumineux`);
                         return;
                     }
                     const id = file.name + new Date().getTime();
@@ -139,9 +153,11 @@ export default defineComponent({
         });
 
         return {
+            fileInputRef,
             dropZoneRef,
             isOverDropZone,
-            fileList
+            fileList,
+            errors
         };
     },
     computed: {
@@ -160,7 +176,9 @@ export default defineComponent({
             return (size / Math.pow(1024, i)) + ' ' + sizes[i];
         },
         removeFile(file: FileEntity) {
-            this.fileList = this.fileList.filter(f => f.id !== file.id);
+            const newList = this.fileList.filter(f => f.id !== file.id);
+            this.$emit('update:files', newList)
+
         },
         addFile(event: Event) {
             const file = (event.target as HTMLInputElement).files?.[0];
@@ -170,6 +188,15 @@ export default defineComponent({
                     return;
                 }
                 const id = file.name + new Date().getTime();
+                // check file exist in list
+                if (this.fileList.find(f => {
+                    const fileItem = f.file as File;
+                    return fileItem.name === file.name && fileItem.size === file.size && fileItem.lastModified === file.lastModified;
+                })) {
+                    console.error('file exist');
+                    return;
+                }
+
                 const fileEntity = new FileEntity(id, file.name, file.size, file.type, file);
                 this.fileList.push(fileEntity);
             }

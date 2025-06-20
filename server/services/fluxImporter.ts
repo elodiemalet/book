@@ -25,8 +25,6 @@ export class FluxImporter {
             });
         }
 
-        return feed;
-
         const contents: PostInterface[] = [];
         for (const item of feed.entries) {
             if (item.link && item.id) {
@@ -42,7 +40,7 @@ export class FluxImporter {
                 const window = new JSDOM('').window;
                 const purify = DOMPurify(window);
                 const sanitizedContent = purify.sanitize(content, {
-                    ALLOWED_TAGS: ['h1', 'h2', 'h3', 'p', 'strong', 'em', 'ul', 'li', 'a', 'img', 'u', 's'],
+                    ALLOWED_TAGS: ['h1', 'h2', 'h3', 'p', 'strong', 'em', 'ul', 'li', 'a', 'img', 'u', 's', 'br'],
                     ALLOWED_ATTR: ['src', 'alt', 'title']
                 });
 

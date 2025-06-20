@@ -9,7 +9,7 @@
         >
             <h2 class="title">{{ post.postTitle }}</h2>
             <SafeHtml :raw-html="post.content" class="p-4"/>
-            <p>{{ post.date.toLocaleDateString('fr') }} - {{ post.author }}</p>
+            <p>{{ post.publishDate.toLocaleDateString('fr') }} - {{ post.author }}</p>
 
         </div>
     </div>
