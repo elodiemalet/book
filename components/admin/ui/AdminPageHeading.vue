@@ -1,5 +1,5 @@
 <template>
-    <div class="border-b border-gray-200 pb-6 mb-12 ">
+    <div class="border-b border-gray-200 pb-6 ">
         <div>
             <nav class="sm:hidden" aria-label="Back">
                 <a href="#" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
@@ -27,7 +27,8 @@
                             <ChevronRightIcon class="size-5 shrink-0 text-gray-400" aria-hidden="true"/>
                             <a
                                 href="#" aria-current="page"
-                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Back End Developer</a>
+                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Back End
+                                Developer</a>
                         </div>
                     </li>
                 </ol>

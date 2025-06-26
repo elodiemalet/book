@@ -1,11 +1,12 @@
 <template>
+    <div>
+        <h3 class="text-base/7 font-semibold text-gray-900">Import</h3>
+        <p class="mt-1 text-sm/6 text-gray-600">Importez des fichiers JSON, CSV, texte, HTML, Markdown, ODT ou
+            MS Word contenant les textes à importer</p>
+    </div>
     <form class="mx-auto flex flex-col gap-4 justify-center">
         <div class="space-y-12">
-            <div>
-                <h3 class="text-base/7 font-semibold text-gray-900">Import</h3>
-                <p class="mt-1 text-sm/6 text-gray-600">Importez des fichiers JSON, CSV, texte, HTML, Markdown, ODT ou
-                    MS Word contenant les textes à importer</p>
-            </div>
+
             <BaseDropzone
                 v-model:files="files"
                 :max-size="1024 * 50"
