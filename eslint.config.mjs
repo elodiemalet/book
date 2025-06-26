@@ -1,7 +1,7 @@
 // eslint.config.mjs
-import withNuxt from './.nuxt/eslint.config.mjs';
+import {createConfigForNuxt} from '@nuxt/eslint-config'
 
-export default withNuxt({
+export default createConfigForNuxt({
     rules: {
         // Indentation dans les <template> Vue
         'vue/html-indent': ['error', 4, {
