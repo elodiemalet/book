@@ -3,7 +3,8 @@ import sanitize from "dompurify";
 
 export default defineEventHandler(async (event/**/) => {
 
-    const {user} = await requireUserSession(event);
+    //@todo : access control from connected user or external api with token
+    await requireUserSession(event);
 
     const body = await readBody(event);
 
@@ -21,7 +22,7 @@ export default defineEventHandler(async (event/**/) => {
         try {
             return await Post.create({
                 postTitle: body.postTitle,
-                author: user.name,
+                author: body.author,
                 content: content,
                 publishDate: new Date(),
             });

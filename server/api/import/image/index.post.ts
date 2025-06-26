@@ -3,6 +3,7 @@ import fs from 'fs';
 import {join} from "pathe";
 
 export default defineEventHandler(async (event) => {
+    await requireUserSession(event);
     const data = await readMultipartFormData(event);
 
     const firstFile = data?.[0];

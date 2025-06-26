@@ -9,7 +9,8 @@ interface ImportResult {
 }
 
 export default defineEventHandler(async (event) => {
-
+    await requireUserSession(event);
+    
     const files = await readMultipartFormData(event);
     const acceptedFileTypes = [
         'application/json',

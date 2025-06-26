@@ -1,6 +1,7 @@
 import Post from "~/server/models/post";
 
 export default defineEventHandler(async (event) => {
+    //@todo : access control from front only
     const query = getQuery(event);
     const limit: number = parseInt(Array.isArray(query.limit) ? query.limit[0] : query.limit) || 10;
     const page: number = parseInt(Array.isArray(query.page) ? query.page[0] : query.page) || 1;
