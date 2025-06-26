@@ -9,7 +9,9 @@
         <!-- Détail du message d’erreur -->
         <p class="mb-4">{{ error.message || 'Une erreur est survenue.' }}</p>
         <!-- Lien de retour -->
-        <NuxtLink to="/" class="px-4 py-2 rounded bg-cyan-600 text-white hover:bg-cyan-700">
+        <NuxtLink
+            to="/"
+            class="px-4 py-2 rounded bg-cyan-600 text-white hover:bg-cyan-700">
             Retour à l’accueil
         </NuxtLink>
     </div>

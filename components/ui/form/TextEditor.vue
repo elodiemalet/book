@@ -9,21 +9,27 @@
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('heading', { level: 1 }) }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="editor.chain().focus().toggleHeading({level: 1}).run()">
-                                <H1Icon class="size-5 " aria-hidden="true"/>
+                                <H1Icon
+                                    class="size-5 "
+                                    aria-hidden="true"/>
                                 <span class="sr-only">Heading 1</span>
                             </div>
                             <div
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('heading', { level: 2 }) }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="editor.chain().focus().toggleHeading({level: 2}).run()">
-                                <H2Icon class="size-5 " aria-hidden="true"/>
+                                <H2Icon
+                                    class="size-5 "
+                                    aria-hidden="true"/>
                                 <span class="sr-only">Heading 2</span>
                             </div>
                             <div
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('heading', { level: 3 }) }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="editor.chain().focus().toggleHeading({level: 3}).run()">
-                                <H3Icon class="size-5 " aria-hidden="true"/>
+                                <H3Icon
+                                    class="size-5 "
+                                    aria-hidden="true"/>
                                 <span class="sr-only">Heading 3</span>
                             </div>
                             <div class="px-1">
@@ -33,28 +39,36 @@
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('bold') }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="editor.chain().focus().toggleBold().run()">
-                                <BoldIcon class="size-5 " aria-hidden="true"/>
+                                <BoldIcon
+                                    class="size-5 "
+                                    aria-hidden="true"/>
                                 <span class="sr-only">Bold</span>
                             </div>
                             <div
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('italic') }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="editor.chain().focus().toggleItalic().run()">
-                                <ItalicIcon class="size-5 " aria-hidden="true"/>
+                                <ItalicIcon
+                                    class="size-5 "
+                                    aria-hidden="true"/>
                                 <span class="sr-only">Italic</span>
                             </div>
                             <div
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('underline') }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="editor.chain().focus().toggleUnderline().run()">
-                                <UnderlineIcon class="size-5 " aria-hidden="true"/>
+                                <UnderlineIcon
+                                    class="size-5 "
+                                    aria-hidden="true"/>
                                 <span class="sr-only">Underline</span>
                             </div>
                             <div
                                 :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('strike') }"
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="editor.chain().focus().toggleStrike().run()">
-                                <StrikethroughIcon class="size-5 " aria-hidden="true"/>
+                                <StrikethroughIcon
+                                    class="size-5 "
+                                    aria-hidden="true"/>
                                 <span class="sr-only">Strike</span>
                             </div>
                             <div class="px-1">
@@ -65,11 +79,19 @@
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="toggleLeftAlign()">
                                 <svg
-                                    class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" fill="none" viewBox="0 0 24 24">
+                                    class="w-5 h-5"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    fill="none"
+                                    viewBox="0 0 24 24">
                                     <path
-                                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M6 6h8m-8 4h12M6 14h8m-8 4h12"/>
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 6h8m-8 4h12M6 14h8m-8 4h12"/>
                                 </svg>
                                 <span class="sr-only">Align left</span>
                             </div>
@@ -78,11 +100,19 @@
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="toggleCenterAlign()">
                                 <svg
-                                    class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" fill="none" viewBox="0 0 24 24">
+                                    class="w-5 h-5"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    fill="none"
+                                    viewBox="0 0 24 24">
                                     <path
-                                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M8 6h8M6 10h12M8 14h8M6 18h12"/>
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 6h8M6 10h12M8 14h8M6 18h12"/>
                                 </svg>
                                 <span class="sr-only">Align center</span>
                             </div>
@@ -91,11 +121,19 @@
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="toggleRightAlign()">
                                 <svg
-                                    class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" fill="none" viewBox="0 0 24 24">
+                                    class="w-5 h-5"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    fill="none"
+                                    viewBox="0 0 24 24">
                                     <path
-                                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M18 6h-8m8 4H6m12 4h-8m8 4H6"/>
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M18 6h-8m8 4H6m12 4h-8m8 4H6"/>
                                 </svg>
                                 <span class="sr-only">Align right</span>
                             </div>
@@ -104,11 +142,19 @@
                                 class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                                 @click="toggleJustify()">
                                 <svg
-                                    class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" fill="none" viewBox="0 0 24 24">
+                                    class="w-5 h-5"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    fill="none"
+                                    viewBox="0 0 24 24">
                                     <path
-                                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M18 6H6m12 4H6m12 4H6m12 4H6"/>
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M18 6H6m12 4H6m12 4H6m12 4H6"/>
                                 </svg>
                                 <span class="sr-only">Justify</span>
                             </div>
@@ -169,7 +215,7 @@ export default {
     emits: ['update:modelValue'],
     data() {
         return {
-            editor: null as any,
+            editor: null,
         };
     },
     mounted() {

@@ -8,7 +8,9 @@
             class="page-preview flex-1 h-fit p-4"
         >
             <h2 class="title">{{ post.postTitle }}</h2>
-            <SafeHtml :raw-html="post.content" class="p-4"/>
+            <SafeHtml
+                :raw-html="post.content"
+                class="p-4"/>
             <p>{{ post.publishDate.toLocaleDateString('fr') }} - {{ post.author }}</p>
 
         </div>
@@ -48,7 +50,7 @@ export default {
     emits: ['page', 'limit'],
     data() {
         return {
-            poems: [] as any,
+            poems: [],
             loaded: false,
             count: 1,
             page: 1,

@@ -1,18 +1,16 @@
-// eslint.config.mjs
 import {createConfigForNuxt} from '@nuxt/eslint-config'
 
 export default createConfigForNuxt({
+    // Parser global pour JS/TS et Vue
+    parser: 'vue-eslint-parser',
+    parserOptions: {
+        parser: '@typescript-eslint/parser',
+        ecmaVersion: 'latest',
+        sourceType: 'module'
+    },
+    // Règles globales JS/TS
     rules: {
-        // Indentation dans les <template> Vue
-        'vue/html-indent': ['error', 4, {
-            attribute: 1,
-            baseIndent: 1,
-            closeBracket: 0,
-            alignAttributesVertically: false,
-            ignores: []
-        }],
-
-        // Indentation générale JS
+        // Indentation générale JS à 4 espaces
         'indent': ['error', 4, {
             SwitchCase: 1,
             VariableDeclarator: 1,
@@ -21,27 +19,39 @@ export default createConfigForNuxt({
             FunctionDeclaration: {parameters: 'first'},
             FunctionExpression: {parameters: 'first'},
             CallExpression: {arguments: 'first'},
-            ignoredNodes: ['TemplateLiteral'],
-            // ignore indent for HTML attributes
+            ignoredNodes: ['TemplateLiteral']
         }],
-
-        // Point-virgule obligatoire en JS
+        // Point-virgule obligatoire
         'semi': ['error', 'always'],
-
-        // Forcer l'utilisation de PascalCase pour les noms de composants dans les templates
+        // Désactive any explicite et ban-types en TS
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/ban-types': 'off',
+        // Nommage des composants Vue
         'vue/component-name-in-template-casing': ['error', 'PascalCase', {
             registeredComponentsOnly: false,
             ignores: []
         }],
-
-        '@typescript-eslint/no-explicit-any': 'off',
-
-        'no-multiple-empty-lines': ['error', {
-            max: 1,      // max 1 ligne vide consécutive
-            maxEOF: 0,   // pas de ligne vide à la fin
-            maxBOF: 0    // pas de ligne vide au début
-        }],
-        // 2. Fin de fichier : pas de saut de ligne en trop (ou en ajouter 1 si tu préfères 'always')
-        'eol-last': ['error', 'always'],
-    },
-});
+        // Gestion des lignes vides
+        'no-multiple-empty-lines': ['error', {max: 1, maxEOF: 0, maxBOF: 0}],
+        'eol-last': ['error', 'always']
+    }
+})
+    // Configuration spécifique pour les templates Vue
+    .prepend({
+        files: ['**/*.vue'],
+        rules: {
+            // Indentation dans les <template> Vue
+            'vue/html-indent': ['error', 4, {
+                attribute: 1,
+                baseIndent: 1,
+                closeBracket: 0,
+                alignAttributesVertically: false,
+                ignores: []
+            }],
+            // Un seul attribut par ligne sur plusieurs lignes
+            'vue/max-attributes-per-line': ['error', {
+                singleline: 1,
+                multiline: 1
+            }]
+        }
+    })

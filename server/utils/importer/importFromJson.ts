@@ -1,10 +1,20 @@
+import type { PostInterface} from "~/server/models/post";
 import Post, {getPostSchemaValidator} from "~/server/models/post";
-import sanitize from "dompurify";
 import {extractWithPandoc} from "~/server/services/pandoc";
 import {AiHttpClient} from "~/server/services/aiHttpClient";
 import {sanitizeContent} from "~/server/services/contentSanitizer";
+import type {MultiPartData} from "h3";
 
-export async function importFromJson(json: any) {
+
+export interface ImportResult {
+    posts: {
+        success: number
+        error: number
+        total: number
+    }
+}
+
+export async function importFromJson(json: { data: MultiPartData[] }) {
     const {data} = json;
 
     return await Promise.all([
@@ -12,7 +22,7 @@ export async function importFromJson(json: any) {
     ]);
 }
 
-export async function importFromText(files: any) {
+export async function importFromText(files: { data: MultiPartData[] }) {
     const {data} = files;
 
     return await Promise.all([
@@ -20,14 +30,17 @@ export async function importFromText(files: any) {
     ]);
 }
 
-async function getPostsFromTextFiles(files: any) {
+async function getPostsFromTextFiles(files: MultiPartData[]) {
 
     const aiApi = new AiHttpClient();
 
     const texts = await Promise.all(
         files.map(async (file) => {
             try {
-                const fileExtension = file?.filename.split('.').pop() || '';
+                if (file.filename === undefined) {
+                    return null;
+                }
+                const fileExtension = file.filename.split('.').pop() || '';
                 const text = await extractWithPandoc(file.data, fileExtension);
                 const documentInformation = await aiApi.getDocumentInformation(text);
                 return JSON.parse(documentInformation.choices[0].message.content);
@@ -41,7 +54,7 @@ async function getPostsFromTextFiles(files: any) {
     return importPosts(texts);
 }
 
-async function importPosts(posts: any[]) {
+async function importPosts(posts: PostInterface[]): Promise<ImportResult> {
 
     const resultImport = await Promise.all(posts.map(async (post) => {
         //valid

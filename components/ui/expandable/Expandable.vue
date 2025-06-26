@@ -1,5 +1,7 @@
 <template>
-    <ol role="list" class="mt-16 space-y-10 sm:space-y-16">
+    <ol
+        role="list"
+        class="mt-16 space-y-10 sm:space-y-16">
         <ExpandableItem
             v-for="(pages, title) in contents"
             :key="title"

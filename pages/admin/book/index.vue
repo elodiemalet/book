@@ -152,7 +152,7 @@ export default {
             return this.images.find(image => image.pageType === type) || null;
         },
         saveFiles(files: File[], pageType: string) {
-            const entity = files[0] as any;
+            const entity = files[0];
             const file = entity.file as File;
             console.log(file);
             const formData = new FormData();

@@ -40,7 +40,7 @@ export default {
                 {name: '', key: 'actions', type: 'actions'},
             ],
             token: null,
-            posts: [] as any,
+            posts: [],
             loaded: false,
             count: 1,
             page: 1,

@@ -38,7 +38,7 @@ export default {
     components: {SafeHtml, BasePagination},
     data() {
         return {
-            posts: [] as any,
+            posts: [],
             loaded: false,
             count: 1,
             page: 1,

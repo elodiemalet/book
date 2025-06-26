@@ -5,7 +5,9 @@
         class="scroll-mt-14 pt-16 pb-8 sm:scroll-mt-32 sm:pt-20 sm:pb-10 lg:pt-32 lg:pb-16"
     >
         <Container>
-            <SectionHeading id="pricing-title" :number="4">
+            <SectionHeading
+                id="pricing-title"
+                :number="4">
                 Prix
             </SectionHeading>
             <p class="mt-8 font-display text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">

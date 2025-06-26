@@ -1,16 +1,10 @@
+import type { ImportResult} from "~/server/utils/importer/importFromJson";
 import {importFromJson, importFromText} from "~/server/utils/importer/importFromJson";
 
-interface ImportResult {
-    posts: {
-        success: number
-        error: number
-        total: number
-    }
-}
 
 export default defineEventHandler(async (event) => {
     await requireUserSession(event);
-    
+
     const files = await readMultipartFormData(event);
     const acceptedFileTypes = [
         'application/json',
@@ -33,6 +27,13 @@ export default defineEventHandler(async (event) => {
 
     const jsonFiles = [];
     const textFiles = [];
+    if (files === undefined) {
+        throw createError({
+            statusCode: 404,
+            statusMessage: 'No file uploaded',
+        });
+    }
+
     for (const file of files) {
 
         const type = file.type || '';
@@ -48,20 +49,20 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-
-    const results = [];
+    const results: ImportResult[] = [];
 
     if (jsonFiles.length > 0) {
         const jsonResult = await importFromJson({data: jsonFiles});
         jsonResult.forEach(item => {
-            console.log('item', item);
+            results.push(item);
         });
-        results.push(jsonResult);
     }
 
     if (textFiles.length > 0) {
         const textResult = await importFromText({data: textFiles});
-        results.push(textResult);
+        textResult.forEach(item => {
+            results.push(item);
+        });
     }
 
     if (results.length === 0) {
@@ -84,7 +85,6 @@ export default defineEventHandler(async (event) => {
                 total: acc.posts.total + curr.posts.total,
             }
         }),
-        // point de départ : le premier élément
         results[0]
     )
 

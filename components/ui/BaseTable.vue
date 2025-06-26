@@ -8,16 +8,20 @@
                             <th
                                 v-for="column in columns"
                                 :key="column.key"
-                                scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                                scope="col"
+                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                             >
                                 {{ column.name }}
                             </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        <tr v-for="(row, index) in rows" :key="index">
+                        <tr
+                            v-for="(row, index) in rows"
+                            :key="index">
                             <td
-                                v-for="column in columns" :key="column.key"
+                                v-for="column in columns"
+                                :key="column.key"
                                 :class="[
                                     column.bold ? 'font-medium text-gray-900' : 'font-normal',
                                     'whitespace-nowrap px-3 py-4 text-sm ',
@@ -27,7 +31,9 @@
                                     {{ row[column.key].toLocaleDateString('fr') }}
                                 </template>
                                 <template v-else-if="column.type === 'actions'">
-                                    <template v-for="(action, aindex) in row.actions" :key="aindex">
+                                    <template
+                                        v-for="(action, aindex) in row.actions"
+                                        :key="aindex">
                                         <template v-if="action.type === 'emit'">
                                             <BaseButton
                                                 class="inline-block ml-2"
@@ -67,7 +73,7 @@ import {defineComponent} from 'vue';
 import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 
 interface Row {
-    [key: string]: any;
+    [key: string]: string;
 }
 
 interface Column {

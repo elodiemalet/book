@@ -9,12 +9,18 @@
                     >
                         <GlassImage/>
                         <div class="glass-effect absolute inset-0 z-10"/>
-                        <img class="w-full" :src="coverImage?.url" :alt="coverImage?.name">
+                        <img
+                            class="w-full"
+                            :src="coverImage?.url"
+                            :alt="coverImage?.name">
                     </div>
 
                     <div
                         class="relative z-10 mx-auto flex w-64 rounded-xl bg-slate-600 shadow-xl md:w-80 lg:w-auto">
-                        <img class="w-full" :src="coverImage?.url" :alt="coverImage?.name">
+                        <img
+                            class="w-full"
+                            :src="coverImage?.url"
+                            :alt="coverImage?.name">
                     </div>
                 </div>
                 <div class="relative px-4 sm:px-6 lg:col-span-7 lg:pr-0 lg:pb-14 lg:pl-16 xl:pl-20">

@@ -1,6 +1,10 @@
 <template>
-    <TransitionRoot as="template" :show="open">
-        <DialogComponent class="relative z-[50] " @close="close">
+    <TransitionRoot
+        as="template"
+        :show="open">
+        <DialogComponent
+            class="relative z-[50] "
+            @close="close">
             <div class="fixed inset-0"/>
             <div class="fixed inset-0 overflow-hidden">
                 <div class="absolute inset-0 overflow-hidden">
@@ -8,9 +12,11 @@
                         <TransitionChild
                             as="template"
                             enter="transform transition ease-in-out duration-500 sm:duration-700"
-                            enter-from="translate-x-full" enter-to="translate-x-0"
+                            enter-from="translate-x-full"
+                            enter-to="translate-x-0"
                             leave="transform transition ease-in-out duration-500 sm:duration-700"
-                            leave-from="translate-x-0" leave-to="translate-x-full">
+                            leave-from="translate-x-0"
+                            leave-to="translate-x-full">
                             <DialogPanel class="pointer-events-auto w-screen max-w-2xl">
                                 <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                                     <div class="flex-1">
@@ -31,7 +37,9 @@
                                                     <div class="relative text-gray-400 hover:text-gray-500">
                                                         <span class="absolute -inset-2.5"/>
                                                         <span class="sr-only">Close panel</span>
-                                                        <XMarkIcon class="size-6" aria-hidden="true"/>
+                                                        <XMarkIcon
+                                                            class="size-6"
+                                                            aria-hidden="true"/>
                                                     </div>
                                                 </div>
                                             </div>

@@ -1,5 +1,8 @@
 <template>
-    <table class="wrapper" role="presentation" width="100%">
+    <table
+        class="wrapper"
+        role="presentation"
+        width="100%">
         <tbody>
             <!-- Header -->
             <tr>
@@ -7,7 +10,8 @@
                     <img
                         v-if="dataUrl.length > 0"
                         class="logo"
-                        :src="dataUrl" alt="Logo de MonEntreprise"
+                        :src="dataUrl"
+                        alt="Logo de MonEntreprise"
                     >
                 </td>
             </tr>
@@ -29,7 +33,9 @@
                 <td class="footer">
                     <p style="font-size:12px; color:#777777;">© 2025 MonEntreprise – Tous droits réservés</p>
                     <p style="font-size:12px; color:#777777;">
-                        <a href="http://localhost:3000/unsubscribe" style="color:#007bff;">Se désabonner</a>
+                        <a
+                            href="http://localhost:3000/unsubscribe"
+                            style="color:#007bff;">Se désabonner</a>
                     </p>
                 </td>
             </tr>

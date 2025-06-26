@@ -3,15 +3,16 @@
         <div class="space-y-6 ">
             <dl class="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4">
                 <div
-                    v-for="stat in stats" :key="stat.name"
+                    v-for="stat in stats"
+                    :key="stat.name"
                     class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
                     <dt class="text-sm/6 font-medium text-gray-500">{{ stat.name }}</dt>
                     <dd :class="[stat.changeType === 'negative' ? 'text-rose-600' : 'text-gray-700', 'text-xs font-medium']">
                         {{ stat.change }}
                     </dd>
                     <dd class="w-full flex-none text-3xl/10 font-medium tracking-tight text-gray-900">{{
-                            stat.value
-                        }}
+                        stat.value
+                    }}
                     </dd>
                 </div>
             </dl>
@@ -20,19 +21,27 @@
                 <div
                     class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
                     <div
-                        v-for="(action, actionIdx) in actions" :key="action.title"
+                        v-for="(action, actionIdx) in actions"
+                        :key="action.title"
                         :class="[actionIdx === 0 ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none' : '', actionIdx === 1 ? 'sm:rounded-tr-lg' : '', actionIdx === actions.length - 2 ? 'sm:rounded-bl-lg' : '', actionIdx === actions.length - 1 ? 'rounded-bl-lg rounded-br-lg sm:rounded-bl-none' : '', 'group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500']">
                         <div>
                             <span
                                 :class="[action.iconBackground, action.iconForeground, 'inline-flex rounded-lg p-3 ring-4 ring-white']">
-                                <component :is="action.icon" class="size-6" aria-hidden="true"/>
+                                <component
+                                    :is="action.icon"
+                                    class="size-6"
+                                    aria-hidden="true"/>
                             </span>
                         </div>
                         <div class="mt-8">
                             <h3 class="text-base font-semibold text-gray-900">
-                                <a :href="action.href" class="focus:outline-none">
+                                <a
+                                    :href="action.href"
+                                    class="focus:outline-none">
                                     <!-- Extend touch target to entire panel -->
-                                    <span class="absolute inset-0" aria-hidden="true"/>
+                                    <span
+                                        class="absolute inset-0"
+                                        aria-hidden="true"/>
                                     {{ action.title }}
                                 </a>
                             </h3>
@@ -41,7 +50,10 @@
                         <span
                             class="pointer-events-none absolute right-6 top-6 text-gray-300 group-hover:text-gray-400"
                             aria-hidden="true">
-                            <svg class="size-6" fill="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                class="size-6"
+                                fill="currentColor"
+                                viewBox="0 0 24 24">
                                 <path
                                     d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z"/>
                             </svg>

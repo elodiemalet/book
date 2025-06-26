@@ -23,7 +23,6 @@
 </template>
 <script setup lang="ts">
 import AdminPageHeading from "~/components/admin/ui/AdminPageHeading.vue";
-import AdminNavTabs from "~/components/admin/ui/AdminNavTabs.vue";
 
 const addUrl: string = useState<string>("addUrl")?.value ?? '';
 const editUrl: string = useState<string>("editUrl")?.value ?? '';

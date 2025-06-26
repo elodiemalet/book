@@ -2,7 +2,9 @@
     <h2
         class="inline-flex items-center rounded-full px-4 py-1 text-cyan-600 ring-1 ring-cyan-600 ring-inset"
     >
-        <span class="font-mono text-sm" aria-hidden="true">
+        <span
+            class="font-mono text-sm"
+            aria-hidden="true">
             {{ numberPadStart }}
         </span>
         <span class="ml-3 h-3.5 w-px bg-cyan-600/20"/>

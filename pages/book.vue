@@ -1,5 +1,7 @@
 <template>
-    <div v-if="loaded" class="flex flex-col items-center w-full ">
+    <div
+        v-if="loaded"
+        class="flex flex-col items-center w-full ">
         <CoverPage/>
         <BasePage>
             <!--            Page de faux-titre : Contient simplement le titre du recueil ou une citation évocatrice.-->
@@ -13,7 +15,9 @@
             <h2 class="title">Dédicace</h2>
             
             <div>
-                <img src="/images/fleur.png" alt="Fleur">
+                <img
+                    src="/images/fleur.png"
+                    alt="Fleur">
             </div>
 
         </BasePage>
@@ -76,7 +80,7 @@ export default {
         const bookStore = useBookStore();
         bookStore.fetchImagePages();
         return {
-            posts: [] as any,
+            posts: [],
             loaded: false,
             pageStart: 6,
             totalPages: 0,

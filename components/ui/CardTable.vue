@@ -8,7 +8,8 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th
-                                    v-for="(column, index) in columns" :key="index"
+                                    v-for="(column, index) in columns"
+                                    :key="index"
                                     scope="col"
                                     class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     {{ column.name }}
@@ -17,9 +18,12 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
-                            <tr v-for="(row,index) in rows" :key="index">
+                            <tr
+                                v-for="(row,index) in rows"
+                                :key="index">
                                 <td
-                                    v-for="(column, indexCol) in columns" :key="indexCol"
+                                    v-for="(column, indexCol) in columns"
+                                    :key="indexCol"
                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                 >
                                     {{ row[column.key] }}
@@ -36,7 +40,7 @@
 <script lang="ts">
 
 interface Row {
-    [key: string]: any;
+    [key: string]: string;
 }
 
 interface Column {

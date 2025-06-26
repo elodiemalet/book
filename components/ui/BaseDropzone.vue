@@ -18,8 +18,8 @@
                             Télécharger un fichier
                         </span>
                         <input
-                            ref="fileInputRef"
                             id="file-upload"
+                            ref="fileInputRef"
                             name="file-upload"
                             type="file"
                             class="sr-only"
@@ -33,22 +33,32 @@
             </div>
         </div>
         <admin-alert
+            v-if="errors.length > 0"
             title="Erreur lors du téléchargement du fichier"
             severity="danger"
             class="mt-3"
-            v-if="errors.length > 0"
             @close="errors = []"
         >
             <ul class="list-disc list-inside">
-                <li v-for="error in errors" :key="error">{{ error }}</li>
+                <li
+                    v-for="error in errors"
+                    :key="error">{{ error }}
+                </li>
             </ul>
         </admin-alert>
-        <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-            <li v-for="(file, index) in fileList" :key="index" class="col-span-1 flex rounded-md shadow-sm">
+        <ul
+            role="list"
+            class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+            <li
+                v-for="(file, index) in fileList"
+                :key="index"
+                class="col-span-1 flex rounded-md shadow-sm">
                 <div
                     class="flex flex-1 items-center justify-between truncate rounded-r-md border border-gray-200 bg-white">
                     <div class="flex-1 truncate px-4 py-2 text-sm">
-                        <a href="#" class="font-medium text-gray-900 hover:text-gray-600">
+                        <a
+                            href="#"
+                            class="font-medium text-gray-900 hover:text-gray-600">
                             {{
                                 file.name
                             }}
@@ -103,6 +113,7 @@ export default defineComponent({
             default: () => [],
         }
     },
+    emits: ['update:files'],
     setup(props) {
         const dropZoneRef = ref<HTMLElement | null>(null);
         const fileList = ref<FileEntity[]>(props.files);

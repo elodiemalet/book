@@ -3,10 +3,10 @@
         type="button"
         class="rounded-md  px-3 py-2 font-semibold shadow-xs disabled:cursor-not-allowed"
         :class="
-        [
-            outlined ? 'border text-purple-800 border-purple-600 bg-white hover:bg-purple-50' : 'bg-purple-600 hover:bg-purple-500 text-white',
-            loading ? 'cursor-not-allowed bg-opacity-75' : ''
-        ]"
+            [
+                outlined ? 'border text-purple-800 border-purple-600 bg-white hover:bg-purple-50' : 'bg-purple-600 hover:bg-purple-500 text-white',
+                loading ? 'cursor-not-allowed bg-opacity-75' : ''
+            ]"
         :disabled="loading"
         @click="$emit('click')"
     >
@@ -17,7 +17,7 @@
                 aria-hidden="true"
             />
             <span>
-            <slot/>
+                <slot/>
             </span>
         </span>
     </button>

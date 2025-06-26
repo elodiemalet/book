@@ -1,22 +1,36 @@
 <template>
     <div class="border-b border-gray-200 pb-6 ">
         <div>
-            <nav class="sm:hidden" aria-label="Back">
-                <a href="#" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
-                    <ChevronLeftIcon class="-ml-1 mr-1 size-5 shrink-0 text-gray-400" aria-hidden="true"/>
+            <nav
+                class="sm:hidden"
+                aria-label="Back">
+                <a
+                    href="#"
+                    class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
+                    <ChevronLeftIcon
+                        class="-ml-1 mr-1 size-5 shrink-0 text-gray-400"
+                        aria-hidden="true"/>
                     Back
                 </a>
             </nav>
-            <nav class="hidden sm:flex" aria-label="Breadcrumb">
-                <ol role="list" class="flex items-center space-x-4">
+            <nav
+                class="hidden sm:flex"
+                aria-label="Breadcrumb">
+                <ol
+                    role="list"
+                    class="flex items-center space-x-4">
                     <li>
                         <div class="flex">
-                            <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-700">Jobs</a>
+                            <a
+                                href="#"
+                                class="text-sm font-medium text-gray-500 hover:text-gray-700">Jobs</a>
                         </div>
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <ChevronRightIcon class="size-5 shrink-0 text-gray-400" aria-hidden="true"/>
+                            <ChevronRightIcon
+                                class="size-5 shrink-0 text-gray-400"
+                                aria-hidden="true"/>
                             <a
                                 href="#"
                                 class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Engineering</a>
@@ -24,9 +38,12 @@
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <ChevronRightIcon class="size-5 shrink-0 text-gray-400" aria-hidden="true"/>
+                            <ChevronRightIcon
+                                class="size-5 shrink-0 text-gray-400"
+                                aria-hidden="true"/>
                             <a
-                                href="#" aria-current="page"
+                                href="#"
+                                aria-current="page"
                                 class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Back End
                                 Developer</a>
                         </div>

@@ -15,7 +15,9 @@ import SafeHtml from "~/components/layout/SafeHtml.vue";
                     <span v-if="i === 0">
                         {{ titleLine }}
                     </span>
-                    <span v-else class="italic">
+                    <span
+                        v-else
+                        class="italic">
                         ~ {{ titleLine }}
                     </span>
                 </span>
@@ -25,7 +27,9 @@ import SafeHtml from "~/components/layout/SafeHtml.vue";
             v-else
             class="text-gray-500 italic flex gap-4 normal-case"
         >
-            <div v-for="titleLine in contentSplit(title)" :key="titleLine">
+            <div
+                v-for="titleLine in contentSplit(title)"
+                :key="titleLine">
                 {{ titleLine }}
             </div>
         </header>
@@ -36,7 +40,8 @@ import SafeHtml from "~/components/layout/SafeHtml.vue";
                 :class="contentSplit(contentLine)?.length > 1 ? 'grid grid-cols-2 gap-6' : ''"
             >
                 <div
-                    v-for="contentLinePart in contentSplit(contentLine)" :key="contentLinePart"
+                    v-for="contentLinePart in contentSplit(contentLine)"
+                    :key="contentLinePart"
                     class="min-h-4 first-letter:uppercase">
                     <SafeHtml :raw-html="contentLinePart"/>
                 </div>

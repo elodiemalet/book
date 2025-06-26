@@ -57,7 +57,8 @@
                 >
                     <li
                         v-for="feature in features"
-                        :key="feature" class="flex py-2">
+                        :key="feature"
+                        class="flex py-2">
                         <CheckIcon
                             :class="[
                                 'h-8 w-8 flex-none',

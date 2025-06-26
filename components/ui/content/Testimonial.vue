@@ -3,7 +3,9 @@
         :aria-label="`Testimonial from ${author.name}`"
         class="relative bg-slate-100 py-4 sm:py-6"
     >
-        <Container size="xs" class="relative">
+        <Container
+            size="xs"
+            class="relative">
             <figure>
                 <div class="flex text-yellow-500 ">
                     <StarRating/>

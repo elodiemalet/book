@@ -8,7 +8,7 @@ export interface PostEntityInterface {
     timestamp: number;
     date: Date;
     publishDate: Date;
-    attachments?: any[];
+    attachments?: [];
 }
 
 export default class PostEntity implements PostEntityInterface {
@@ -19,9 +19,9 @@ export default class PostEntity implements PostEntityInterface {
     public timestamp: number;
     public date: Date;
     public publishDate: Date;
-    public attachments?: any[];
+    public attachments?: [];
 
-    constructor(id: number | null, postTitle: string, author: string, content: string, timestamp: number, publishDate: Date, attachments?: any[]) {
+    constructor(id: number | null, postTitle: string, author: string, content: string, timestamp: number, publishDate: Date, attachments?: []) {
         this.id = id;
         this.postTitle = postTitle;
         this.author = author;
@@ -54,7 +54,7 @@ export default class PostEntity implements PostEntityInterface {
         yield JSON.stringify(this.attachments);
     }
 
-    public static create(postTitle: string = '', author: string = '', content: string = '', attachments?: any[]) {
-        return new PostEntity(null, postTitle, author, content, new Date().getTime(), new Date().getTime(), attachments);
+    public static create(postTitle: string = '', author: string = '', content: string = '', attachments?: []) {
+        return new PostEntity(null, postTitle, author, content, new Date().getTime(), new Date(), attachments);
     }
 }

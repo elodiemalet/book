@@ -69,7 +69,7 @@ export default defineComponent({
         return {
             file: null,
             files: [],
-            resultImportedDatas: [] as any[],
+            resultImportedDatas: [],
             loading: false,
         };
     },
