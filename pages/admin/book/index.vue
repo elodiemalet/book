@@ -154,7 +154,6 @@ export default {
         saveFiles(files: File[], pageType: string) {
             const entity = files[0];
             const file = entity.file as File;
-            console.log(file);
             const formData = new FormData();
             formData.append('file', file, file.name);
             formData.append('data', pageType);
@@ -163,7 +162,6 @@ export default {
                 body: formData
             })
                 .then(data => {
-                    console.log(data);
                     this.images = data as AttachmentEntityInterface[];
 
                     this.toast.add({

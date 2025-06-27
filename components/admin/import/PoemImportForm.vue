@@ -103,7 +103,6 @@ export default defineComponent({
                 const result = {...data.value?.result};
                 Object.entries(result).forEach(([, item]) => {
                     Object.entries(item).forEach(([type, data]) => {
-                        console.log(type, data, item);
                         this.resultImportedDatas.push({
                             type: type,
                             success: data.success,

@@ -12,6 +12,7 @@
     "postinstall": "nuxt prepare",
     "prerender": "NODE_ENV=production nuxt generate",
     "init-db": "sequelize-cli db:migrate",
+    "create-migration": "sequelize-cli migration:generate --name",
     "lint": "eslint . --ext .js,.ts,.vue",
     "lint:fix": "eslint . --ext .js,.ts,.vue --fix"
   },

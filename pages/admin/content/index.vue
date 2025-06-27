@@ -2,6 +2,7 @@
     <NuxtLayout name="admin-page">
         <template #title>Liste des contenus</template>
         <BaseTable
+            class="mt-8"
             :columns="columns"
             :rows="posts"
             @action="doAction"
