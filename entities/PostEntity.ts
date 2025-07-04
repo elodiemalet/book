@@ -1,4 +1,5 @@
 import type {PostInterface} from "~/server/models/post";
+import {z} from "zod";
 
 export interface PostEntityInterface {
     id: number | null;
@@ -57,4 +58,20 @@ export default class PostEntity implements PostEntityInterface {
     public static create(postTitle: string = '', author: string = '', content: string = '', attachments?: []) {
         return new PostEntity(null, postTitle, author, content, new Date().getTime(), new Date(), attachments);
     }
+
+    public static schema = z.object({
+        id: z.number().optional(),
+        postTitle: z.string(),
+        author: z.string(),
+        content: z.string(),
+        publishDate: z.coerce
+            .date({
+                required_error: "La date de publication est requise",
+                invalid_type_error: "publishDate doit être une date valide (ISO 8601)"
+            })
+            .refine(d => !isNaN(d.getTime()), {
+                message: "publishDate doit être une date valide",
+            }),
+        attachments: z.array(z.string()).optional(),
+    });
 }
