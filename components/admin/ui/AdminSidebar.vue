@@ -68,6 +68,7 @@
                                                     :key="item.name">
                                                     <a
                                                         :href="item.href"
+                                                        class="inline-flex items-center justify-center"
                                                         :class="[item.current ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 font-semibold']">
                                                         <component
                                                             :is="item.icon"
@@ -120,6 +121,7 @@
                                     :key="item.name">
                                     <a
                                         :href="item.href"
+                                        class="inline-flex items-center justify-center"
                                         :class="[item.current ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:bg-indigo-700 hover:text-white', 'group flex gap-x-3 rounded-md p-2 font-semibold']">
                                         <component
                                             :is="item.icon"
@@ -278,9 +280,15 @@ import {
     FolderIcon,
     HomeIcon,
     UsersIcon,
+    GlobeAltIcon,
     XMarkIcon,
 } from '@heroicons/vue/24/outline';
-import {ArrowsUpDownIcon, ChevronDownIcon, ListBulletIcon, MagnifyingGlassIcon} from '@heroicons/vue/20/solid';
+import {
+    ArrowsUpDownIcon,
+    ChevronDownIcon,
+    ListBulletIcon,
+    MagnifyingGlassIcon
+} from '@heroicons/vue/20/solid';
 import DownloadBookButton from "~/components/admin/ui/DownloadBookButton.vue";
 
 export default {
@@ -320,7 +328,7 @@ export default {
                 {name: 'Mon livre', href: '/admin/book', icon: BookOpenIcon, current: false},
                 {name: 'Contenus', href: '/admin/content', icon: ListBulletIcon, current: false},
                 {name: 'Importer du contenu', href: '/admin/import', icon: ArrowsUpDownIcon, current: false},
-                {name: 'Mon site', href: '/', icon: ArrowsUpDownIcon, current: false},
+                {name: 'Mon site', href: '/', icon: GlobeAltIcon, current: false},
             ],
             searchActive: false,
             searchValue: '',

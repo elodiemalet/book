@@ -1,21 +1,21 @@
 <template>
     <NuxtLayout name="admin-page">
         <div class="space-y-6 ">
-            <dl class="mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4">
-                <div
-                    v-for="stat in stats"
-                    :key="stat.name"
-                    class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
-                    <dt class="text-sm/6 font-medium text-gray-500">{{ stat.name }}</dt>
-                    <dd :class="[stat.changeType === 'negative' ? 'text-rose-600' : 'text-gray-700', 'text-xs font-medium']">
-                        {{ stat.change }}
-                    </dd>
-                    <dd class="w-full flex-none text-3xl/10 font-medium tracking-tight text-gray-900">{{
-                        stat.value
-                    }}
-                    </dd>
+            <div class="bg-white py-24 sm:py-12">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="mx-auto max-w-2xl lg:max-w-none">
+                        <div class="text-center">
+                            <h2 class="text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                                Optimisez la création de vos e-books
+                            </h2>
+                            <p class="mt-4 text-lg/8 text-gray-600">Connectez vos contenus via API, organisez
+                                vos métadonnées et personnalisez la mise en forme pour générer des e-books
+                                professionnels en un clic.</p>
+                        </div>
+                        <AdminStats/>
+                    </div>
                 </div>
-            </dl>
+            </div>
 
             <div class="rounded-lg px-4 sm:px-6 lg:px-8 shadow-sm bg-gray-100 ring-1 ring-gray-950/10 py-10 mt-8 ">
                 <div
@@ -35,15 +35,15 @@
                         </div>
                         <div class="mt-8">
                             <h3 class="text-base font-semibold text-gray-900">
-                                <a
-                                    :href="action.href"
-                                    class="focus:outline-none">
+                                <router-link
+                                    :to="action.href"
+                                    :href="action.href">
                                     <!-- Extend touch target to entire panel -->
                                     <span
                                         class="absolute inset-0"
                                         aria-hidden="true"/>
                                     {{ action.title }}
-                                </a>
+                                </router-link>
                             </h3>
                             <p class="mt-2 text-sm text-gray-500">{{ action.description }}</p>
                         </div>
@@ -65,26 +65,30 @@
     </NuxtLayout>
 </template>
 
-<script setup>
+<script lang="ts">
 import {
     AcademicCapIcon,
     CheckBadgeIcon,
     ClockIcon,
     ReceiptRefundIcon,
 } from '@heroicons/vue/24/outline';
+import AdminStats from "~/components/admin/AdminStats.vue";
 
-const stats = [
-    {name: 'Revenue', value: '$405,091.00', change: '+4.75%', changeType: 'positive'},
-    {name: 'Overdue invoices', value: '$12,787.00', change: '+54.02%', changeType: 'negative'},
-    {name: 'Outstanding invoices', value: '$245,988.00', change: '-1.39%', changeType: 'positive'},
-    {name: 'Expenses', value: '$30,156.00', change: '+10.18%', changeType: 'negative'},
-];
+export default {
+    name: "AdminPage",
+    components: {AdminStats},
+    setup() {
+        return {
+            actions,
+        };
+    },
+};
 
 const actions = [
     {
-        title: 'Importat de contenu',
-        description: 'Importez vos fichiers (PDF, Word, Markdown) ou flux RSS en un clic ; notre outil détecte automatiquement chapitres et images pour structurer votre projet.',
-        href: '#',
+        title: 'Importation de contenu',
+        description: 'Importez vos fichiers (PDF, Word, Markdown) ou connectez une api en quelques clics.',
+        href: '/admin/import',
         icon: ClockIcon,
         iconForeground: 'text-teal-700',
         iconBackground: 'bg-teal-50',
@@ -92,7 +96,7 @@ const actions = [
     {
         title: 'Personnalisation',
         description: 'Choisissez un thème ou appliquez vos propres styles (CSS, polices, marges) via un éditeur WYSIWYG pour un rendu professionnel instantané.',
-        href: '#',
+        href: '/admin/import',
         icon: CheckBadgeIcon,
         iconForeground: 'text-purple-700',
         iconBackground: 'bg-purple-50',
@@ -100,7 +104,7 @@ const actions = [
     {
         title: 'Métadonnées',
         description: 'Renseignez titre, auteur, description, couverture et ISBN dans un formulaire unique ; toutes les infos sont intégrées à l’EPUB/MOBI.',
-        href: '#',
+        href: '/admin/content',
         icon: ReceiptRefundIcon,
         iconForeground: 'text-rose-700',
         iconBackground: 'bg-rose-50',
@@ -108,7 +112,7 @@ const actions = [
     {
         title: 'Génération',
         description: 'Exports EPUB, MOBI et PDF optimisés liseuses et mobiles ; récupérez votre ebook via un lien sécurisé dès la conversion terminée.',
-        href: '#',
+        href: '/admin/book',
         icon: AcademicCapIcon,
         iconForeground: 'text-indigo-700',
         iconBackground: 'bg-indigo-50',
