@@ -1,4 +1,5 @@
 import {z} from 'zod';
+import User, {UserRole} from "~/server/models/user";
 
 const bodySchema = z.object({
     email: z.string().email(),
@@ -8,16 +9,25 @@ const bodySchema = z.object({
 export default defineEventHandler(async (event) => {
     const {email, password} = await readValidatedBody(event, bodySchema.parse);
 
-    if (email === 'admin@admin.com' && password === 'iamtheadmin') {
-        // set the user session in the cookie
-        // this server util is auto-imported by the auth-utils module
-        await setUserSession(event, {
-            user: {
-                name: 'John Doe'
-            }
-        });
+    const user = await User.findOne({
+        where: {
+            email: email,
+            active: true,
+            role: UserRole.ADMIN
+        },
+    });
+
+    if (!user) {
+        throw createError({statusCode: 404, statusMessage: 'Utilisateur non trouvé'})
+    }
+
+    const {password: hashedPassword} = user.get({plain: true})
+
+    if (await verifyPassword(hashedPassword, password)) {
+        await setUserSession(event, {user});
         return {};
     }
+
     throw createError({
         statusCode: 401,
         message: 'Bad credentials'
