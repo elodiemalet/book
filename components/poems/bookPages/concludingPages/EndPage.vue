@@ -1,13 +1,11 @@
 <template>
     <div
-        class="page image-page w-a4 h-a4 bg-[#FCFCF9] text-center flex flex-col justify-center overflow-hidden relative">
-        <div>
-            <img
-                :src="endPage?.url"
-                :alt="endPage?.name"
-                class="m-auto"
-            >
-        </div>
+        class="page image-page text-center flex flex-col justify-center overflow-hidden relative">
+        <img
+            class="m-auto w-full h-full"
+            :src="endPage?.url"
+            :alt="endPage?.name"
+        >
     </div>
 </template>
 

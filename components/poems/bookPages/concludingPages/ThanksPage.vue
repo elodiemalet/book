@@ -1,5 +1,5 @@
 <template>
-    <div class="page w-a4 h-a4 text-left flex flex-col gap-4 justify-center pb-10">
+    <div class="page text-left flex flex-col gap-4 justify-center pb-10">
 
         <div><h1 class="title">Remerciements</h1></div>
         <div>

@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="loaded"
-        class="flex flex-col items-center w-full ">
+        class="flex flex-col items-center w-full book book-carre">
         <CoverPage/>
         <BasePage>
             <!--            Page de faux-titre : Contient simplement le titre du recueil ou une citation évocatrice.-->
@@ -73,8 +73,16 @@ export default {
     },
     setup() {
         definePageMeta({
+            layout: 'book',
             middleware: ['protect-book'],
         });
+        const className = 'book-carre'
+        useHead({
+            bodyAttrs: {
+                class: className,
+                'data-theme': 'dark'
+            }
+        })
     },
     data() {
         const bookStore = useBookStore();

@@ -1,9 +1,10 @@
 <template>
     <BaseButton
-        class="self-end flex gap-2 items-center justify-center"
     >
-        <div>Enregistrer</div>
-        <CheckIcon class="w-5 h-5"/>
+        <div class="flex items-center gap-x-2">
+            <div>Enregistrer</div>
+            <CheckIcon class="w-5 h-5"/>
+        </div>
     </BaseButton>
 </template>
 <script setup lang="ts">

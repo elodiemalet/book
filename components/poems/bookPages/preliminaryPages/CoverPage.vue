@@ -1,13 +1,11 @@
 <template>
     <div
-        class="page image-page w-a4 h-a4 bg-[#FCFCF9] text-center flex flex-col justify-center overflow-hidden relative">
-        <div>
-            <img
-                class="m-auto"
-                :src="coverPage?.url"
-                :alt="coverPage?.name"
-            >
-        </div>
+        class="page image-page text-center flex flex-col justify-center overflow-hidden relative">
+        <img
+            class="m-auto w-full h-full"
+            :src="coverPage?.url"
+            :alt="coverPage?.name"
+        >
     </div>
 </template>
 

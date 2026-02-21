@@ -10,11 +10,12 @@ export async function generatePdfFromEvent(token: string, protocol: string, host
     });
 
     const page = await browser.newPage();
+    await page.emulateMediaType('print');
     await page.goto(url, {waitUntil: 'networkidle0'});
 
     const pdfBuffer = await page.pdf({
-        format: 'A4',
         printBackground: true,
+        preferCSSPageSize: true
     });
 
     await browser.close();

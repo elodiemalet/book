@@ -41,6 +41,7 @@ export default defineNuxtConfig({
         '~/assets/styles/fonts.scss',
         '~/assets/styles/tailwind.css',
         '~/assets/styles/main.scss',
+        '~/assets/styles/pageSize.scss',
     ],
     postcss: {
         plugins: {

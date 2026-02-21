@@ -4,7 +4,7 @@ import SafeHtml from "~/components/layout/SafeHtml.vue";
 </script>
 
 <template>
-    <div class="page w-a4 h-a4 text-left flex flex-col gap-4 justify-center pb-10 relative">
+    <div class="page text-left flex flex-col gap-4 justify-center pb-10 relative">
 
         <div v-if="prevPageId !== id">
             <h2 class="title text-left pl-10 flex normal-case">
