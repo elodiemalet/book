@@ -307,28 +307,7 @@ export default {
         extend: {
             backgroundImage: {
                 'pattern-gradient': 'url(/images/background-img.png)',
-                'fleur': 'url(/images/fleur.png)',
             },
-            // width: {
-            //     massMarket: '108mm',
-            //     digest: '140mm',
-            //     trade: '152.4mm',
-            //     usLetter: '215.9mm',
-            //     a4: '210mm',
-            //     a5: '148mm',
-            //     a6: '105mm',
-            //     b5: '176mm',
-            // },
-            // height: {
-            //     massMarket: '178mm',
-            //     digest: '216mm',
-            //     trade: '228.6mm',
-            //     usLetter: '279.4mm',
-            //     a4: '297mm',
-            //     a5: '210mm',
-            //     a6: '148mm',
-            //     b5: '250mm',
-            // },
             fontSize: {
                 xs: ['0.75rem', {lineHeight: '1rem'}],
                 sm: ['0.875rem', {lineHeight: '1.5rem'}],

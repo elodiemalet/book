@@ -4,9 +4,11 @@ import SafeHtml from "~/components/layout/SafeHtml.vue";
 </script>
 
 <template>
-    <div class="page text-left flex flex-col gap-4 justify-center pb-10 relative">
+    <div class="page text-left flex flex-col gap-4 relative">
 
-        <div v-if="prevPageId !== id">
+        <div
+            v-if="prevPageId !== id"
+            class="mt-8">
             <h2 class="title text-left pl-10 flex normal-case">
                 <span
                     v-for="(titleLine, i) in contentSplit(title)"

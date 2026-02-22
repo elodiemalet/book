@@ -1,5 +1,47 @@
 import type {AttachmentEntityInterface} from "~/entities/AttachmentEntity";
 
+export const PAGE_FORMAT_SIZES: Record<string, string> = {
+    poche: '108mm 175mm',
+    digest: '140mm 216mm',
+    a5: '148mm 210mm',
+    royal: '156mm 234mm',
+    roman: '152mm 229mm',
+    bd: '168mm 260mm',
+    executif: '178mm 254mm',
+    'crown-quarto': '189mm 246mm',
+    'petit-carre': '191mm 191mm',
+    a4: '210mm 297mm',
+    carre: '216mm 216mm',
+    'lettre-us': '216mm 279mm',
+    'petit-paysage': '229mm 178mm',
+    'lettre-us-paysage': '279mm 216mm',
+    'a4-paysage': '297mm 210mm',
+    calendrier: '279mm 216mm',
+};
+
+// Max lines and chars per format, calculated from content area dimensions
+// Height: A4 = 297mm, padding 10.6mm top+bottom → 275.8mm → 38 lines → ~7.26mm/line
+// Width:  content width (w - padRight - padLeft) at 16px Cormorant → ~0.5 chars/mm
+// First page ratio: 32/38 ≈ 0.84 (title + author header take space)
+export const PAGE_FORMAT_LIMITS: Record<string, { maxLines: number; maxLinesFirstPage: number; maxCharsPerLine: number }> = {
+    poche:              { maxLines: 22, maxLinesFirstPage: 18, maxCharsPerLine: 35 },
+    digest:             { maxLines: 27, maxLinesFirstPage: 23, maxCharsPerLine: 45 },
+    a5:                 { maxLines: 26, maxLinesFirstPage: 22, maxCharsPerLine: 48 },
+    royal:              { maxLines: 29, maxLinesFirstPage: 25, maxCharsPerLine: 50 },
+    roman:              { maxLines: 29, maxLinesFirstPage: 24, maxCharsPerLine: 49 },
+    bd:                 { maxLines: 33, maxLinesFirstPage: 28, maxCharsPerLine: 54 },
+    executif:           { maxLines: 32, maxLinesFirstPage: 27, maxCharsPerLine: 57 },
+    'crown-quarto':     { maxLines: 31, maxLinesFirstPage: 26, maxCharsPerLine: 61 },
+    'petit-carre':      { maxLines: 24, maxLinesFirstPage: 20, maxCharsPerLine: 62 },
+    a4:                 { maxLines: 38, maxLinesFirstPage: 32, maxCharsPerLine: 68 },
+    carre:              { maxLines: 27, maxLinesFirstPage: 23, maxCharsPerLine: 70 },
+    'lettre-us':        { maxLines: 35, maxLinesFirstPage: 30, maxCharsPerLine: 70 },
+    'petit-paysage':    { maxLines: 22, maxLinesFirstPage: 19, maxCharsPerLine: 74 },
+    'lettre-us-paysage': { maxLines: 27, maxLinesFirstPage: 23, maxCharsPerLine: 90 },
+    'a4-paysage':       { maxLines: 26, maxLinesFirstPage: 22, maxCharsPerLine: 96 },
+    calendrier:         { maxLines: 27, maxLinesFirstPage: 23, maxCharsPerLine: 90 },
+};
+
 export interface BookConfigState {
     title: string;
     author: string;
@@ -35,6 +77,15 @@ export const useBookStore = defineStore('bookStore', {
             return state.imagePages.find(image => image.pageType === type);
         },
         bookCssClass: (state) => `book-${state.config.pageFormat}`,
+        pageSize: (state) => PAGE_FORMAT_SIZES[state.config.pageFormat] || '210mm 297mm',
+        formatMaxLines: (state) => PAGE_FORMAT_LIMITS[state.config.pageFormat] || PAGE_FORMAT_LIMITS.a4,
+        effectiveMaxLines(): number {
+            return Math.min(this.config.maxLines, this.formatMaxLines.maxLines);
+        },
+        effectiveMaxLinesFirstPage(): number {
+            return Math.min(this.config.maxLinesFirstPage, this.formatMaxLines.maxLinesFirstPage);
+        },
+        maxCharsPerLine: (state) => (PAGE_FORMAT_LIMITS[state.config.pageFormat] || PAGE_FORMAT_LIMITS.a4).maxCharsPerLine,
     },
     actions: {
         async fetchImagePages() {

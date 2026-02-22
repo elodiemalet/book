@@ -1,5 +1,5 @@
 <template>
-    <div class="page text-center flex flex-col gap-4 justify-center pb-10">
+    <div class="page text-center flex flex-col gap-4 justify-center relative">
         <slot/>
         <footer v-if="page">
             {{ page }}

@@ -38,6 +38,8 @@
   background: white;
   position: relative;
   overflow: hidden;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 // ───────────────────────────────────────────────────────
@@ -211,6 +213,7 @@ $book-formats: (
       }
 
       footer {
+        position: absolute;
         bottom: $ftr-bot;
         left: 0;
         width: 100%;
