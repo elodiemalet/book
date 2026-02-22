@@ -1,6 +1,12 @@
 <template>
     <NuxtLayout name="admin-page">
         <template #title>Mon livre</template>
+        <template #actions>
+            <AdminNavTabs
+                :tabs="tabs"
+                class="mb-12"
+            />
+        </template>
         <div class="flex gap-4">
             <BaseCard v-if="coverPage">
                 <div class="flex gap-6 items-center justify-center ">
@@ -78,9 +84,11 @@ import ButtonCard from "~/components/ui/ButtonCard.vue";
 import type {AttachmentEntityInterface} from "~/entities/AttachmentEntity";
 import EditRoundButton from "~/components/ui/buttons/EditRoundButton.vue";
 import ImportImage from "~/components/admin/book/ImportImage.vue";
+import AdminNavTabs from "~/components/admin/ui/AdminNavTabs.vue";
 
 export default {
     components: {
+        AdminNavTabs,
         ImportImage,
         EditRoundButton,
         ButtonCard,
@@ -92,6 +100,10 @@ export default {
         const toast = useToast();
         return {
             toast,
+            tabs: [
+                {name: 'Mon livre', route: '/admin/book', current: true},
+                {name: 'Configuration', route: '/admin/book/settings', current: false},
+            ],
             images: [] as AttachmentEntityInterface[],
             posts: [] as PostEntityInterface[],
             totalRecords: 0,

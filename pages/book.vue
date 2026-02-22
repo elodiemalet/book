@@ -1,42 +1,30 @@
 <template>
     <div
-        v-if="loaded"
-        class="flex flex-col items-center w-full book book-a4">
+        v-if="loaded && bookStore.configLoaded"
+        class="flex flex-col items-center w-full book"
+        :class="bookStore.bookCssClass">
         <CoverPage/>
         <BasePage>
             <!--            Page de faux-titre : Contient simplement le titre du recueil ou une citation évocatrice.-->
-            <h1 class="title">Recueil de Poèmes</h1>
-            <h3 class="title"></h3>
-            <h4 class="title">2019 - 2024</h4>
+            <h1 class="title">{{ bookStore.config.title }}</h1>
+            <h3 class="title">{{ bookStore.config.author }}</h3>
+            <h4 class="title">{{ bookStore.config.years }}</h4>
         </BasePage>
-        <BasePage>
+        <BasePage v-if="bookStore.config.dedicationText">
 
-            <!--            Dédicace : Une page où l’auteur peut dédier le recueil à une personne ou exprimer un hommage.-->
+            <!--            Dédicace : Une page où l'auteur peut dédier le recueil à une personne ou exprimer un hommage.-->
             <h2 class="title">Dédicace</h2>
-            
-            <div>
-                <img
-                    src="/images/fleur.png"
-                    alt="Fleur">
-            </div>
+            <p
+                class="text-left"
+                style="white-space: pre-line;">{{ bookStore.config.dedicationText }}</p>
 
         </BasePage>
-        <BasePage>
+        <BasePage v-if="bookStore.config.prefaceText">
 
             <h2 class="title">Préface</h2>
-            <p class="text-left">
-                Ce recueil de poèmes est le fruit de plusieurs années de travail.
-            </p>
-            <p class="text-left">
-                Il regroupe des textes écrits entre 2019 et 2024.
-            </p>
-            <p class="text-left">
-                L’auteur y partage ses pensées, ses émotions et ses
-                réflexions à travers ses poèmes.
-            </p>
-            <p class="text-left">
-                J'espère que vous prendrez autant de plaisir à les lire qu’il en a eu à les écrire.
-            </p>
+            <p
+                class="text-left"
+                style="white-space: pre-line;">{{ bookStore.config.prefaceText }}</p>
 
         </BasePage>
         <PoemPage
@@ -76,28 +64,39 @@ export default {
             layout: 'book',
             middleware: ['protect-book'],
         });
-        const className = 'book-a4'
+        const bookStore = useBookStore();
+        const bookCssClass = computed(() => bookStore.bookCssClass);
         useHead({
             bodyAttrs: {
-                class: className,
+                class: bookCssClass,
                 'data-theme': 'dark'
             }
-        })
+        });
     },
     data() {
         const bookStore = useBookStore();
         bookStore.fetchImagePages();
         return {
+            bookStore,
             posts: [] as PostEntity[],
             pages: [] as PostEntity[],
             loaded: false,
-            pageStart: 6,
             totalPages: 0,
-            maxLines: 38,
-            maxLinesFirstPage: 32,
         };
     },
-    mounted() {
+    computed: {
+        pageStart(): number {
+            return this.bookStore.config.pageStart;
+        },
+        maxLines(): number {
+            return this.bookStore.config.maxLines;
+        },
+        maxLinesFirstPage(): number {
+            return this.bookStore.config.maxLinesFirstPage;
+        },
+    },
+    async mounted() {
+        await this.bookStore.fetchConfig();
         this.getPosts();
     },
     methods: {
