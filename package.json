@@ -40,6 +40,7 @@
     "nodemailer": "^7.0.3",
     "nuxt": "^3.17.1",
     "nuxt-auth-utils": "^0.5.16",
+    "pdf-lib": "^1.17.1",
     "pg": "^8.13.3",
     "pg-hstore": "^2.3.4",
     "pinia": "^3.0.2",

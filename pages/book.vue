@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="loaded"
-        class="flex flex-col items-center w-full book book-carre">
+        class="flex flex-col items-center w-full book book-a4">
         <CoverPage/>
         <BasePage>
             <!--            Page de faux-titre : Contient simplement le titre du recueil ou une citation évocatrice.-->
@@ -40,16 +40,16 @@
 
         </BasePage>
         <PoemPage
-            v-for="(post, i) in posts"
-            :id="post.id"
-            :key="post.id"
-            :next-page-id="posts[i + 1]?.id"
-            :prev-page-id="posts[i - 1]?.id"
-            :title="post.postTitle"
-            :content="post.content"
+            v-for="(page, i) in pages"
+            :id="page.id"
+            :key="page.id + '-' + i"
+            :next-page-id="pages[i + 1]?.id"
+            :prev-page-id="pages[i - 1]?.id"
+            :title="page.postTitle"
+            :content="page.content"
             :page="i + pageStart"
-            :date="post.date"
-            :author="post.author"
+            :date="page.date"
+            :author="page.author"
         />
         <EndPage/>
     </div>
@@ -76,7 +76,7 @@ export default {
             layout: 'book',
             middleware: ['protect-book'],
         });
-        const className = 'book-carre'
+        const className = 'book-a4'
         useHead({
             bodyAttrs: {
                 class: className,
@@ -88,25 +88,17 @@ export default {
         const bookStore = useBookStore();
         bookStore.fetchImagePages();
         return {
-            posts: [],
+            posts: [] as PostEntity[],
+            pages: [] as PostEntity[],
             loaded: false,
             pageStart: 6,
             totalPages: 0,
-            maxLines: 42,
+            maxLines: 38,
+            maxLinesFirstPage: 32,
         };
-    },
-    watch: {
-        page() {
-            this.getPosts();
-        },
-        limit() {
-            this.getPosts();
-        },
     },
     mounted() {
         this.getPosts();
-        this.totalPages = Math.ceil(this.posts.length);
-        this.loaded = true;
     },
     methods: {
         getPosts() {
@@ -116,7 +108,43 @@ export default {
                     this.posts = data.rows.map((post: PostInterface) => {
                         return PostEntity.hydrateFromDatabase(post);
                     });
+                    this.pages = this.paginatePosts(this.posts);
+                    this.totalPages = this.pages.length;
+                    this.loaded = true;
                 });
+        },
+        paginatePosts(posts: PostEntity[]): PostEntity[] {
+            const pages: PostEntity[] = [];
+
+            for (const post of posts) {
+                const lines = post.content.split('\n');
+
+                if (lines.length <= this.maxLinesFirstPage) {
+                    pages.push(post);
+                    continue;
+                }
+
+                // First page has fewer lines (title + author take space)
+                let offset = 0;
+                const firstChunk = lines.slice(0, this.maxLinesFirstPage).join('\n');
+                pages.push(new PostEntity(
+                    post.id, post.postTitle, post.author,
+                    firstChunk, post.timestamp, post.publishDate
+                ));
+                offset = this.maxLinesFirstPage;
+
+                // Continuation pages
+                while (offset < lines.length) {
+                    const chunk = lines.slice(offset, offset + this.maxLines).join('\n');
+                    pages.push(new PostEntity(
+                        post.id, post.postTitle, post.author,
+                        chunk, post.timestamp, post.publishDate
+                    ));
+                    offset += this.maxLines;
+                }
+            }
+
+            return pages;
         }
     }
 };

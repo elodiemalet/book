@@ -2,7 +2,7 @@
     <div
         class="page image-page text-center flex flex-col justify-center overflow-hidden relative">
         <img
-            class="m-auto w-full h-full"
+            class="absolute inset-0 w-full h-full object-cover"
             :src="coverPage?.url"
             :alt="coverPage?.name"
         >

@@ -19,10 +19,16 @@
     margin: 0;
     padding: 0;
   }
+
+  .book {
+    margin: 0;
+    padding: 0;
+  }
 }
 
-.page:not(:last-of-type) {
-  page-break-after: always;
+.page:not(:first-of-type) {
+  page-break-before: always;
+  break-before: page;
 }
 
 .page {
@@ -31,7 +37,7 @@
   color: black;
   background: white;
   position: relative;
-  border: 1px solid black;
+  overflow: hidden;
 }
 
 // ───────────────────────────────────────────────────────

@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import {PDFDocument} from 'pdf-lib';
 
 export async function generatePdfFromEvent(token: string, protocol: string, host: string) {
 
@@ -13,6 +14,8 @@ export async function generatePdfFromEvent(token: string, protocol: string, host
     await page.emulateMediaType('print');
     await page.goto(url, {waitUntil: 'networkidle0'});
 
+    const expectedPages = await page.$$eval('.page', (els) => els.length);
+
     const pdfBuffer = await page.pdf({
         printBackground: true,
         preferCSSPageSize: true
@@ -20,5 +23,13 @@ export async function generatePdfFromEvent(token: string, protocol: string, host
 
     await browser.close();
 
-    return pdfBuffer;
+    const pdfDoc = await PDFDocument.load(pdfBuffer);
+    const totalPages = pdfDoc.getPageCount();
+
+    while (totalPages > expectedPages && pdfDoc.getPageCount() > expectedPages) {
+        pdfDoc.removePage(pdfDoc.getPageCount() - 1);
+    }
+
+    const finalPdf = await pdfDoc.save();
+    return Buffer.from(finalPdf);
 }
