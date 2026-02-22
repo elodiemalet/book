@@ -38,13 +38,18 @@ export class AiHttpClient {
     }
 
     async post(body: AiRequestBody): Promise<AiResponse> {
-        const response = await fetch(this._url + 'engines/llama.cpp/v1/chat/completions', {
+        const response = await fetch(this._url + 'v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(body),
         });
+
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`AI API error ${response.status}: ${text}`);
+        }
 
         return response.json();
     }

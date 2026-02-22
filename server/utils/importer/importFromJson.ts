@@ -1,4 +1,4 @@
-import type { PostInterface} from "~/server/models/post";
+import type {PostInterface} from "~/server/models/post";
 import Post, {getPostSchemaValidator} from "~/server/models/post";
 import {extractWithPandoc} from "~/server/services/pandoc";
 import {AiHttpClient} from "~/server/services/aiHttpClient";
@@ -43,7 +43,13 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
                 const fileExtension = file.filename.split('.').pop() || '';
                 const text = await extractWithPandoc(file.data, fileExtension);
                 const documentInformation = await aiApi.getDocumentInformation(text);
-                return JSON.parse(documentInformation.choices[0].message.content);
+                const raw = documentInformation.choices[0].message.content;
+                const jsonMatch = raw.match(/\{[\s\S]*\}/);
+                if (!jsonMatch) {
+                    console.error('No JSON found in AI response:', raw);
+                    return null;
+                }
+                return JSON.parse(jsonMatch[0]);
             } catch (e) {
                 console.error('error', e);
                 return null;
@@ -51,13 +57,13 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
         })
     );
 
-    return importPosts(texts);
+    const validTexts = texts.filter((t): t is PostInterface => t !== null);
+    return importPosts(validTexts);
 }
 
 async function importPosts(posts: PostInterface[]): Promise<ImportResult> {
 
     const resultImport = await Promise.all(posts.map(async (post) => {
-        //valid
         const isValid = await getPostSchemaValidator().isValid(post);
         if (!isValid) {
             console.error('invalid post', post);

@@ -20,8 +20,9 @@
                         <input
                             id="file-upload"
                             ref="fileInputRef"
-                            name="file-upload"
+                            name="file-upload[]"
                             type="file"
+                            multiple
                             class="sr-only"
                             :accept="accept.join('|')"
                             @change="addFile"
@@ -192,24 +193,27 @@ export default defineComponent({
 
         },
         addFile(event: Event) {
-            const file = (event.target as HTMLInputElement).files?.[0];
-            if (file) {
-                if (file.size > this.maxSize) {
-                    alert('File too large');
-                    return;
-                }
-                const id = file.name + new Date().getTime();
-                // check file exist in list
-                if (this.fileList.find(f => {
-                    const fileItem = f.file as File;
-                    return fileItem.name === file.name && fileItem.size === file.size && fileItem.lastModified === file.lastModified;
-                })) {
-                    console.error('file exist');
-                    return;
-                }
+            const files = Array.from((event.target as HTMLInputElement).files || []);
 
-                const fileEntity = new FileEntity(id, file.name, file.size, file.type, file);
-                this.fileList.push(fileEntity);
+            if (files.length > 0) {
+                files.forEach(file => {
+                    if (file.size > this.maxSize) {
+                        alert('File too large');
+                        return;
+                    }
+                    const id = file.name + new Date().getTime();
+                    // check file exist in list
+                    if (this.fileList.find(f => {
+                        const fileItem = f.file as File;
+                        return fileItem.name === file.name && fileItem.size === file.size && fileItem.lastModified === file.lastModified;
+                    })) {
+                        console.error('file exist');
+                        return;
+                    }
+
+                    const fileEntity = new FileEntity(id, file.name, file.size, file.type, file);
+                    this.fileList.push(fileEntity);
+                });
             }
         }
     }
