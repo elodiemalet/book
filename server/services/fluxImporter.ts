@@ -44,20 +44,21 @@ export class FluxImporter {
                     ALLOWED_ATTR: ['src', 'alt', 'title']
                 });
 
-                Post.create({
-                    postTitle: title,
-                    author: author,
-                    content: sanitizedContent,
-                    externalId: externalId,
-                    publishDate: new Date(published),
-                }).then((post) => {
+                try {
+                    const post = await Post.create({
+                        postTitle: title,
+                        author: author,
+                        content: sanitizedContent,
+                        externalId: externalId,
+                        publishDate: new Date(published),
+                    });
                     contents.push(post);
-                }).catch((error) => {
+                } catch (error) {
                     throw createError({
                         statusCode: 500,
-                        statusMessage: error.message
+                        statusMessage: error instanceof Error ? error.message : String(error)
                     });
-                });
+                }
 
             }
         }

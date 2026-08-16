@@ -6,10 +6,7 @@ export default defineNuxtConfig({
     devtools: {enabled: true},
     runtimeConfig: {
         pdfApiToken: process.env.PDF_API_TOKEN,
-        public: {
-            // exposé au client
-            pdfApiToken: process.env.PDF_API_TOKEN
-        }
+        public: {},
     },
     app: {
         head: {

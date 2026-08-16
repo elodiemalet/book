@@ -44,7 +44,7 @@ export default defineEventHandler(async (event/**/) => {
         await Post.update(
             {
                 postTitle: body.postTitle,
-                content: body.content,
+                content: sanitize(body.content),
             },
             {
                 where: {

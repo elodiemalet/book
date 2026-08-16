@@ -1,7 +1,7 @@
 import Post from "~/server/models/post";
 
 export default defineEventHandler(async (event) => {
-    //@todo : access control from front only
+    await requireUserSession(event);
     const id = getRouterParam(event, 'id');
 
     try {

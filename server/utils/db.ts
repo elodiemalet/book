@@ -1,38 +1,25 @@
 import {type Dialect, Sequelize} from 'sequelize';
-import configJson from '../../config/config.json';
 
 type Environments = 'development' | 'test' | 'production';
 const env = (process.env.NODE_ENV as Environments) || 'development';
 
-interface DBSettings {
-    username: string;
-    password: string;
-    database: string;
-    host: string;
-    dialect: string;
-}
-
-interface DBConfig {
-    [key: string]: DBSettings;
-}
-
-const config: DBConfig = configJson as unknown as DBConfig;
-
-// if env is not in, type Environments return
-if (config[env] === undefined) {
-    console.warn(`[WARN] No config for env ${env} found, using development config`);
-}
-
-const {username, password, database, host, dialect} = config[env] || config.development;
+// Defaults only cover local dev/test (matching docker-compose service names);
+// production must be fully configured via DB_* env vars.
+const DEFAULTS: Record<Environments, { host: string; database: string; username: string }> = {
+    development: {host: 'postgres', database: 'livre', username: 'user'},
+    test: {host: 'postgres', database: 'database_test', username: 'user'},
+    production: {host: '', database: '', username: ''},
+};
+const defaults = DEFAULTS[env] || DEFAULTS.development;
 
 const sequelize: Sequelize = new Sequelize(
-    database,
-    username,
-    password,
+    process.env.DB_NAME || defaults.database,
+    process.env.DB_USER || defaults.username,
+    process.env.DB_PASSWORD,
     {
-        host,
-        dialect: dialect as Dialect,
-        port: 5432,
+        host: process.env.DB_HOST || defaults.host,
+        dialect: 'postgres' as Dialect,
+        port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
         logging: false,
         benchmark: false,
     },

@@ -17,8 +17,8 @@ export default {
         return {
             toast: useToast(),
             credentials: {
-                email: 'admin@admin.com',
-                password: 'iamtheadmin',
+                email: '',
+                password: '',
             },
             user: null as User | null,
             loggedIn: false,
