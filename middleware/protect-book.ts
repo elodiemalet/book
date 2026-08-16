@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to) => {
         return;
     }
 
-    if (tokenFromQuery !== config.public.pdfApiToken) {
+    if (tokenFromQuery !== config.pdfApiToken) {
         throw createError({
             statusCode: 401,
             statusMessage: 'Unauthorized'

@@ -131,7 +131,7 @@ export default defineComponent({
             this.tokens = data.value as ApiTokenEntityInterface[] || [];
             console.log('getTokens', data.value);
         },
-        async revokeToken(token: ApiTokenEntityInterface, index: number) {
+        async revokeToken(token: ApiTokenEntityInterface) {
             const {data, error} = await useFetch('/api/config/api-token', {
                 method: 'DELETE',
                 headers: {

@@ -126,13 +126,6 @@ export default defineComponent({
             try {
                 const {data, error} = await useFetch('/api/generate-pdf', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: {
-                        endpoint: 'book',
-                        token: 'mon-token-perso',
-                    },
                     responseType: 'blob',
                 });
 

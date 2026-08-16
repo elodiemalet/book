@@ -2,18 +2,13 @@ import {setHeader} from "h3";
 import {generatePdfFromEvent} from "~/server/services/bookPdfGenerator";
 
 export default defineEventHandler(async (event/**/) => {
+    await requireUserSession(event);
+
     const protocol: string = event.node.req.headers?.forwarded || 'http';
     const host = event.node.req.headers?.host || 'localhost';
-    const body = await readBody(event);
 
     try {
-        const token = body.token;
-
-        if (token !== useRuntimeConfig().pdfApiToken) {
-            event.node.res.statusCode = 401;
-            return {error: 'Unauthorized'};
-        }
-
+        const token = useRuntimeConfig().pdfApiToken;
         const pdfBuffer = await generatePdfFromEvent(token, protocol, host);
         const fileName = `book.pdf`;
 

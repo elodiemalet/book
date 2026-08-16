@@ -10,18 +10,22 @@ export async function generatePdfFromEvent(token: string, protocol: string, host
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
-    const page = await browser.newPage();
-    await page.emulateMediaType('print');
-    await page.goto(url, {waitUntil: 'networkidle0'});
+    let pdfBuffer: Uint8Array;
+    let expectedPages: number;
+    try {
+        const page = await browser.newPage();
+        await page.emulateMediaType('print');
+        await page.goto(url, {waitUntil: 'networkidle0'});
 
-    const expectedPages = await page.$$eval('.page', (els) => els.length);
+        expectedPages = await page.$$eval('.page', (els) => els.length);
 
-    const pdfBuffer = await page.pdf({
-        printBackground: true,
-        preferCSSPageSize: true
-    });
-
-    await browser.close();
+        pdfBuffer = await page.pdf({
+            printBackground: true,
+            preferCSSPageSize: true
+        });
+    } finally {
+        await browser.close();
+    }
 
     const pdfDoc = await PDFDocument.load(pdfBuffer);
     const totalPages = pdfDoc.getPageCount();

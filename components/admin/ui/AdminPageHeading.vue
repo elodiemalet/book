@@ -76,11 +76,11 @@
 </template>
 
 <script>
-import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/vue/20/solid';
+import {ChevronLeftIcon} from '@heroicons/vue/20/solid';
 import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 
 export default {
-    components: {BaseButton, ChevronLeftIcon, ChevronRightIcon},
+    components: {BaseButton, ChevronLeftIcon},
     props: {
         title: {
             type: String,
