@@ -83,10 +83,17 @@ export class AiHttpClient {
                 1. Extraire les informations suivantes :
                    - postTitle : le titre du document.
                    - author : le nom de l’auteur.
-                   - content : Le corps du texte, restitué intégralement, sans aucune modifications ! Retirer le "postTitle" du "content". Conserver les sauts de paragraphe. 
+                   - content : Le corps du texte, restitué intégralement, avec uniquement le nettoyage décrit au point 2. Retirer le "postTitle" du "content". Conserver les retours à la ligne et les sauts de paragraphe.
                    - publishDate : la date de publication, au format ISO “YYYY-MM-DD”.
-                
-                2. Produire **uniquement** un **objet JSON** exactement dans ce format, sans commentaire, explication ou champ supplémentaire :
+
+                2. Nettoyer le "content", et seulement de cette façon :
+                   - Supprimer les caractères de mise en forme parasites : astérisques (*), dièses (#), tirets bas (_), accents graves (\`), puces isolées, séparateurs décoratifs (par exemple "* * *" ou "---").
+                   - Supprimer les données redondantes : si l’auteur et/ou la date apparaissent plusieurs fois (par exemple un en-tête "J.D. (le 12 mars 2021)" et une signature "12/03/2021 - J.D."), n’en garder qu’une seule occurrence, la signature en fin de texte.
+                   - Supprimer les restes de liens, d’images ou de légendes qui ne font pas partie du texte (par exemple "Voir la vidéo", "Lien :", "[image]").
+                   - Ne pas supprimer les vers répétés volontairement (refrains).
+                   - Ne rien reformuler, ne rien corriger, ne rien ajouter : les mots et la ponctuation du texte restent identiques.
+
+                3. Produire **uniquement** un **objet JSON** exactement dans ce format, sans commentaire, explication ou champ supplémentaire :
                 
                 {
                   "postTitle": "…",
@@ -95,9 +102,9 @@ export class AiHttpClient {
                   "publishDate": "YYYY-MM-DD"
                 }
                 
-                3. Ne rien retourner d’autre que cet objet JSON.
-                
-                Ne modifiez en rien le texte qui suit, ne rajoutez ni ponctuation, ni explications, ni formatage.
+                4. Ne rien retourner d’autre que cet objet JSON.
+
+                En dehors du nettoyage du point 2, ne modifiez en rien le texte qui suit : ne rajoutez ni ponctuation, ni explications, ni formatage.
                 Texte du document :
                 ---
                 ${text}

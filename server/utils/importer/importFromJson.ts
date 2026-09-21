@@ -3,6 +3,7 @@ import Post, {getPostSchemaValidator} from "~/server/models/post";
 import {extractWithPandoc} from "~/server/services/pandoc";
 import {AiHttpClient} from "~/server/services/aiHttpClient";
 import {sanitizeContent} from "~/server/services/contentSanitizer";
+import {cleanTextForAi} from "~/server/services/textCleaner";
 import type {MultiPartData} from "h3";
 
 
@@ -41,7 +42,7 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
                     return null;
                 }
                 const fileExtension = file.filename.split('.').pop() || '';
-                const text = await extractWithPandoc(file.data, fileExtension);
+                const text = cleanTextForAi(await extractWithPandoc(file.data, fileExtension));
                 const documentInformation = await aiApi.getDocumentInformation(text);
                 const raw = documentInformation.choices[0].message.content;
                 const jsonMatch = raw.match(/\{[\s\S]*\}/);
