@@ -4,15 +4,25 @@
             <div @click="prevPage">Previous</div>
         </div>
         <div class="flex gap-4 ">
-            <div
+            <template
                 v-for="(pageNumber, index) in paginationPages"
                 :key="index"
-                class="pagination-item"
-                :class="pageNumber === page ? 'selected' : ''"
-                @click="$emit('page', pageNumber)"
             >
-                {{ pageNumber }}
-            </div>
+                <div
+                    v-if="pageNumber === '...'"
+                    class="pagination-ellipsis"
+                >
+                    …
+                </div>
+                <div
+                    v-else
+                    class="pagination-item"
+                    :class="pageNumber === page ? 'selected' : ''"
+                    @click="$emit('page', pageNumber)"
+                >
+                    {{ pageNumber }}
+                </div>
+            </template>
         </div>
         <div class="pagination-item">
             <div @click="nextPage">Next</div>
@@ -21,6 +31,7 @@
 </template>
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {paginationItems, type PaginationItem} from '~/utils/pagination';
 
 export default defineComponent({
     props: {
@@ -39,18 +50,8 @@ export default defineComponent({
     },
     emits: ['prevPage', 'nextPage', 'page'],
     computed: {
-        paginationPages() {
-            const pages = [];
-            for (let i = 1; i <= this.countPage; i++) {
-                pages.push(i);
-            }
-            if (pages.length > 6) {
-                const firstPages = pages.slice(0, 3);
-                const lastPages = pages.slice(-3);
-                return [...firstPages, '...', ...lastPages];
-            }
-
-            return pages;
+        paginationPages(): PaginationItem[] {
+            return paginationItems(this.page, this.countPage);
         }
     },
     methods: {
@@ -78,6 +79,10 @@ export default defineComponent({
         @apply border-t border-cyan-500 text-cyan-500;
     }
 
+}
+
+.pagination-ellipsis {
+    @apply p-3 text-gray-400;
 }
 
 </style>

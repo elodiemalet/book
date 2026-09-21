@@ -1,18 +1,18 @@
 export default defineNuxtRouteMiddleware((to) => {
-    const config = useRuntimeConfig();
-    const tokenFromQuery = (to.query.token as string) || '';
+    const nuxtApp = useNuxtApp();
     const {loggedIn} = useUserSession();
 
-    if (loggedIn.value) {
-        return;
-    }
+    const allowed = canAccessBook({
+        loggedIn: loggedIn.value,
+        isHydratingServerRender: import.meta.client && nuxtApp.isHydrating === true && !!nuxtApp.payload.serverRendered,
+        tokenFromQuery: (to.query.token as string) || '',
+        expectedToken: import.meta.server ? useRuntimeConfig().pdfApiToken : undefined,
+    });
 
-    if (tokenFromQuery !== config.pdfApiToken) {
+    if (!allowed) {
         throw createError({
             statusCode: 401,
             statusMessage: 'Unauthorized'
         });
     }
-
-    return;
 });

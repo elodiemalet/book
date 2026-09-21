@@ -79,7 +79,8 @@ export async function processJob(job: ImportJob, file: MultiPartData): Promise<v
                     success: acc.posts.success + curr.posts.success,
                     error: acc.posts.error + curr.posts.error,
                     total: acc.posts.total + curr.posts.total,
-                }
+                },
+                errors: [...(acc.errors ?? []), ...(curr.errors ?? [])],
             }),
             {posts: {success: 0, error: 0, total: 0}}
         );
@@ -88,7 +89,7 @@ export async function processJob(job: ImportJob, file: MultiPartData): Promise<v
 
         if (merged.posts.success === 0) {
             job.status = 'error';
-            job.errorMessage = 'Aucun contenu importé';
+            job.errorMessage = merged.errors?.[0] ?? 'Aucun contenu importé';
         } else {
             job.status = 'done';
         }

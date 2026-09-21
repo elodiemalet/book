@@ -10,7 +10,7 @@
                 <p>
                     <SafeHtml :raw-html="post.content"/>
                 </p>
-                <p>{{ post.date.toLocaleDateString('fr') }} - {{ post.author }}</p>
+                <p>{{ formatSignature(post.author, post.publishDate) }}</p>
                 <footer>
                     <p>{{ i + 1 + (page - 1) * limit }} </p>
                 </footer>
@@ -33,6 +33,7 @@ import PostEntity from "~/entities/PostEntity.js";
 import BasePagination from "~/components/BasePagination.vue";
 import type {PostInterface} from "~/server/models/post";
 import SafeHtml from "~/components/layout/SafeHtml.vue";
+import {formatSignature} from "~/utils/signature";
 
 export default {
     components: {SafeHtml, BasePagination},
@@ -70,6 +71,7 @@ export default {
         this.loaded = true;
     },
     methods: {
+        formatSignature,
         async getPosts() {
 
             await fetch(`/api/post?limit=${this.limit}&page=${this.page}`)

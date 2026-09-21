@@ -22,6 +22,7 @@
 import BaseTable from "~/components/ui/BaseTable.vue";
 import type {PostInterface} from "~/server/models/post";
 import PostEntity from "~/entities/PostEntity";
+import type {PostEntityInterface} from "~/entities/PostEntity";
 
 export default {
     components: {BaseTable},
@@ -105,13 +106,42 @@ export default {
                     });
                 });
         },
-        async doAction(action: string) {
+        async doAction({action, row}: {action: string, row: PostEntityInterface}) {
             if (action === 'delete') {
                 this.toast.add({
                     id: 'delete',
                     title: 'Confirmation de suppression',
+                    description: `Supprimer « ${row.postTitle} » ? Cette action est définitive.`,
+                    color: 'red',
+                    timeout: 0,
+                    actions: [
+                        {label: 'Supprimer', color: 'red', click: () => this.deletePost(row)},
+                        {label: 'Annuler', color: 'gray', variant: 'ghost'},
+                    ],
                 });
             }
+        },
+        async deletePost(post: PostEntityInterface) {
+            try {
+                await $fetch(`/api/post/${post.id}`, {method: 'DELETE'});
+            } catch {
+                this.toast.add({
+                    id: 'error',
+                    title: 'Erreur lors de la suppression du contenu',
+                    color: 'red',
+                });
+                return;
+            }
+
+            this.toast.add({
+                id: 'success',
+                title: 'Contenu supprimé avec succès',
+            });
+            // Si on vient de vider la dernière page, on revient à la précédente
+            if (this.posts.length === 1 && this.page > 1) {
+                this.page--;
+            }
+            await this.getPosts();
         },
 
     }

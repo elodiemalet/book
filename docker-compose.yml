@@ -38,6 +38,9 @@ services:
         condition: service_healthy
     networks:
       - nuxt-postgres-network
+    env_file:
+      - path: .env.local
+        required: false
     environment:
       DB_HOST: postgres
       DB_USER: user

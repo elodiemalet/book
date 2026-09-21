@@ -48,6 +48,13 @@ describe('paginatePosts', () => {
         expect(pages[0]).toBe(post);
     });
 
+    it('does not reserve room for the author/date signature when it is hidden', () => {
+        const post = PostEntity.create('Titre', 'Auteur', Array.from({length: 6}, (_, i) => `ligne ${i}`).join('\n'));
+
+        expect(paginatePosts([post], limits)).toHaveLength(2);
+        expect(paginatePosts([post], {...limits, showSignature: false})).toHaveLength(1);
+    });
+
     it('splits a long poem across multiple pages without losing or duplicating lines', () => {
         const lines = Array.from({length: 12}, (_, i) => `ligne ${i}`);
         const post = PostEntity.create('Titre', 'Auteur', lines.join('\n'));

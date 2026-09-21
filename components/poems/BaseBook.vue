@@ -11,7 +11,7 @@
             <SafeHtml
                 :raw-html="post.content"
                 class="p-4"/>
-            <p>{{ post.publishDate.toLocaleDateString('fr') }} - {{ post.author }}</p>
+            <p v-if="bookStore.config.showSignature">{{ formatSignature(post.author, post.publishDate) }}</p>
 
         </div>
     </div>
@@ -30,6 +30,8 @@
 import type {PostEntityInterface} from "~/entities/PostEntity.js";
 import BasePagination from "~/components/BasePagination.vue";
 import SafeHtml from "~/components/layout/SafeHtml.vue";
+import {formatSignature} from "~/utils/signature";
+import {useBookStore} from "~/stores/bookStore";
 
 export default {
     components: {SafeHtml, BasePagination},
@@ -50,6 +52,7 @@ export default {
     emits: ['page', 'limit'],
     data() {
         return {
+            bookStore: useBookStore(),
             poems: [],
             loaded: false,
             count: 1,
@@ -67,7 +70,13 @@ export default {
             return Math.ceil(this.totalRecords / this.limit);
         }
     },
+    async mounted() {
+        if (!this.bookStore.configLoaded) {
+            await this.bookStore.fetchConfig();
+        }
+    },
     methods: {
+        formatSignature,
         prevPage() {
             this.page--;
             this.$emit('page', this.page);

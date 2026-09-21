@@ -65,6 +65,11 @@
                             v-model.number="form.pageStart"
                             type="number" />
                     </UFormGroup>
+                    <UCheckbox
+                        v-model="form.showSignature"
+                        label="Afficher l'auteur et la date sous chaque texte"
+                        help="À décocher pour un livre classique d'un seul auteur."
+                    />
                 </div>
             </div>
 
@@ -103,6 +108,7 @@ export default {
                 maxLines: 38,
                 maxLinesFirstPage: 32,
                 pageStart: 6,
+                showSignature: true,
             },
             pageFormats: [
                 {label: 'Poche (108 × 175 mm)', value: 'poche'},
@@ -141,6 +147,7 @@ export default {
                 this.form.maxLines = data.maxLines || 38;
                 this.form.maxLinesFirstPage = data.maxLinesFirstPage || 32;
                 this.form.pageStart = data.pageStart || 6;
+                this.form.showSignature = data.showSignature ?? true;
             }
         },
         async save() {

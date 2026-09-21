@@ -3,6 +3,7 @@ import Post, {getPostSchemaValidator} from "~/server/models/post";
 import {extractWithPandoc} from "~/server/services/pandoc";
 import {AiHttpClient} from "~/server/services/aiHttpClient";
 import {sanitizeContent} from "~/server/services/contentSanitizer";
+import {cleanTextForAi, removeAuthorDateLines} from "~/server/services/textCleaner";
 import type {MultiPartData} from "h3";
 
 
@@ -12,6 +13,8 @@ export interface ImportResult {
         error: number
         total: number
     }
+    // Raisons des échecs (IA indisponible, réponse illisible…), affichées dans la file d'import
+    errors?: string[]
 }
 
 export async function importFromJson(json: { data: MultiPartData[] }) {
@@ -33,6 +36,7 @@ export async function importFromText(files: { data: MultiPartData[] }) {
 async function getPostsFromTextFiles(files: MultiPartData[]) {
 
     const aiApi = new AiHttpClient();
+    const errors: string[] = [];
 
     const texts = await Promise.all(
         files.map(async (file) => {
@@ -41,24 +45,40 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
                     return null;
                 }
                 const fileExtension = file.filename.split('.').pop() || '';
-                const text = await extractWithPandoc(file.data, fileExtension);
+                const text = cleanTextForAi(await extractWithPandoc(file.data, fileExtension));
                 const documentInformation = await aiApi.getDocumentInformation(text);
                 const raw = documentInformation.choices[0].message.content;
                 const jsonMatch = raw.match(/\{[\s\S]*\}/);
                 if (!jsonMatch) {
                     console.error('No JSON found in AI response:', raw);
+                    errors.push('Réponse de l’IA illisible');
                     return null;
                 }
-                return JSON.parse(jsonMatch[0]);
+                const post = JSON.parse(jsonMatch[0]);
+                if (typeof post.content === 'string') {
+                    post.content = removeAuthorDateLines(post.content, post.author, post.publishDate);
+                }
+                return post;
             } catch (e) {
                 console.error('error', e);
+                errors.push(e instanceof Error ? e.message : String(e));
                 return null;
             }
         })
     );
 
     const validTexts = texts.filter((t): t is PostInterface => t !== null);
-    return importPosts(validTexts);
+    const result = await importPosts(validTexts);
+    const failed = texts.length - validTexts.length;
+
+    return {
+        posts: {
+            success: result.posts.success,
+            error: result.posts.error + failed,
+            total: result.posts.total + failed,
+        },
+        errors,
+    };
 }
 
 async function importPosts(posts: PostInterface[]): Promise<ImportResult> {

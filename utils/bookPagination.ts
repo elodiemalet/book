@@ -24,12 +24,14 @@ export interface BookPaginationLimits {
     maxLines: number;
     maxLinesFirstPage: number;
     maxCharsPerLine: number;
+    // Signature auteur/date sous chaque texte (affichée par défaut)
+    showSignature?: boolean;
 }
 
 export function paginatePosts(posts: PostEntity[], limits: BookPaginationLimits): PostEntity[] {
     const pages: PostEntity[] = [];
     // Visual lines reserved for author/date footer on the last page
-    const footerLines = 4;
+    const footerLines = limits.showSignature === false ? 0 : 4;
     const {maxLines, maxLinesFirstPage, maxCharsPerLine} = limits;
 
     for (const post of posts) {
@@ -43,15 +45,15 @@ export function paginatePosts(posts: PostEntity[], limits: BookPaginationLimits)
         }
 
         // Multi-page poem
-        // First page (title takes space, no footer)
-        let offset = 0;
-        const firstCount = fillPage(lines, maxLinesFirstPage, maxCharsPerLine);
+        // First page (title takes space, no footer). At least one line moves on,
+        // otherwise the footer would overflow this page.
+        const firstCount = Math.min(fillPage(lines, maxLinesFirstPage, maxCharsPerLine), lines.length - 1);
         const firstChunk = lines.slice(0, firstCount).join('\n');
         pages.push(new PostEntity(
             post.id, post.postTitle, post.author,
             firstChunk, post.timestamp, post.publishDate
         ));
-        offset = firstCount;
+        let offset = firstCount;
 
         // Continuation pages
         while (offset < lines.length) {
@@ -61,7 +63,7 @@ export function paginatePosts(posts: PostEntity[], limits: BookPaginationLimits)
             const isLastChunk = lastPageCount >= remaining.length;
             const count = isLastChunk
                 ? remaining.length
-                : fillPage(remaining, maxLines, maxCharsPerLine);
+                : Math.min(fillPage(remaining, maxLines, maxCharsPerLine), remaining.length - 1);
             const chunk = remaining.slice(0, count).join('\n');
             pages.push(new PostEntity(
                 post.id, post.postTitle, post.author,

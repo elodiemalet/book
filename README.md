@@ -1,117 +1,177 @@
-# Nuxt Minimal Starter
+# Livre
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Application Nuxt 3 qui transforme des contenus (poèmes, récits, textes) en livre mis en page, prêt à être exporté en PDF.
 
-## Setup
+On importe ses textes (fichiers, flux RSS ou API), on les édite dans une interface d'administration, on configure le livre (titre, dédicace, préface, format de page), puis on génère le PDF. Une page d'accueil publique présente le livre et permet de recevoir un extrait gratuit par email.
 
-Make sure to install dependencies:
+## Fonctionnalités
+
+- **Génération du livre** : rendu HTML paginé (`/book`) converti en PDF par Puppeteer, avec plusieurs formats d'impression (poche, A5, A4, carré, etc.).
+- **Administration** (`/admin`) : gestion des contenus avec éditeur riche (TipTap), statistiques, configuration du livre.
+- **Import de contenus** :
+  - fichiers `.json`, `.txt`, `.md`, `.html`, `.csv`, `.odt`, `.doc`. Les fichiers texte passent par Pandoc, puis par une IA qui extrait titre, auteur, date et contenu ;
+  - flux RSS/Atom (extraction des articles) ;
+  - API REST `/api/v1/post` authentifiée par token.
+- **Prospects** : formulaire de la page d'accueil qui enregistre l'email et envoie un extrait du livre en PDF.
+
+## Stack
+
+- Nuxt 3, Vue 3, TypeScript, Pinia
+- TailwindCSS, SCSS, @nuxt/ui, Headless UI, Heroicons
+- PostgreSQL avec Sequelize (migrations via `sequelize-cli`)
+- nuxt-auth-utils (session admin), tokens API en base
+- Puppeteer et pdf-lib pour le PDF, Pandoc pour l'extraction de texte
+- Vitest, ESLint, GitHub Actions
+
+## Prérequis
+
+- Docker et Docker Compose (méthode recommandée)
+- ou, sans Docker : Node.js 22, PostgreSQL, [Pandoc](https://pandoc.org/installing.html) (pour l'import de fichiers texte)
+
+## Démarrage avec Docker
+
+1. Créer un fichier `.env.local` à la racine (voir [Variables d'environnement](#variables-denvironnement)) :
+
+   ```dotenv
+   NUXT_SESSION_PASSWORD=une-chaine-aleatoire-d-au-moins-32-caracteres
+   PDF_API_TOKEN=un-token-secret
+   GEMINI_API_KEY=...
+   GEMINI_MODEL=gemini-2.5-flash
+   ```
+
+   Les variables `DB_*` sont déjà fournies par `docker-compose.yml`.
+
+2. Lancer les services :
+
+   ```bash
+   make up
+   ```
+
+   Le conteneur `nuxt` joue les migrations (`npm run init-db`) puis démarre le serveur de dev.
+
+3. Ouvrir :
+   - l'application sur http://localhost:3000
+   - l'administration sur http://localhost:3000/admin
+   - MailHog (emails envoyés en local) sur http://localhost:8025
+
+Commandes utiles :
+
+| Commande | Effet |
+| --- | --- |
+| `make up` / `make down` | Démarrer / arrêter les conteneurs |
+| `make rebuild` | Reconstruire l'image puis redémarrer |
+| `make logs` | Suivre les logs de l'application |
+| `make shell` | Ouvrir un shell dans le conteneur `nuxt` |
+| `make clean` | Tout arrêter et supprimer les volumes (**efface la base**) |
+
+## Démarrage sans Docker
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+npm ci
 ```
 
-## Development Server
+Créer un fichier `.env` avec au minimum les variables `DB_*` pointant vers votre PostgreSQL (par exemple `DB_HOST=localhost`), `NUXT_SESSION_PASSWORD` et `PDF_API_TOKEN`.
 
-Start the development server on `http://localhost:3000`:
+`sequelize-cli` ne lit pas le fichier `.env` : il faut exporter les variables avant de lancer les migrations.
 
 ```bash
-# npm
+set -a && source .env && set +a && npm run init-db
+```
+
+```bash
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
+
+## Variables d'environnement
+
+| Variable | Rôle |
+| --- | --- |
+| `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` | Connexion PostgreSQL. En dev, valeurs par défaut `postgres` / `5432` / `user` / `livre`. Obligatoires en production. |
+| `NUXT_SESSION_PASSWORD` | Clé de chiffrement de la session admin (32 caractères minimum). |
+| `PDF_API_TOKEN` | Secret qui autorise Puppeteer à ouvrir `/book?token=...` pour générer le PDF. En production, il peut être surchargé au runtime par `NUXT_PDF_API_TOKEN`. |
+| `GEMINI_API_KEY`, `GEMINI_MODEL` | IA utilisée pour l'import de fichiers texte (endpoint Gemini compatible OpenAI). Prioritaire si la clé est définie. |
+| `AI_API_URL`, `AI_MODEL` | Sinon, serveur local compatible OpenAI (Ollama par exemple, `AI_API_URL=http://host.docker.internal:11434/`). |
+| `PUPPETEER_EXECUTABLE_PATH` | Chemin vers Chromium. Déjà défini dans l'image Docker ; inutile en local, où Puppeteer utilise son propre Chromium. |
+
+Les fichiers `.env` et `.env.*` sont ignorés par git.
+
+## Base de données
+
+Les migrations se trouvent dans `migrations/` (fichiers `.cjs`), la configuration Sequelize dans `config/config.cjs`.
+
+| Commande (Docker) | Effet |
+| --- | --- |
+| `make migration-run` | Appliquer les migrations |
+| `make migration-create NAME=<nom>` | Créer une migration (renommée en `.cjs`) |
+| `make migration-undo` | Annuler la dernière migration |
+| `make migration-reset` | Tout annuler puis tout rejouer |
+
+Hors Docker : `npm run init-db` et `npm run create-migration -- <nom>`.
+
+Une migration crée un compte administrateur `admin@admin.com`. Changez son mot de passe avant tout déploiement.
+
+## Import de contenus
+
+Depuis `/admin/import` :
+
+- **Fichiers** : les fichiers `.json` sont importés directement ; les autres formats sont convertis en texte par Pandoc, nettoyés, puis envoyés à l'IA qui renvoie un contenu structuré. Les imports passent par une file de traitement en mémoire, dont le statut est visible dans l'interface.
+- **Flux RSS** : le contenu complet de chaque article du flux est extrait. Chaque article reçoit un identifiant externe unique, ce qui empêche de l'importer deux fois.
+- **API** : créer un token dans l'onglet API (5 tokens actifs maximum), puis :
+
+  ```bash
+  curl -X POST http://localhost:3000/api/v1/post \
+    -H "Authorization: Bearer <token>" \
+    -H "Content-Type: application/json" \
+    -d '{"postTitle": "Titre", "author": "Auteur", "content": "<p>Texte</p>", "publishDate": "2025-01-01"}'
+  ```
+
+Le contenu HTML est assaini (DOMPurify) avant d'être enregistré.
+
+## Génération du PDF
+
+1. Configurer le livre dans `/admin/book/settings` : titre, auteur, années, dédicace, préface, format de page, nombre de lignes par page, numéro de la première page.
+2. Prévisualiser dans `/admin/book`, puis télécharger le PDF.
+
+Le serveur lance Puppeteer sur `/book?token=<PDF_API_TOKEN>`, imprime la page au format CSS choisi, puis retire avec pdf-lib les pages blanches en trop. La page `/book` n'est accessible qu'à un admin connecté ou avec ce token.
+
+## Tests et qualité
+
+```bash
+npm test
+```
+
+```bash
+npm run lint
+```
+
+La CI GitHub Actions (`.github/workflows/ci.yml`) lance `npm ci`, le lint, les tests et le build à chaque push sur `main` et `dev`, ainsi que sur chaque pull request.
 
 ## Production
 
-Build the application for production:
-
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
-
-Locally preview production build:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+node .output/server/index.mjs
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Le serveur a besoin des variables d'environnement ci-dessus, de Pandoc et d'un Chromium accessible par Puppeteer. Le `Dockerfile` actuel lance le serveur de développement et n'est pas une image de production.
 
-## Database
+## Structure
 
-The database is configured in `server/utils/db.ts`. You can change the database configuration according to your needs.
-
-### Migrations
-
-To create a new migration, run the following command:
-
-```bash
-# npm
-npm run db:migrate:create <name>
-
-# pnpm
-pnpm run db:migrate:create <name>
-
-# yarn
-yarn run db:migrate:create <name>
-
-# bun
-bun run db:migrate:create <name>
 ```
-
-This will create a new migration file in the `migrations` directory.
-
-To run the migrations, run the following command:
-
-```bash
-# npm
-npm run db:migrate
-
-# pnpm
-pnpm run db:migrate
-
-# yarn
-yarn run db:migrate
-
-# bun
-bun run db:migrate
+components/   Composants Vue (admin, livre, landing, ui, layout)
+pages/        Routes Nuxt : accueil, /poem, /book, /admin/*
+layouts/      Layouts (admin, book, login)
+middleware/   Middleware de routes (auth admin, accès au livre)
+stores/       Stores Pinia
+entities/     Entités et schémas de validation partagés
+server/
+  api/        Endpoints (admin, import, v1, génération PDF)
+  middleware/ Protection des routes API (session, token)
+  models/     Modèles Sequelize
+  services/   PDF, import, IA, Pandoc, email
+migrations/   Migrations Sequelize
+assets/       Styles (dont formats de page) et images
 ```
-
-This will run all the migrations in the `migrations` directory.

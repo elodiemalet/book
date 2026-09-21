@@ -26,10 +26,12 @@ logs
 /content/
 
 yarn.lock
-package-lock.json
 
 test_data
 /public/uploads/
 
 # Local-only notes, never committed
 /_private/
+
+# Generated books (personal content)
+/*.pdf
