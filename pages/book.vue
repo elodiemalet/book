@@ -1,89 +1,133 @@
 <template>
-    <div v-if="loaded">
-        <PagePresentation/>
-        <PageThanks/>
-        <div
-            v-for="(post, i) in posts"
-            :key="post.id"
-            class="page poem"
-        >
-            <h2>{{ post.postTitle }}</h2>
-            <p>{{ post.content }}</p>
-            <p>{{ post.date.toLocaleDateString('fr') }} - {{ post.author }}</p>
-            <footer>
-                <p>{{ i + 1 }}</p>
-            </footer>
-        </div>
+    <div
+        v-if="loaded && bookStore.configLoaded"
+        class="flex flex-col items-center w-full book"
+        :class="bookStore.bookCssClass">
+        <CoverPage/>
+        <BasePage>
+            <!--            Page de faux-titre : Contient simplement le titre du recueil ou une citation évocatrice.-->
+            <h1 class="title">{{ bookStore.config.title }}</h1>
+            <h3 class="title">{{ bookStore.config.author }}</h3>
+            <h4 class="title">{{ bookStore.config.years }}</h4>
+        </BasePage>
+        <BasePage v-if="bookStore.config.dedicationText">
+
+            <!--            Dédicace : Une page où l'auteur peut dédier le recueil à une personne ou exprimer un hommage.-->
+            <h2 class="title">Dédicace</h2>
+            <p
+                v-for="(paragraph, i) in dedicationParagraphs"
+                :key="'ded-' + i"
+                class="text-left">{{ paragraph }}</p>
+
+        </BasePage>
+        <BasePage v-if="bookStore.config.prefaceText">
+
+            <h2 class="title">Préface</h2>
+            <p
+                v-for="(paragraph, i) in prefaceParagraphs"
+                :key="'pre-' + i"
+                class="text-left">{{ paragraph }}</p>
+
+        </BasePage>
+        <PoemPage
+            v-for="(page, i) in pages"
+            :id="page.id"
+            :key="page.id + '-' + i"
+            :next-page-id="pages[i + 1]?.id"
+            :prev-page-id="pages[i - 1]?.id"
+            :title="page.postTitle"
+            :content="page.content"
+            :page="i + pageStart"
+            :date="page.date"
+            :author="page.author"
+        />
+        <EndPage/>
     </div>
 </template>
 
 <script lang="ts">
-import PagePresentation from "~/components/bookPages/PageCover.vue";
-import PageThanks from "~/components/bookPages/PageThanks.vue";
-import {useCounter} from "@vueuse/shared";
-import {usePostStore} from "~/stores/postStore";
-import PostModel, {type PostInterface} from "~/models/PostModel";
+import CoverPage from "~/components/poems/bookPages/preliminaryPages/CoverPage.vue";
+import PoemPage from "~/components/poems/bookPages/PoemPage.vue";
+import BasePage from "~/components/poems/bookPages/BasePage.vue";
+import EndPage from "~/components/poems/bookPages/concludingPages/EndPage.vue";
+import type {PostInterface} from "~/server/models/post";
+import PostEntity from "~/entities/PostEntity";
+import {useBookStore} from "~/stores/bookStore";
 
 export default {
     components: {
-        PagePresentation,
-        PageThanks
-    },
-    data() {
-        return {
-            token: null,
-            posts: [] as any,
-            loaded: false
-        }
+        EndPage,
+        PoemPage,
+        BasePage,
+        CoverPage,
     },
     setup() {
-        const postStore = usePostStore()
-
-        return {
-            postStore,
-        }
+        definePageMeta({
+            layout: 'book',
+            middleware: ['protect-book'],
+        });
+        const bookStore = useBookStore();
+        const bookCssClass = computed(() => bookStore.bookCssClass);
+        const pageStyle = computed(() => `@page { size: ${bookStore.pageSize}; margin: 0; }`);
+        useHead({
+            bodyAttrs: {
+                class: bookCssClass,
+                'data-theme': 'dark'
+            },
+            style: [{innerHTML: pageStyle}],
+        });
     },
-    watch: {
-        async page() {
-            await this.getPosts()
+    data() {
+        const bookStore = useBookStore();
+        bookStore.fetchImagePages();
+        return {
+            bookStore,
+            posts: [] as PostEntity[],
+            pages: [] as PostEntity[],
+            loaded: false,
+            totalPages: 0,
+        };
+    },
+    computed: {
+        pageStart(): number {
+            return this.bookStore.config.pageStart;
         },
-        async limit() {
-            await this.getPosts()
+        maxLines(): number {
+            return this.bookStore.effectiveMaxLines;
+        },
+        maxLinesFirstPage(): number {
+            return this.bookStore.effectiveMaxLinesFirstPage;
+        },
+        dedicationParagraphs(): string[] {
+            return (this.bookStore.config.dedicationText || '').split('\n').filter((p: string) => p.trim() !== '');
+        },
+        prefaceParagraphs(): string[] {
+            return (this.bookStore.config.prefaceText || '').split('\n').filter((p: string) => p.trim() !== '');
         },
     },
     async mounted() {
-
-        this.token = this.$route?.query?.token
-        await this.getPosts()
-        this.loaded = true
-
+        await this.bookStore.fetchConfig();
+        this.getPosts();
     },
     methods: {
-        useCounter,
-        async getPosts() {
-            await this.postStore.fetchPosts(this.token, this.page, this.limit, this.filters)
-            const posts = this.postStore.posts
-
-            this.posts = posts.map((post: PostInterface) => {
-                return PostModel.hydrate(
-                    post
-                )
-            })
-        }
+        getPosts() {
+            fetch('/api/post')
+                .then(response => response.json())
+                .then(data => {
+                    this.posts = data.rows.map((post: PostInterface) => {
+                        return PostEntity.hydrateFromDatabase(post);
+                    });
+                    this.pages = paginatePosts(this.posts, {
+                        maxLines: this.maxLines,
+                        maxLinesFirstPage: this.maxLinesFirstPage,
+                        maxCharsPerLine: this.bookStore.maxCharsPerLine,
+                    });
+                    this.totalPages = this.pages.length;
+                    this.loaded = true;
+                });
+        },
     }
-    // async mounted() {
-    //     const bookFromStorage = localStorage.getItem('bookStore')
-    //     if (bookFromStorage) {
-    //         this.book = new BookModel(JSON.parse(bookFromStorage)?.poems)
-    //     } else {
-    //         const token = this.$route?.query?.token
-    //         await this.bookStore.fetchBooks(token)
-    //         this.book = new BookModel(this.bookStore.book.poems)
-    //     }
-    //
-    //     this.loaded = true
-    // }
-}
+};
 
 </script>
 

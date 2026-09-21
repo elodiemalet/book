@@ -1,0 +1,233 @@
+@use "sass:map";
+
+// ───────────────────────────────────────────────────────
+// 1. RESET / RÈGLES COMMUNES
+// ───────────────────────────────────────────────────────
+@media print {
+  .page {
+    border: none;
+  }
+
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: none !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  .book {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.page:not(:first-of-type) {
+  page-break-before: always;
+  break-before: page;
+}
+
+.page {
+  font-family: Cormorant, serif;
+  font-weight: 400;
+  color: black;
+  background: white;
+  position: relative;
+  overflow: hidden;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+// ───────────────────────────────────────────────────────
+// 2. DONNÉES DES FORMATS
+//    taille papier + marges intérieures + positions
+// ───────────────────────────────────────────────────────
+// ──────────────────────────────────────────────
+//  DONNÉES DES FORMATS  (mm)
+// ──────────────────────────────────────────────
+$book-formats: (
+        poche: (
+                size: 108mm 175mm, // coupe
+                size-bleed: 114mm 181mm, // fichier avec débord
+                w: 108mm, h: 175mm,
+                pad: 6.2mm 17.6mm 6.2mm 20.4mm,
+                hdr-top: 4.7mm, hdr-left: 21.8mm, ftr-bot: 4.7mm
+        ),
+        digest: (
+                size: 140mm 216mm,
+                size-bleed: 146mm 222mm,
+                w: 140mm, h: 216mm,
+                pad: 7.7mm 22.9mm 7.7mm 26.5mm,
+                hdr-top: 5.8mm, hdr-left: 28.2mm, ftr-bot: 5.8mm
+        ),
+        a5: (
+                size: 148mm 210mm,
+                size-bleed: 154mm 216mm,
+                w: 148mm, h: 210mm,
+                pad: 7.5mm 24.2mm 7.5mm 28mm,
+                hdr-top: 5.6mm, hdr-left: 29.8mm, ftr-bot: 5.6mm
+        ),
+        royal: (
+                size: 156mm 234mm,
+                size-bleed: 162mm 240mm,
+                w: 156mm, h: 234mm,
+                pad: 8.3mm 25.5mm 8.3mm 29.5mm,
+                hdr-top: 6.3mm, hdr-left: 31.4mm, ftr-bot: 6.3mm
+        ),
+        roman: (
+                size: 152mm 229mm,
+                size-bleed: 159mm 235mm,
+                w: 152mm, h: 229mm,
+                pad: 8.2mm 24.8mm 8.2mm 28.7mm,
+                hdr-top: 6.1mm, hdr-left: 30.6mm, ftr-bot: 6.1mm
+        ),
+        bd: (
+                size: 168mm 260mm,
+                size-bleed: 175mm 267mm,
+                w: 168mm, h: 260mm,
+                pad: 9.3mm 27.4mm 9.3mm 31.8mm,
+                hdr-top: 7mm, hdr-left: 33.9mm, ftr-bot: 7mm
+        ),
+        executif: (
+                size: 178mm 254mm,
+                size-bleed: 184mm 260mm,
+                w: 178mm, h: 254mm,
+                pad: 9.1mm 29.1mm 9.1mm 33.7mm,
+                hdr-top: 6.8mm, hdr-left: 35.9mm, ftr-bot: 6.8mm
+        ),
+        crown-quarto: (
+                size: 189mm 246mm,
+                size-bleed: 195mm 252mm,
+                w: 189mm, h: 246mm,
+                pad: 8.8mm 30.9mm 8.8mm 35.7mm,
+                hdr-top: 6.6mm, hdr-left: 38.1mm, ftr-bot: 6.6mm
+        ),
+        petit-carre: (
+                size: 191mm 191mm,
+                size-bleed: 197mm 197mm,
+                w: 191mm, h: 191mm,
+                pad: 6.8mm 31.2mm 6.8mm 36.1mm,
+                hdr-top: 5.1mm, hdr-left: 38.5mm, ftr-bot: 5.1mm
+        ),
+        a4: (
+                size: 210mm 297mm,
+                size-bleed: 216mm 303mm,
+                w: 210mm, h: 297mm,
+                pad: 10.6mm 34.3mm 10.6mm 39.7mm,
+                hdr-top: 7.9mm, hdr-left: 42.3mm, ftr-bot: 7.9mm
+        ),
+        carre: (
+                size: 216mm 216mm,
+                size-bleed: 222mm 222mm,
+                w: 216mm, h: 216mm,
+                pad: 7.7mm 35.3mm 7.7mm 40.8mm,
+                hdr-top: 5.8mm, hdr-left: 43.5mm, ftr-bot: 5.8mm
+        ),
+        lettre-us: (
+                size: 216mm 279mm,
+                size-bleed: 222mm 286mm,
+                w: 216mm, h: 279mm,
+                pad: 9.9mm 35.3mm 9.9mm 40.8mm,
+                hdr-top: 7.5mm, hdr-left: 43.5mm, ftr-bot: 7.5mm
+        ),
+        petit-paysage: (
+                size: 229mm 178mm,
+                size-bleed: 235mm 184mm,
+                w: 229mm, h: 178mm,
+                pad: 6.3mm 37.4mm 6.3mm 43.3mm,
+                hdr-top: 4.8mm, hdr-left: 46.2mm, ftr-bot: 4.8mm
+        ),
+        lettre-us-paysage: (
+                size: 279mm 216mm,
+                size-bleed: 235mm 184mm, // même fichier que « petit paysage »
+                w: 279mm, h: 216mm,
+                pad: 7.7mm 45.6mm 7.7mm 52.7mm,
+                hdr-top: 5.8mm, hdr-left: 56.2mm, ftr-bot: 5.8mm
+        ),
+        a4-paysage: (
+                size: 297mm 210mm,
+                size-bleed: 303mm 216mm,
+                w: 297mm, h: 210mm,
+                pad: 7.5mm 48.5mm 7.5mm 56.1mm,
+                hdr-top: 5.6mm, hdr-left: 59.9mm, ftr-bot: 5.6mm
+        ),
+        calendrier: (
+                size: 279mm 216mm,
+                size-bleed: 286mm 222mm,
+                w: 279mm, h: 216mm,
+                pad: 7.7mm 45.6mm 7.7mm 52.7mm,
+                hdr-top: 5.8mm, hdr-left: 56.2mm, ftr-bot: 5.8mm
+        )
+);
+
+
+// ───────────────────────────────────────────────────────
+// 3. MIXIN DE GÉNÉRATION
+// ───────────────────────────────────────────────────────
+@mixin book-format($name, $cfg) {
+  $size: map.get($cfg, size);
+  $w: map.get($cfg, w);
+  $h: map.get($cfg, h);
+  $pad: map.get($cfg, pad);
+  $hdr-top: map.get($cfg, hdr-top);
+  $hdr-left: map.get($cfg, hdr-left);
+  $ftr-bot: map.get($cfg, ftr-bot);
+
+  // Page nommée
+  @page #{$name} {
+    size: $size;
+    margin: 0;
+  }
+
+  // Prévisualisation + page réelle
+  .book-#{$name} {
+    .page-preview,
+    .page {
+      width: $w;
+      height: $h;
+    }
+
+    .image-page {
+      width: $w;
+      height: $h;
+      overflow: hidden;
+    }
+
+    .page {
+      page: $name;
+
+      &:not(.image-page) {
+        padding: $pad;
+      }
+
+      header {
+        top: $hdr-top;
+        left: 0;
+        padding-left: $hdr-left;
+        width: 100%;
+        text-align: left;
+      }
+
+      footer {
+        position: absolute;
+        bottom: $ftr-bot;
+        left: 0;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+//$bleed-size: map.get(map.get($book-formats, a4), size-bleed);
+
+// ───────────────────────────────────────────────────────
+// 4. BOUCLE D’AUTO-GÉNÉRATION
+// ───────────────────────────────────────────────────────
+@each $name, $cfg in $book-formats {
+  @include book-format($name, $cfg);
+}

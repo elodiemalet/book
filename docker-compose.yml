@@ -1,0 +1,63 @@
+#version: '3'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: nuxt-postgres-container
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: mon_mot_de_passe
+      POSTGRES_DB: livre
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - nuxt-postgres-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user --dbname=livre -h 127.0.0.1 || exit 1" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  nuxt:
+    build: .
+    #      context: .
+    #      dockerfile: Dockerfile
+    container_name: nuxt-node-container
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.nuxt
+    command: sh -c "npm run init-db && npm run dev"
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - nuxt-postgres-network
+    environment:
+      DB_HOST: postgres
+      DB_USER: user
+      DB_PASSWORD: mon_mot_de_passe
+      DB_NAME: livre
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    platform: linux/amd64
+    ports:
+      - "8025:8025"   # UI
+      - "1025:1025"   # SMTP
+    networks:
+      - nuxt-postgres-network
+
+networks:
+  nuxt-postgres-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local

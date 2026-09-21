@@ -1,25 +1,26 @@
 <template>
     <div class="flex justify-between w-full gap-4 border-t border-gray-200">
         <div class="pagination-item">
-            <button @click="prevPage()">Previous</button>
+            <div @click="prevPage">Previous</div>
         </div>
         <div class="flex gap-4 ">
             <div
+                v-for="(pageNumber, index) in paginationPages"
+                :key="index"
                 class="pagination-item"
                 :class="pageNumber === page ? 'selected' : ''"
-                v-for="pageNumber in paginationPages"
                 @click="$emit('page', pageNumber)"
             >
                 {{ pageNumber }}
             </div>
         </div>
         <div class="pagination-item">
-            <button @click="nextPage()">Next</button>
+            <div @click="nextPage">Next</div>
         </div>
     </div>
 </template>
 <script lang="ts">
-import {defineComponent, ref, computed} from 'vue'
+import {defineComponent} from 'vue';
 
 export default defineComponent({
     props: {
@@ -34,39 +35,38 @@ export default defineComponent({
         limit: {
             type: Number,
             default: 10,
-            validator: (value: number) => [10, 20, 50, 100].includes(value)
-        }
-    },
-    computed: {
-        paginationPages() {
-            const pages = []
-            for (let i = 1; i <= this.countPage; i++) {
-                pages.push(i)
-            }
-            if (pages.length > 6) {
-                const firstPages = pages.slice(0, 3)
-                const lastPages = pages.slice(-3)
-                return [...firstPages, '...', ...lastPages]
-            }
-
-            return pages
         }
     },
     emits: ['prevPage', 'nextPage', 'page'],
+    computed: {
+        paginationPages() {
+            const pages = [];
+            for (let i = 1; i <= this.countPage; i++) {
+                pages.push(i);
+            }
+            if (pages.length > 6) {
+                const firstPages = pages.slice(0, 3);
+                const lastPages = pages.slice(-3);
+                return [...firstPages, '...', ...lastPages];
+            }
+
+            return pages;
+        }
+    },
     methods: {
         prevPage() {
             if (this.page > 1) {
-                this.$emit('prevPage')
+                this.$emit('prevPage');
             }
         },
         nextPage() {
             if (this.page < this.countPage) {
-                this.$emit('nextPage')
+                this.$emit('nextPage');
             }
         }
     }
 
-})
+});
 </script>
 
 <style scoped lang="scss">
@@ -75,9 +75,8 @@ export default defineComponent({
     @apply border-t border-transparent hover:border-gray-200 cursor-pointer p-3;
 
     &.selected {
-        @apply border-t border-blue-500 text-blue-500;
+        @apply border-t border-cyan-500 text-cyan-500;
     }
-
 
 }
 

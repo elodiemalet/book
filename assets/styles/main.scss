@@ -1,78 +1,88 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  h1 {
-    @apply text-4xl;
+@media screen {
+  html {
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 20px;
+    @apply bg-white text-gray-900;
   }
 
-  h2 {
-    @apply text-2xl;
+  body {
+    min-height: 100vh;
   }
 
-  h3 {
-    @apply text-xl;
+  #__nuxt {
+    min-height: 100vh;
+  }
+
+  .page-preview {
+
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 500;
+      padding-bottom: 0.5rem;
+      padding-top: 1rem;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      display: flex;
+      margin: 0;
+      flex-direction: column;
+
+      li {
+        padding: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .main {
+    @apply max-w-[450mm] px-10 py-5;
   }
 }
 
-html {
-  @apply dark:bg-gray-600 dark:text-white bg-gray-50 text-gray-900;
-}
-
-h1, h2, h3, h4, h5, h6 {
+.title {
   font-family: Cormorant, serif;
-}
-
-.main {
-  @apply max-w-[450mm];
 }
 
 .page-book {
   font-family: Cormorant, serif;
-  min-width: 152.4mm;
-  width: 152.4mm;
-  max-width: 152.4mm;
-  min-height: 228.6mm;
-  height: 228.6mm;
+  font-weight: 500;
+  //min-width: 210mm;
+  //width: 210mm;
+  //max-width: 210mm;
+  //min-height: 297mm;
+  //height: 297mm;
   margin: 0;
   padding: 0;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
-.page {
+.page-preview {
   font-family: Cormorant, serif;
-  color: black;
+  font-weight: 400;
+
+  //min-width: 210mm;
+  //width: 210mm;
+  //max-width: 210mm;
+  //min-height: 297mm;
+
+  white-space: pre-line;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+
   background: white;
-  padding: 40px;
+
+  //padding: 40px 130px 40px 150px;
   margin-top: 20px;
   margin-bottom: 20px;
-  position: relative;
 
-  footer {
-    position: absolute;
-    bottom: 15px;
-    width: calc(100% - 80px);
-    text-align: center;
+  p {
+    min-height: 1.5rem;
+    line-height: 1.5rem;
   }
 }
 
-.page:not(:last-of-type) {
-  page-break-after: always;
-}
 
-@media print {
-  html, body {
-    background: transparent;
-  }
-  .page {
-    margin: 0;
-    border: none;
-    width: 152.4mm;
-    height: 228.6mm;
-  }
-
-  .no-print, .no-print * {
-    display: none !important;
-  }
+input[type="text"] {
+  @apply block w-full rounded-md bg-white px-2 py-1 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6;
 }
