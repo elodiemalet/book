@@ -7,6 +7,5 @@ node_modules/
 .vscode/
 dist/
 obj/
-package-lock.json
 yarn.lock
 .yarn/
