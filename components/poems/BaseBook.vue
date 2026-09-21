@@ -11,7 +11,7 @@
             <SafeHtml
                 :raw-html="post.content"
                 class="p-4"/>
-            <p>{{ post.publishDate.toLocaleDateString('fr') }} - {{ post.author }}</p>
+            <p>{{ formatSignature(post.author, post.publishDate) }}</p>
 
         </div>
     </div>
@@ -30,6 +30,7 @@
 import type {PostEntityInterface} from "~/entities/PostEntity.js";
 import BasePagination from "~/components/BasePagination.vue";
 import SafeHtml from "~/components/layout/SafeHtml.vue";
+import {formatSignature} from "~/utils/signature";
 
 export default {
     components: {SafeHtml, BasePagination},
@@ -68,6 +69,7 @@ export default {
         }
     },
     methods: {
+        formatSignature,
         prevPage() {
             this.page--;
             this.$emit('page', this.page);

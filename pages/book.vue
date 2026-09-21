@@ -38,7 +38,7 @@
             :title="page.postTitle"
             :content="page.content"
             :page="i + pageStart"
-            :date="page.date"
+            :date="page.publishDate"
             :author="page.author"
         />
         <EndPage/>
