@@ -40,6 +40,7 @@
             :page="i + pageStart"
             :date="page.publishDate"
             :author="page.author"
+            :show-signature="bookStore.config.showSignature"
         />
         <EndPage/>
     </div>
@@ -121,6 +122,7 @@ export default {
                         maxLines: this.maxLines,
                         maxLinesFirstPage: this.maxLinesFirstPage,
                         maxCharsPerLine: this.bookStore.maxCharsPerLine,
+                        showSignature: this.bookStore.config.showSignature,
                     });
                     this.totalPages = this.pages.length;
                     this.loaded = true;

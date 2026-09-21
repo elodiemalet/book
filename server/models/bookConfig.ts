@@ -13,6 +13,7 @@ export interface BookConfigInterface {
     maxLines: number;
     maxLinesFirstPage: number;
     pageStart: number;
+    showSignature: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -29,6 +30,7 @@ export default class BookConfig extends Model {
     public maxLines!: number;
     public maxLinesFirstPage!: number;
     public pageStart!: number;
+    public showSignature!: boolean;
 
     // timestamps
     public readonly createdAt!: Date;
@@ -85,6 +87,11 @@ BookConfig.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 6,
+        },
+        showSignature: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
         },
     },
     {

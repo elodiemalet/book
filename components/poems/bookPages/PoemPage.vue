@@ -50,7 +50,7 @@ import SafeHtml from "~/components/layout/SafeHtml.vue";
             </div>
         </div>
         <div
-            v-if="nextPageId !== id"
+            v-if="showSignature && nextPageId !== id"
             class="mt-10 font-medium text-left pl-10"
         >
             {{ signature }}
@@ -98,6 +98,10 @@ export default defineComponent({
         page: {
             type: Number,
             required: true
+        },
+        showSignature: {
+            type: Boolean,
+            default: true
         },
     },
     computed: {

@@ -53,6 +53,8 @@ export interface BookConfigState {
     maxLines: number;
     maxLinesFirstPage: number;
     pageStart: number;
+    // Auteur et date sous chaque texte (inutile pour un livre d'un seul auteur)
+    showSignature: boolean;
 }
 
 export const useBookStore = defineStore('bookStore', {
@@ -69,6 +71,7 @@ export const useBookStore = defineStore('bookStore', {
             maxLines: 38,
             maxLinesFirstPage: 32,
             pageStart: 6,
+            showSignature: true,
         } as BookConfigState,
         configLoaded: false,
     }),

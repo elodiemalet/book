@@ -15,6 +15,7 @@ export default defineEventHandler(async () => {
             maxLines: 38,
             maxLinesFirstPage: 32,
             pageStart: 6,
+            showSignature: true,
         };
     }
 
