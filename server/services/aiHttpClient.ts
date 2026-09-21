@@ -88,7 +88,7 @@ export class AiHttpClient {
 
                 2. Nettoyer le "content", et seulement de cette façon :
                    - Supprimer les caractères de mise en forme parasites : astérisques (*), dièses (#), tirets bas (_), accents graves (\`), puces isolées, séparateurs décoratifs (par exemple "* * *" ou "---").
-                   - Supprimer les données redondantes : si l’auteur et/ou la date apparaissent plusieurs fois (par exemple un en-tête "J.D. (le 12 mars 2021)" et une signature "12/03/2021 - J.D."), n’en garder qu’une seule occurrence, la signature en fin de texte.
+                   - Supprimer les données redondantes : toute ligne qui ne donne que l’auteur et/ou la date (en-tête ou signature, par exemple "J.D. (le 12 mars 2021)" ou "12/03/2021 - J.D."), car l’auteur et la date sont affichés à part à partir de "author" et "publishDate".
                    - Supprimer les restes de liens, d’images ou de légendes qui ne font pas partie du texte (par exemple "Voir la vidéo", "Lien :", "[image]").
                    - Ne pas supprimer les vers répétés volontairement (refrains).
                    - Ne rien reformuler, ne rien corriger, ne rien ajouter : les mots et la ponctuation du texte restent identiques.

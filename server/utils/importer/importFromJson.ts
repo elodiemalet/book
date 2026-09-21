@@ -3,7 +3,7 @@ import Post, {getPostSchemaValidator} from "~/server/models/post";
 import {extractWithPandoc} from "~/server/services/pandoc";
 import {AiHttpClient} from "~/server/services/aiHttpClient";
 import {sanitizeContent} from "~/server/services/contentSanitizer";
-import {cleanTextForAi} from "~/server/services/textCleaner";
+import {cleanTextForAi, removeAuthorDateLines} from "~/server/services/textCleaner";
 import type {MultiPartData} from "h3";
 
 
@@ -50,7 +50,11 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
                     console.error('No JSON found in AI response:', raw);
                     return null;
                 }
-                return JSON.parse(jsonMatch[0]);
+                const post = JSON.parse(jsonMatch[0]);
+                if (typeof post.content === 'string') {
+                    post.content = removeAuthorDateLines(post.content, post.author, post.publishDate);
+                }
+                return post;
             } catch (e) {
                 console.error('error', e);
                 return null;
