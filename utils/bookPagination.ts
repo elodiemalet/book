@@ -44,14 +44,13 @@ export function paginatePosts(posts: PostEntity[], limits: BookPaginationLimits)
 
         // Multi-page poem
         // First page (title takes space, no footer)
-        let offset = 0;
         const firstCount = fillPage(lines, maxLinesFirstPage, maxCharsPerLine);
         const firstChunk = lines.slice(0, firstCount).join('\n');
         pages.push(new PostEntity(
             post.id, post.postTitle, post.author,
             firstChunk, post.timestamp, post.publishDate
         ));
-        offset = firstCount;
+        let offset = firstCount;
 
         // Continuation pages
         while (offset < lines.length) {
