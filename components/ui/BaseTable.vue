@@ -76,6 +76,7 @@
                                                 >
                                                     <BaseButton
                                                         class="inline-block"
+                                                        size="sm"
                                                     >
                                                         {{ action.title }}
                                                     </BaseButton>
