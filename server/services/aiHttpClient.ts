@@ -26,23 +26,39 @@ class AiRequestBody {
     }
 }
 
+// Endpoint compatible OpenAI de Gemini
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/';
+
 export class AiHttpClient {
 
     private readonly _url: string;
     private readonly _model: string;
+    private readonly _apiKey: string;
 
     constructor() {
-
-        this._url = process.env.AI_API_URL as string;
-        this._model = process.env.AI_MODEL as string;
+        // Gemini si une clé est configurée, sinon serveur local (Ollama) via AI_API_URL
+        if (process.env.GEMINI_API_KEY) {
+            this._url = GEMINI_API_URL;
+            this._model = process.env.GEMINI_MODEL as string;
+            this._apiKey = process.env.GEMINI_API_KEY;
+        } else {
+            this._url = process.env.AI_API_URL + 'v1/';
+            this._model = process.env.AI_MODEL as string;
+            this._apiKey = '';
+        }
     }
 
     async post(body: AiRequestBody): Promise<AiResponse> {
-        const response = await fetch(this._url + 'v1/chat/completions', {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+        };
+        if (this._apiKey) {
+            headers.Authorization = `Bearer ${this._apiKey}`;
+        }
+
+        const response = await fetch(this._url + 'chat/completions', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify(body),
         });
 
