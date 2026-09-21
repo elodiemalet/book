@@ -13,6 +13,8 @@ export interface ImportResult {
         error: number
         total: number
     }
+    // Raisons des échecs (IA indisponible, réponse illisible…), affichées dans la file d'import
+    errors?: string[]
 }
 
 export async function importFromJson(json: { data: MultiPartData[] }) {
@@ -34,6 +36,7 @@ export async function importFromText(files: { data: MultiPartData[] }) {
 async function getPostsFromTextFiles(files: MultiPartData[]) {
 
     const aiApi = new AiHttpClient();
+    const errors: string[] = [];
 
     const texts = await Promise.all(
         files.map(async (file) => {
@@ -48,6 +51,7 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
                 const jsonMatch = raw.match(/\{[\s\S]*\}/);
                 if (!jsonMatch) {
                     console.error('No JSON found in AI response:', raw);
+                    errors.push('Réponse de l’IA illisible');
                     return null;
                 }
                 const post = JSON.parse(jsonMatch[0]);
@@ -57,13 +61,24 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
                 return post;
             } catch (e) {
                 console.error('error', e);
+                errors.push(e instanceof Error ? e.message : String(e));
                 return null;
             }
         })
     );
 
     const validTexts = texts.filter((t): t is PostInterface => t !== null);
-    return importPosts(validTexts);
+    const result = await importPosts(validTexts);
+    const failed = texts.length - validTexts.length;
+
+    return {
+        posts: {
+            success: result.posts.success,
+            error: result.posts.error + failed,
+            total: result.posts.total + failed,
+        },
+        errors,
+    };
 }
 
 async function importPosts(posts: PostInterface[]): Promise<ImportResult> {

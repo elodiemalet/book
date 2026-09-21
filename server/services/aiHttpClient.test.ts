@@ -42,4 +42,36 @@ describe('AiHttpClient', () => {
         expect(init.headers.Authorization).toBeUndefined();
         expect(JSON.parse(init.body).model).toBe('llama3.2-vision');
     });
+
+    describe('when the AI service is overloaded', () => {
+        const overloaded = () => new Response('{"error":{"code":503,"message":"high demand"}}', {status: 503});
+
+        it('retries and returns the first successful response', async () => {
+            fetchMock
+                .mockResolvedValueOnce(overloaded())
+                .mockResolvedValueOnce(new Response('', {status: 429}))
+                .mockResolvedValueOnce(new Response(JSON.stringify(okResponse)));
+
+            const response = await new AiHttpClient([0, 0, 0]).getDocumentInformation('texte');
+
+            expect(fetchMock).toHaveBeenCalledTimes(3);
+            expect(response).toEqual(okResponse);
+        });
+
+        it('gives up after the last retry with a readable message', async () => {
+            fetchMock.mockImplementation(async () => overloaded());
+
+            await expect(new AiHttpClient([0, 0]).getDocumentInformation('texte'))
+                .rejects.toThrow('L’IA est surchargée (erreur 503), réessayez dans quelques minutes');
+            expect(fetchMock).toHaveBeenCalledTimes(3);
+        });
+
+        it('does not retry a request the service rejects', async () => {
+            fetchMock.mockResolvedValue(new Response('bad request', {status: 400}));
+
+            await expect(new AiHttpClient([0, 0]).getDocumentInformation('texte'))
+                .rejects.toThrow('AI API error 400: bad request');
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
+    });
 });

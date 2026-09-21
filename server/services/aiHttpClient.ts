@@ -29,13 +29,19 @@ class AiRequestBody {
 // Endpoint compatible OpenAI de Gemini
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/';
 
+// Erreurs passagères (surcharge, quota) : on réessaie après ces délais
+const RETRYABLE_STATUSES = [429, 500, 502, 503, 504];
+const DEFAULT_RETRY_DELAYS_MS = [2000, 5000, 10000];
+
 export class AiHttpClient {
 
     private readonly _url: string;
     private readonly _model: string;
     private readonly _apiKey: string;
+    private readonly _retryDelaysMs: number[];
 
-    constructor() {
+    constructor(retryDelaysMs: number[] = DEFAULT_RETRY_DELAYS_MS) {
+        this._retryDelaysMs = retryDelaysMs;
         // Gemini si une clé est configurée, sinon serveur local (Ollama) via AI_API_URL
         if (process.env.GEMINI_API_KEY) {
             this._url = GEMINI_API_URL;
@@ -56,18 +62,27 @@ export class AiHttpClient {
             headers.Authorization = `Bearer ${this._apiKey}`;
         }
 
-        const response = await fetch(this._url + 'chat/completions', {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(body),
-        });
+        for (let attempt = 0; ; attempt++) {
+            const response = await fetch(this._url + 'chat/completions', {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(body),
+            });
 
-        if (!response.ok) {
+            if (response.ok) {
+                return response.json();
+            }
+
             const text = await response.text();
-            throw new Error(`AI API error ${response.status}: ${text}`);
+            if (!RETRYABLE_STATUSES.includes(response.status)) {
+                throw new Error(`AI API error ${response.status}: ${text}`);
+            }
+            if (attempt >= this._retryDelaysMs.length) {
+                console.error(`AI API error ${response.status}: ${text}`);
+                throw new Error(`L’IA est surchargée (erreur ${response.status}), réessayez dans quelques minutes`);
+            }
+            await new Promise((resolve) => setTimeout(resolve, this._retryDelaysMs[attempt]));
         }
-
-        return response.json();
     }
 
     generatePromptFromText(text: string): AiPromptMessage[] {
