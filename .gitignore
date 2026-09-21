@@ -32,3 +32,6 @@ test_data
 
 # Local-only notes, never committed
 /_private/
+
+# Generated books (personal content)
+/*.pdf
