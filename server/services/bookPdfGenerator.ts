@@ -18,6 +18,9 @@ export async function generatePdfFromEvent(token: string, protocol: string, host
         await page.goto(url, {waitUntil: 'networkidle0'});
 
         expectedPages = await page.$$eval('.page', (els) => els.length);
+        if (expectedPages === 0) {
+            throw new Error(`Book page rendered no .page element (${page.url().split('?')[0]})`);
+        }
 
         pdfBuffer = await page.pdf({
             printBackground: true,
