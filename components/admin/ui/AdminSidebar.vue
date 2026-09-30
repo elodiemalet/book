@@ -81,6 +81,7 @@ import {
     ArrowsUpDownIcon,
     Bars3Icon,
     BookOpenIcon,
+    Cog6ToothIcon,
     GlobeAltIcon,
     HomeIcon,
     ListBulletIcon,
@@ -96,6 +97,7 @@ const items = [
     {name: 'Mon livre', href: '/admin/book', icon: BookOpenIcon},
     {name: 'Contenus', href: '/admin/content', icon: ListBulletIcon},
     {name: 'Importer du contenu', href: '/admin/import', icon: ArrowsUpDownIcon},
+    {name: 'Configuration', href: '/admin/settings', icon: Cog6ToothIcon},
     {name: 'Mon site', href: '/', icon: GlobeAltIcon, exact: true, external: true},
 ];
 

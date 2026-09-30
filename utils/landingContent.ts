@@ -1,6 +1,7 @@
 // Contenu éditorial de la page d'accueil (page de vente du livre).
-// Le titre, l'auteur et la couverture viennent de la configuration du livre (bookStore) ;
-// tout le reste se modifie ici.
+// Le titre, l'auteur et la couverture viennent de la configuration du livre (bookStore).
+// Les textes ci-dessous sont les valeurs par défaut. L'en-tête, l'auteur (photo comprise) et le pied de page
+// se modifient dans l'admin (Configuration) et sont enregistrés en base (SiteConfigs) ; le reste se modifie ici.
 
 export interface LandingTocItem {
     title: string;
@@ -120,10 +121,10 @@ export const landingContent: LandingContent = {
     },
     author: {
         label: 'L\'auteur',
+        // Image de repli, utilisée tant qu'aucune photo n'a été envoyée depuis Configuration.
         portraitUrl: '/images/avatars/author.png',
-        bio: [
-            '[Présentation de l\'autrice ou de l\'auteur en deux ou trois phrases : parcours, rapport à l\'écriture, ce qui a mené à ce livre.]',
-        ],
+        // Vide par défaut : se renseigne dans Configuration.
+        bio: [],
         link: null,
     },
     pricing: {
@@ -166,3 +167,49 @@ export const landingContent: LandingContent = {
     },
     footer: '© 2025 Élodie Malet – Melodev. Tous droits réservés.',
 };
+
+type Loose = Record<string, unknown> | null | undefined;
+
+const isObject = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const str = (value: unknown, fallback: string): string => typeof value === 'string' ? value : fallback;
+
+const strList = (value: unknown, fallback: string[]): string[] => Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string').map(item => item.trim()).filter(Boolean)
+    : fallback;
+
+const section = (value: unknown): Record<string, unknown> => isObject(value) ? value : {};
+
+function mergeLink(value: unknown, fallback: LandingContent['author']['link']): LandingContent['author']['link'] {
+    if (value === null) {
+        return null;
+    }
+    if (!isObject(value)) {
+        return fallback;
+    }
+    const href = str(value.href, '').trim();
+    return href ? {label: str(value.label, '').trim() || href, href} : null;
+}
+
+// Fusionne un contenu enregistré (éventuellement partiel ou ancien) avec les valeurs par défaut.
+// Seuls l'en-tête, l'auteur (photo comprise) et le pied de page sont configurables ;
+// le reste (sommaire, extrait gratuit, offres, avis) garde toujours la valeur par défaut.
+export function mergeLandingContent(stored: Loose | unknown, defaults: LandingContent = landingContent): LandingContent {
+    const data = section(stored);
+    const author = section(data.author);
+
+    return {
+        ...defaults,
+        genre: str(data.genre, defaults.genre),
+        pagesLabel: str(data.pagesLabel, defaults.pagesLabel),
+        pitch: str(data.pitch, defaults.pitch),
+        author: {
+            label: str(author.label, defaults.author.label),
+            portraitUrl: str(author.portraitUrl, '').trim() || defaults.author.portraitUrl,
+            bio: strList(author.bio, defaults.author.bio),
+            link: 'link' in author ? mergeLink(author.link, defaults.author.link) : defaults.author.link,
+        },
+        footer: str(data.footer, defaults.footer),
+    };
+}
