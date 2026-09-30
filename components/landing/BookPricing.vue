@@ -1,67 +1,100 @@
 <template>
     <section
-        id="book"
+        id="livre"
         aria-labelledby="pricing-title"
-        class="scroll-mt-14 pt-16 pb-8 sm:scroll-mt-32 sm:pt-20 sm:pb-10 lg:pt-32 lg:pb-16"
+        class="scroll-mt-16 border-t border-atelier-line bg-atelier-panel"
     >
-        <Container>
-            <SectionHeading
-                id="pricing-title"
-                :number="4">
-                Prix
-            </SectionHeading>
-            <p class="mt-8 font-display text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
-                Faites votre choix
-            </p>
-            <p class="mt-4 max-w-xl text-lg tracking-tight text-slate-600">
-                “Ton livre, tes règles” est disponible en deux formules,
-                pour que tu puisses choisir celle qui te convient le mieux.
-            </p>
-        </Container>
-        <div class="mx-auto mt-16 max-w-5xl lg:px-6">
-            <div class="grid bg-slate-50 sm:px-6 sm:pb-16 md:grid-cols-2 md:rounded-6xl md:px-8 md:pt-16 lg:p-20">
-                <PrincingPlan
-                    name="E-book"
-                    description="Téléchargez la version e-book de “Ton livre, tes règles”."
-                    :price="5"
-                    href="#"
-                    :features="features"
-                />
-                <PrincingPlan
-                    featured
-                    name="Livre"
-                    description="Recevez chez vous la version imprimée de l’édition complète."
-                    :price="29"
-                    href="#"
-                    :features="featuresFeatured"
-                />
+        <div class="mx-auto flex max-w-7xl flex-col gap-14 px-5 py-24 sm:px-8 lg:px-20 lg:py-32">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:gap-10">
+                <div class="flex flex-1 flex-col gap-5">
+                    <span class="font-fraunces text-sm text-menthe tabular-nums">{{ number }} — Obtenir le livre</span>
+                    <h2
+                        id="pricing-title"
+                        class="font-fraunces text-4xl leading-none font-normal tracking-tight text-atelier-ink sm:text-[56px]"
+                    >
+                        {{ heading }} <em class="italic">{{ headingEmphasis }}</em>
+                    </h2>
+                </div>
+                <p class="max-w-md text-base leading-relaxed text-atelier-muted">
+                    {{ intro }}
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <article
+                    v-for="offer in offers"
+                    :key="offer.id"
+                    :aria-labelledby="`offer-${offer.id}`"
+                    class="flex flex-col gap-6 rounded-[10px] border p-8 sm:p-10"
+                    :class="offer.featured ? 'border-lilas bg-lilas-tint' : 'border-atelier-line bg-atelier-ground'"
+                >
+                    <div class="flex items-baseline justify-between gap-4">
+                        <h3
+                            :id="`offer-${offer.id}`"
+                            class="text-xl font-semibold text-atelier-ink"
+                        >
+                            {{ offer.name }}
+                        </h3>
+                        <span
+                            v-if="offer.badge"
+                            class="rounded bg-lilas px-2.5 py-1 text-xs font-semibold text-atelier-panel"
+                        >{{ offer.badge }}</span>
+                        <span
+                            v-else
+                            class="text-sm text-atelier-muted"
+                        >{{ offer.format }}</span>
+                    </div>
+                    <p class="flex items-start gap-1 font-fraunces text-atelier-ink">
+                        <span class="text-[88px] leading-[0.9] font-light tracking-[-0.03em] tabular-nums">{{ offer.price }}</span>
+                        <span class="mt-1.5 text-3xl text-atelier-muted">€</span>
+                    </p>
+                    <p :class="offer.featured ? 'text-[#c3c6d3]' : 'text-atelier-muted'">
+                        {{ offer.description }}
+                    </p>
+                    <ul
+                        role="list"
+                        class="flex flex-col text-[15px] text-atelier-ink"
+                    >
+                        <li
+                            v-for="feature in offer.features"
+                            :key="feature"
+                            class="flex gap-3 border-t py-3 last:border-b"
+                            :class="offer.featured ? 'border-[#454275]' : 'border-atelier-line'"
+                        >
+                            <CheckIcon
+                                class="size-4.5 shrink-0"
+                                :class="offer.featured ? 'text-lilas' : 'text-menthe'"
+                                aria-hidden="true"
+                            />
+                            {{ feature }}
+                        </li>
+                    </ul>
+                    <span class="flex-1"/>
+                    <a
+                        :href="offer.href"
+                        class="flex h-12.5 items-center justify-center rounded-md text-[15px] font-semibold transition-colors duration-150"
+                        :class="offer.featured
+                            ? 'bg-lilas text-atelier-panel hover:bg-lilas-light'
+                            : 'border border-atelier-line-strong text-atelier-ink hover:border-atelier-subtle hover:bg-atelier-hover'"
+                        :aria-label="`${offer.cta} — ${offer.price} €`"
+                    >
+                        {{ offer.cta }}
+                    </a>
+                </article>
             </div>
         </div>
     </section>
 </template>
-<script lang="ts">
-import Container from "~/components/ui/content/Container.vue";
-import SectionHeading from "~/components/ui/content/SectionHeading.vue";
-import PrincingPlan from "~/components/ui/PrincingPlan.vue";
 
-export default {
-    name: "BookPricing",
-    components: {PrincingPlan, Container, SectionHeading},
-    data() {
-        return {
-            features: [
-                'Téléchargement instantané',
-                'Sur tous vos appareils',
-                'Lecture sur écran',
-            ],
-            featuresFeatured: [
-                'Livraison à domicile',
-                'Emportez-le partout',
-                'Confort de lecture papier',
-                'À feuilleter, annoter, conserver',
-                'Offrir, relire, ou afficher dans sa bibliothèque',
-            ],
-        };
-    }
-};
+<script setup lang="ts">
+import CheckIcon from "@heroicons/vue/24/outline/CheckIcon";
+import type {LandingOffer} from "~/utils/landingContent";
+
+defineProps<{
+    number: string;
+    heading: string;
+    headingEmphasis: string;
+    intro: string;
+    offers: LandingOffer[];
+}>();
 </script>

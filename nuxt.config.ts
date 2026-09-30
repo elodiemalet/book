@@ -26,6 +26,19 @@ export default defineNuxtConfig({
                     rel: 'stylesheet',
                     href: 'https://api.fontshare.com/v2/css?f[]=satoshi@800,500,700&display=swap',
                 },
+                {
+                    rel: 'preconnect',
+                    href: 'https://fonts.googleapis.com',
+                },
+                {
+                    rel: 'preconnect',
+                    href: 'https://fonts.gstatic.com',
+                    crossorigin: '',
+                },
+                {
+                    rel: 'stylesheet',
+                    href: 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Instrument+Sans:wght@400..600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap',
+                },
             ],
         },
     },
