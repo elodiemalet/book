@@ -146,6 +146,17 @@ npm run lint
 
 La CI GitHub Actions (`.github/workflows/ci.yml`) lance `npm ci`, le lint, les tests et le build à chaque push sur `main` et `dev`, ainsi que sur chaque pull request.
 
+### Qualité de l'import de fichiers (promptfoo)
+
+`evals/` vérifie avec [promptfoo](https://promptfoo.dev) que l'import d'un fichier (Pandoc, nettoyage, IA) donne le bon titre, auteur, date et contenu, sans résidus de mise en forme. Il appelle vraiment l'IA configurée dans `.env` (Gemini ou Ollama) : il n'est donc pas lancé par la CI.
+
+```bash
+npm run eval        # lance les cas de evals/promptfooconfig.yaml
+npm run eval:view   # ouvre le détail dans le navigateur
+```
+
+Pour ajouter un cas : déposer le fichier dans `evals/fixtures/`, écrire le contenu attendu dans `evals/attendu/` (`npx tsx evals/voir-texte.ts <fichier>` montre le texte que reçoit l'IA), puis déclarer le cas dans `tests:`. Ajouter `--repeat 3` à `npm run eval --` pour vérifier que les réponses de l'IA sont stables.
+
 ## Production
 
 ```bash
