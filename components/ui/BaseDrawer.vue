@@ -3,7 +3,7 @@
         as="template"
         :show="open">
         <DialogComponent
-            class="relative z-[50] "
+            class="relative z-50 "
             @close="close">
             <div class="fixed inset-0"/>
             <div class="fixed inset-0 overflow-hidden">

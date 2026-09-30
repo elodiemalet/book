@@ -70,7 +70,9 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+
+@reference "~/assets/styles/tailwind.css";
 
 .pagination-item {
     @apply border-t border-transparent hover:border-gray-200 cursor-pointer p-3;

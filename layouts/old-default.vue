@@ -9,7 +9,6 @@
             ">
             <slot/>
         </div>
-        <UNotifications/>
     </FragmentContainer>
 </template>
 

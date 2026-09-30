@@ -1,7 +1,6 @@
 <template>
     <FragmentContainer>
         <slot/>
-        <UNotifications/>
     </FragmentContainer>
 </template>
 <script setup lang="ts">

@@ -123,7 +123,7 @@ export default defineComponent({
             if (error.value) {
                 this.toast.add({
                     id: 'error',
-                    color: 'red',
+                    color: 'error',
                     title: 'Erreur lors de la récupération des tokens',
                 });
                 return;
@@ -145,7 +145,7 @@ export default defineComponent({
             if (error.value || !data.value) {
                 this.toast.add({
                     id: 'error',
-                    color: 'red',
+                    color: 'error',
                     title: 'Erreur lors de la suppression du token',
                 });
                 return;
@@ -166,7 +166,7 @@ export default defineComponent({
             if (error.value) {
                 this.toast.add({
                     id: 'error',
-                    color: 'red',
+                    color: 'error',
                     title: 'Erreur lors de la modification du token',
                 });
                 return;
