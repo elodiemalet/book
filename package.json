@@ -15,7 +15,9 @@
     "create-migration": "sequelize-cli migration:generate --name",
     "lint": "eslint . --ext .js,.ts,.vue",
     "lint:fix": "eslint . --ext .js,.ts,.vue --fix",
-    "test": "vitest run"
+    "test": "vitest run",
+    "eval": "npx --yes promptfoo@0.123.1 eval -c evals/promptfooconfig.yaml",
+    "eval:view": "npx --yes promptfoo@0.123.1 view"
   },
   "dependencies": {
     "@extractus/article-extractor": "^8.0.19",

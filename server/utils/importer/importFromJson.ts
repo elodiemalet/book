@@ -1,9 +1,8 @@
 import type {PostInterface} from "~/server/models/post";
 import Post, {getPostSchemaValidator} from "~/server/models/post";
-import {extractWithPandoc} from "~/server/services/pandoc";
 import {AiHttpClient} from "~/server/services/aiHttpClient";
 import {sanitizeContent} from "~/server/services/contentSanitizer";
-import {cleanTextForAi, removeAuthorDateLines} from "~/server/services/textCleaner";
+import {extractPostFromFile} from "~/server/services/postExtractor";
 import type {MultiPartData} from "h3";
 
 
@@ -45,20 +44,7 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
                     return null;
                 }
                 const fileExtension = file.filename.split('.').pop() || '';
-                const text = cleanTextForAi(await extractWithPandoc(file.data, fileExtension));
-                const documentInformation = await aiApi.getDocumentInformation(text);
-                const raw = documentInformation.choices[0].message.content;
-                const jsonMatch = raw.match(/\{[\s\S]*\}/);
-                if (!jsonMatch) {
-                    console.error('No JSON found in AI response:', raw);
-                    errors.push('Réponse de l’IA illisible');
-                    return null;
-                }
-                const post = JSON.parse(jsonMatch[0]);
-                if (typeof post.content === 'string') {
-                    post.content = removeAuthorDateLines(post.content, post.author, post.publishDate);
-                }
-                return post;
+                return await extractPostFromFile(file.data, fileExtension, aiApi);
             } catch (e) {
                 console.error('error', e);
                 errors.push(e instanceof Error ? e.message : String(e));
