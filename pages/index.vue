@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import {useBookStore} from "~/stores/bookStore";
-import {landingContent} from "~/utils/landingContent";
+import {landingContent, type LandingContent} from "~/utils/landingContent";
 import LandingNav from "~/components/landing/LandingNav.vue";
 import LandingHero from "~/components/landing/LandingHero.vue";
 import LandingTestimonial from "~/components/landing/LandingTestimonial.vue";
@@ -69,32 +69,35 @@ import Author from "~/components/landing/Author.vue";
 import BookPricing from "~/components/landing/BookPricing.vue";
 import LandingFooter from "~/components/landing/LandingFooter.vue";
 
-const content = landingContent;
 const bookStore = useBookStore();
 
 bookStore.fetchImagePages();
-await useAsyncData('landing-book-config', async () => {
-    await bookStore.fetchConfig();
-    return true;
-});
+const [, {data: siteContent}] = await Promise.all([
+    useAsyncData('landing-book-config', async () => {
+        await bookStore.fetchConfig();
+        return true;
+    }),
+    useAsyncData('landing-site-config', () => $fetch<LandingContent>('/api/site-config')),
+]);
+const content = computed<LandingContent>(() => siteContent.value ?? landingContent);
 
 const bookTitle = computed(() => bookStore.config.title || 'Le livre');
 const bookAuthor = computed(() => bookStore.config.author || '');
 const coverImage = computed(() => bookStore.getImagePageByType('cover'));
-const minPrice = computed(() => Math.min(...content.pricing.offers.map(offer => offer.price)));
+const minPrice = computed(() => Math.min(...content.value.pricing.offers.map(offer => offer.price)));
 
-const sections = [
+const sections = computed(() => [
     {id: 'sommaire', label: 'Sommaire'},
     {id: 'extrait', label: 'Extrait gratuit'},
-    {id: 'auteur', label: content.author.label},
+    {id: 'auteur', label: content.value.author.label},
     {id: 'livre', label: 'Obtenir le livre'},
-];
+]);
 
 useHead({
     title: () => bookAuthor.value ? `${bookTitle.value} — ${bookAuthor.value}` : bookTitle.value,
     htmlAttrs: {lang: 'fr'},
     meta: [
-        {name: 'description', content: content.pitch},
+        {name: 'description', content: () => content.value.pitch},
     ],
 });
 </script>
