@@ -1,13 +1,18 @@
 <template>
-    <div class="flex flex-col gap-4">
-        <site-api-configurator
-            class=""
-        />
-        <h3 class="text-base/7 font-semibold text-gray-900 mt-8">Liste des connecteurs API</h3>
-        <p class=" text-sm/6 text-gray-600">Configurez les connecteurs API pour importer des contenus</p>
-        <api-connectors-configurator
-            class=""
-        />
+    <div class="flex flex-col gap-12">
+        <SiteApiConfigurator/>
+        <section
+            aria-labelledby="connectors-title"
+            class="flex flex-col gap-4"
+        >
+            <div>
+                <h2
+                    id="connectors-title"
+                    class="text-base font-semibold text-atelier-ink">Connecteurs</h2>
+                <p class="mt-1.5 text-sm text-atelier-muted">Importer directement depuis un service.</p>
+            </div>
+            <ApiConnectorsConfigurator/>
+        </section>
     </div>
 </template>
 <script lang="ts">

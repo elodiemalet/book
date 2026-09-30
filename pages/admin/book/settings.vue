@@ -1,96 +1,231 @@
 <template>
     <NuxtLayout name="admin-page">
-        <template #title>Configuration du livre</template>
-        <template #actions>
-            <AdminNavTabs
-                :tabs="tabs"
-                class="mb-12"
-            />
-        </template>
-
-        <div class="max-w-2xl space-y-8">
-            <div>
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Métadonnées</h3>
-                <div class="space-y-4">
-                    <UFormField label="Titre du recueil">
-                        <UInput v-model="form.title" />
-                    </UFormField>
-                    <UFormField label="Auteur">
-                        <UInput v-model="form.author" />
-                    </UFormField>
-                    <UFormField label="Années">
-                        <UInput
-                            v-model="form.years"
-                            placeholder="2019 - 2024" />
-                    </UFormField>
-                    <UFormField label="Texte de dédicace">
-                        <UTextarea
-                            v-model="form.dedicationText"
-                            :rows="6" />
-                    </UFormField>
-                    <UFormField label="Auteur de la dédicace">
-                        <UInput v-model="form.dedicationAuthor" />
-                    </UFormField>
-                    <UFormField label="Texte de préface">
-                        <UTextarea
-                            v-model="form.prefaceText"
-                            :rows="6" />
-                    </UFormField>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Format et mise en page</h3>
-                <div class="space-y-4">
-                    <UFormField label="Format de page">
-                        <USelect
-                            v-model="form.pageFormat"
-                            :items="pageFormats"
-                        />
-                    </UFormField>
-                    <UFormField label="Lignes max par page">
-                        <UInput
-                            v-model.number="form.maxLines"
-                            type="number" />
-                    </UFormField>
-                    <UFormField label="Lignes max (première page du poème)">
-                        <UInput
-                            v-model.number="form.maxLinesFirstPage"
-                            type="number" />
-                    </UFormField>
-                    <UFormField label="Numéro de page de départ">
-                        <UInput
-                            v-model.number="form.pageStart"
-                            type="number" />
-                    </UFormField>
-                    <UCheckbox
-                        v-model="form.showSignature"
-                        label="Afficher l'auteur et la date sous chaque texte"
-                        description="À décocher pour un livre classique d'un seul auteur."
-                    />
-                </div>
-            </div>
-
-            <UButton
-                label="Enregistrer"
-                color="primary"
+        <template #title>Mon livre</template>
+        <template #buttons>
+            <BaseButton
                 :loading="saving"
                 @click="save"
-            />
+            >
+                Enregistrer
+            </BaseButton>
+        </template>
+        <template #actions>
+            <AdminNavTabs :tabs="tabs"/>
+        </template>
+
+        <div class="grid grid-cols-1 gap-12 xl:grid-cols-[minmax(0,1fr)_300px]">
+            <form
+                aria-label="Configuration du livre"
+                class="flex flex-col"
+                @submit.prevent="save"
+            >
+                <section
+                    v-for="section in sections"
+                    :key="section.id"
+                    :aria-labelledby="`section-${section.id}`"
+                    class="grid grid-cols-1 gap-5 border-b border-atelier-line py-8 first:pt-0 last:border-b-0 md:grid-cols-[180px_minmax(0,1fr)]"
+                >
+                    <div>
+                        <h2
+                            :id="`section-${section.id}`"
+                            class="text-[15px] leading-snug font-semibold text-atelier-ink">{{ section.title }}</h2>
+                        <p
+                            v-if="section.hint"
+                            class="mt-1 text-[13px] text-atelier-subtle">{{ section.hint }}</p>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <template v-if="section.id === 'meta'">
+                            <div class="flex flex-col gap-1.5 sm:col-span-2">
+                                <label
+                                    for="cfg-title"
+                                    :class="labelClass">Titre du recueil</label>
+                                <input
+                                    id="cfg-title"
+                                    v-model="form.title"
+                                    :class="[fieldClass, 'font-fraunces text-lg']">
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-author"
+                                    :class="labelClass">Auteur</label>
+                                <input
+                                    id="cfg-author"
+                                    v-model="form.author"
+                                    :class="fieldClass">
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-years"
+                                    :class="labelClass">Années</label>
+                                <input
+                                    id="cfg-years"
+                                    v-model="form.years"
+                                    placeholder="2019 - 2024"
+                                    :class="[fieldClass, 'tabular-nums']">
+                            </div>
+                        </template>
+
+                        <template v-else-if="section.id === 'texts'">
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-dedication"
+                                    :class="labelClass">Texte de dédicace</label>
+                                <textarea
+                                    id="cfg-dedication"
+                                    v-model="form.dedicationText"
+                                    rows="3"
+                                    :class="[areaClass, 'italic']"/>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-dedication-author"
+                                    :class="labelClass">Auteur de la dédicace</label>
+                                <input
+                                    id="cfg-dedication-author"
+                                    v-model="form.dedicationAuthor"
+                                    :class="fieldClass">
+                            </div>
+                            <div class="flex flex-col gap-1.5 sm:col-span-2">
+                                <label
+                                    for="cfg-preface"
+                                    :class="labelClass">Texte de préface</label>
+                                <textarea
+                                    id="cfg-preface"
+                                    v-model="form.prefaceText"
+                                    rows="6"
+                                    :class="areaClass"/>
+                            </div>
+                        </template>
+
+                        <template v-else>
+                            <div class="flex flex-col gap-1.5 sm:col-span-2">
+                                <label
+                                    for="cfg-format"
+                                    :class="labelClass">Format de page</label>
+                                <div class="grid grid-cols-1">
+                                    <select
+                                        id="cfg-format"
+                                        v-model="form.pageFormat"
+                                        :class="[fieldClass, 'col-start-1 row-start-1 appearance-none pr-9']"
+                                    >
+                                        <option
+                                            v-for="format in pageFormats"
+                                            :key="format.value"
+                                            :value="format.value">{{ format.label }}</option>
+                                    </select>
+                                    <ChevronUpDownIcon
+                                        class="pointer-events-none col-start-1 row-start-1 mr-3 size-4 self-center justify-self-end text-atelier-subtle"
+                                        aria-hidden="true"/>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-max-lines"
+                                    :class="labelClass">Lignes max par page</label>
+                                <input
+                                    id="cfg-max-lines"
+                                    v-model.number="form.maxLines"
+                                    type="number"
+                                    min="1"
+                                    :class="[fieldClass, 'tabular-nums']">
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-max-lines-first"
+                                    :class="labelClass">Lignes max (première page du poème)</label>
+                                <input
+                                    id="cfg-max-lines-first"
+                                    v-model.number="form.maxLinesFirstPage"
+                                    type="number"
+                                    min="1"
+                                    :class="[fieldClass, 'tabular-nums']">
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-page-start"
+                                    :class="labelClass">Numéro de page de départ</label>
+                                <input
+                                    id="cfg-page-start"
+                                    v-model.number="form.pageStart"
+                                    type="number"
+                                    min="1"
+                                    :class="[fieldClass, 'tabular-nums']">
+                            </div>
+                            <label
+                                for="cfg-signature"
+                                class="flex cursor-pointer items-start gap-3 self-end pb-2.5 sm:col-span-2"
+                            >
+                                <input
+                                    id="cfg-signature"
+                                    v-model="form.showSignature"
+                                    type="checkbox"
+                                    class="mt-0.5 size-[18px] shrink-0 accent-lilas"
+                                >
+                                <span class="flex flex-col gap-0.5">
+                                    <span class="text-sm text-atelier-ink">Afficher l'auteur et la date sous chaque texte</span>
+                                    <span class="text-[13px] text-atelier-subtle">À décocher pour un livre classique d'un seul auteur.</span>
+                                </span>
+                            </label>
+                        </template>
+                    </div>
+                </section>
+            </form>
+
+            <aside
+                aria-label="Aperçu du format"
+                class="flex flex-col items-center gap-5 xl:sticky xl:top-10 xl:self-start"
+            >
+                <div
+                    class="relative flex flex-col items-center bg-page px-[11%] pt-[12%] text-center font-newsreader text-page-ink shadow-page"
+                    :style="previewStyle"
+                >
+                    <span class="text-[0.45rem] tracking-[0.22em] text-page-muted uppercase">{{ form.author }}</span>
+                    <span class="mt-[30%] text-xl leading-tight">{{ form.title || 'Sans titre' }}</span>
+                    <span
+                        class="mt-3 h-px w-4 bg-page-ink"
+                        aria-hidden="true"/>
+                    <span class="mt-3 text-[0.6rem] text-page-muted tabular-nums">{{ form.years }}</span>
+                </div>
+                <dl class="grid w-full max-w-[240px] grid-cols-[1fr_auto] gap-x-3 gap-y-2 text-[13px]">
+                    <dt class="text-atelier-subtle">Format</dt>
+                    <dd class="text-atelier-ink tabular-nums">{{ formatSize }}</dd>
+                    <dt class="text-atelier-subtle">Lignes max du format</dt>
+                    <dd class="text-atelier-ink tabular-nums">{{ formatLimits.maxLines }}</dd>
+                    <dt class="text-atelier-subtle">Caractères par ligne</dt>
+                    <dd class="text-atelier-ink tabular-nums">~{{ formatLimits.maxCharsPerLine }}</dd>
+                </dl>
+                <p
+                    v-if="form.maxLines > formatLimits.maxLines"
+                    class="max-w-[240px] rounded-md bg-warning-soft px-3 py-2 text-[13px] text-warning"
+                >
+                    Au-delà de {{ formatLimits.maxLines }} lignes, ce format limite automatiquement la page.
+                </p>
+            </aside>
         </div>
     </NuxtLayout>
 </template>
 
 <script lang="ts">
+import {ChevronUpDownIcon} from "@heroicons/vue/24/outline";
 import AdminNavTabs from "~/components/admin/ui/AdminNavTabs.vue";
+import BaseButton from "~/components/ui/buttons/BaseButton.vue";
+import {PAGE_FORMAT_LIMITS, PAGE_FORMAT_SIZES} from "~/stores/bookStore";
 
 export default {
-    components: {AdminNavTabs},
+    components: {AdminNavTabs, BaseButton, ChevronUpDownIcon},
     data() {
         const toast = useToast();
         return {
             toast,
             saving: false,
+            labelClass: 'text-[13px] text-atelier-muted',
+            fieldClass: 'h-11 w-full rounded-md border border-atelier-line-strong bg-atelier-panel px-3 text-[15px] text-atelier-ink placeholder:text-atelier-subtle focus:border-lilas focus:ring-3 focus:ring-lilas-soft focus:outline-none',
+            areaClass: 'w-full resize-y rounded-md border border-atelier-line-strong bg-atelier-panel px-3 py-2.5 font-newsreader text-base leading-relaxed text-atelier-ink focus:border-lilas focus:ring-3 focus:ring-lilas-soft focus:outline-none',
+            sections: [
+                {id: 'meta', title: 'Métadonnées', hint: 'Page de titre et couverture.'},
+                {id: 'texts', title: 'Dédicace et préface', hint: 'Pages liminaires, avant le premier texte.'},
+                {id: 'layout', title: 'Format et mise en page', hint: 'Appliqué à l\'aperçu et au PDF.'},
+            ],
             tabs: [
                 {name: 'Mon livre', route: '/admin/book', current: false},
                 {name: 'Configuration', route: '/admin/book/settings', current: true},
@@ -127,6 +262,22 @@ export default {
                 {label: 'Calendrier (279 × 216 mm)', value: 'calendrier'},
             ],
         };
+    },
+    computed: {
+        formatSize(): string {
+            const size = PAGE_FORMAT_SIZES[this.form.pageFormat] || PAGE_FORMAT_SIZES.a4;
+            return size.replace(/mm/g, '').trim().split(/\s+/).join(' × ') + ' mm';
+        },
+        formatLimits() {
+            return PAGE_FORMAT_LIMITS[this.form.pageFormat] || PAGE_FORMAT_LIMITS.a4;
+        },
+        previewStyle(): Record<string, string> {
+            const [width, height] = (PAGE_FORMAT_SIZES[this.form.pageFormat] || PAGE_FORMAT_SIZES.a4)
+                .split(/\s+/)
+                .map(value => parseFloat(value));
+            const scale = Math.min(220 / width, 300 / height);
+            return {width: `${Math.round(width * scale)}px`, height: `${Math.round(height * scale)}px`};
+        },
     },
     async mounted() {
         await this.fetchConfig();

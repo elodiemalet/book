@@ -1,6 +1,6 @@
 <template>
     <span
-        class="rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
+        class="inline-flex items-center rounded px-2 py-0.5 text-xs font-semibold"
         :class="[
             severityClass,
             sizeClass
@@ -36,32 +36,23 @@ export default defineComponent({
     computed: {
         sizeClass() {
             switch (this.size) {
-                case 'xs':
-                    return 'px-2 py-1 text-xs';
-                case 'sm':
-                    return 'px-2 py-1 text-sm';
-                case 'md':
-                    return 'px-2.5 py-1.5 text-sm';
                 case 'lg':
-                    return 'px-3 py-2 text-sm';
                 case 'xl':
-                    return 'px-3.5 py-2.5 text-sm';
+                    return 'px-2.5 py-1 text-sm';
                 default:
-                    return 'px-3 py-2 ';
+                    return '';
             }
         },
         severityClass() {
             switch (this.severity) {
-                case 'info':
-                    return 'bg-blue-100 text-blue-800';
                 case 'danger':
-                    return 'bg-red-100 text-red-800';
+                    return 'bg-danger-soft text-danger';
                 case 'success':
-                    return 'bg-green-100 text-green-800';
+                    return 'bg-menthe-soft text-menthe';
                 case 'warning':
-                    return 'bg-yellow-100 text-yellow-800';
+                    return 'bg-warning-soft text-warning';
                 default:
-                    return 'bg-blue-100 text-blue-800';
+                    return 'bg-lilas-soft text-lilas-light';
             }
         },
     },

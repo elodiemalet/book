@@ -16,12 +16,17 @@
                     :max-files="maxFiles"
                     :accept="accept"
                 />
-                <BaseCard v-if="image">
+                <figure
+                    v-if="image"
+                    class="flex flex-col gap-2"
+                >
+                    <figcaption class="text-[13px] text-atelier-muted">Image actuelle</figcaption>
                     <img
                         :src="image.url"
-                        alt="Cover page"
+                        :alt="title"
+                        class="max-h-80 w-fit rounded-[2px] shadow-page"
                     >
-                </BaseCard>
+                </figure>
                 <SaveButton
                     class="self-end"
                     :disabled="!filesChanged"
@@ -38,14 +43,13 @@
 import {defineComponent} from "vue";
 import BaseDrawer from "~/components/ui/BaseDrawer.vue";
 import BaseDropzone from "~/components/ui/BaseDropzone.vue";
-import BaseCard from "~/components/ui/BaseCard.vue";
 import type {FileEntityInterface} from "~/entities/FileEntity";
 import type {AttachmentEntityInterface} from "~/entities/AttachmentEntity";
 import SaveButton from "~/components/ui/buttons/SaveButton.vue";
 
 export default defineComponent({
     name: 'ImportImage',
-    components: {SaveButton, BaseCard, BaseDropzone, BaseDrawer},
+    components: {SaveButton, BaseDropzone, BaseDrawer},
     props: {
         pageType: {
             type: String,
@@ -73,11 +77,20 @@ export default defineComponent({
             accept: ['image/jpeg', 'image/png'],
             maxSize: 1024 * 1024 * 10,
             maxFiles: 1,
-            title: 'Ajouter une page de couverture',
-            description: 'La page de couverture sera affichée en haut de la page de livre',
             files: [] as FileEntityInterface[],
             filesChanged: false,
         };
+    },
+    computed: {
+        title(): string {
+            const verb = this.image ? 'Remplacer' : 'Ajouter';
+            return this.pageType === 'back_cover' ? `${verb} la page de fin` : `${verb} la page de couverture`;
+        },
+        description(): string {
+            return this.pageType === 'back_cover'
+                ? 'Cette image ferme le livre, après le dernier texte.'
+                : 'Cette image ouvre le livre et sert de couverture sur la page d\'accueil.';
+        },
     },
     watch: {
         files: {

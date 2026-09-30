@@ -1,6 +1,6 @@
 <template>
     <BaseButton
-        class="bg-transparent! px-0! text-gray-900! hover:text-gray-500! focus:text-gray-500!"
+        class="border-0! bg-transparent! text-atelier-muted! hover:bg-atelier-hover! hover:text-atelier-ink!"
         @click="$emit('click')"
     >
         <slot/>

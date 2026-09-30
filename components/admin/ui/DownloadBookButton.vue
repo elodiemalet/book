@@ -1,26 +1,43 @@
 <template>
     <button
         type="button"
-        class="no-print mt-2 text-white bg-linear-to-br from-purple-600 to-cyan-500 hover:bg-linear-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg px-3 py-2 text-xs text-left me-2 mb-2"
+        class="no-print inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border border-atelier-line-strong text-[13px] font-semibold text-atelier-ink transition-colors duration-150 hover:border-atelier-subtle hover:bg-atelier-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lilas disabled:cursor-wait disabled:opacity-60"
+        :disabled="generating"
         @click="downloadBook">
-        Télécharger le livre
+        <ArrowPathIcon
+            v-if="generating"
+            class="size-4 animate-spin motion-reduce:animate-none"
+            aria-hidden="true"/>
+        <ArrowDownTrayIcon
+            v-else
+            class="size-4"
+            aria-hidden="true"/>
+        {{ generating ? 'Génération du PDF…' : 'Télécharger le PDF' }}
     </button>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import {ArrowDownTrayIcon, ArrowPathIcon} from "@heroicons/vue/24/outline";
 
 export default defineComponent({
     name: "DownloadBookButton",
+    components: {ArrowDownTrayIcon, ArrowPathIcon},
     setup() {
         const toast = useToast();
         return {
             toast
         };
     },
+    data() {
+        return {
+            generating: false,
+        };
+    },
 
     methods: {
         async downloadBook() {
+            this.generating = true;
             try {
                 const {data, error} = await useFetch('/api/generate-pdf', {
                     method: 'POST',
@@ -65,6 +82,8 @@ export default defineComponent({
 
             } catch (error) {
                 console.error('Erreur lors de la génération du PDF:', error);
+            } finally {
+                this.generating = false;
             }
 
         }

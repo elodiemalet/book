@@ -1,7 +1,8 @@
 <template>
     <button
         type="button"
-        class="rounded-full bg-indigo-600 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        class="inline-flex size-9 items-center justify-center rounded-md border border-dashed border-atelier-line-strong text-lilas transition-colors duration-150 hover:border-lilas hover:bg-lilas-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lilas"
+        aria-label="Ajouter"
         @click="$emit('click')"
     >
         <PlusIcon
@@ -11,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import {PlusIcon} from '@heroicons/vue/20/solid';
+import {PlusIcon} from '@heroicons/vue/24/outline';
 
 export default defineComponent({
     name: "AddButton",

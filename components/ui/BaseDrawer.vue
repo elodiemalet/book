@@ -5,48 +5,48 @@
         <DialogComponent
             class="relative z-50 "
             @close="close">
-            <div class="fixed inset-0"/>
+            <div
+                class="fixed inset-0 bg-black/50"
+                aria-hidden="true"/>
             <div class="fixed inset-0 overflow-hidden">
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
                         <TransitionChild
                             as="template"
-                            enter="transform transition ease-in-out duration-500 sm:duration-700"
+                            enter="transform transition ease-atelier duration-300"
                             enter-from="translate-x-full"
                             enter-to="translate-x-0"
-                            leave="transform transition ease-in-out duration-500 sm:duration-700"
+                            leave="transform transition ease-in duration-200"
                             leave-from="translate-x-0"
                             leave-to="translate-x-full">
-                            <DialogPanel class="pointer-events-auto w-screen max-w-2xl">
-                                <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                            <DialogPanel class="pointer-events-auto w-screen max-w-xl">
+                                <div class="flex h-full flex-col overflow-y-auto border-l border-atelier-line bg-atelier-panel text-atelier-ink shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)]">
                                     <div class="flex-1">
                                         <!-- Header -->
-                                        <div class="bg-gray-50 px-4 py-6 sm:px-6">
+                                        <div class="border-b border-atelier-line px-5 py-6 sm:px-7">
                                             <div class="flex items-start justify-between space-x-3">
                                                 <div class="space-y-1">
-                                                    <DialogTitle class="text-base font-semibold text-gray-900">
+                                                    <DialogTitle class="font-fraunces text-2xl font-normal">
                                                         <slot name="title"/>
                                                     </DialogTitle>
-                                                    <p class="text-sm text-gray-500">
+                                                    <p class="text-sm text-atelier-muted">
                                                         <slot name="description"/>
                                                     </p>
                                                 </div>
-                                                <div
-                                                    class="flex h-7 items-center cursor-pointer"
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex size-9 items-center justify-center rounded-md text-atelier-muted transition-colors duration-150 hover:bg-atelier-hover hover:text-atelier-ink focus-visible:outline-2 focus-visible:outline-lilas"
+                                                    aria-label="Fermer"
                                                     @click="close">
-                                                    <div class="relative text-gray-400 hover:text-gray-500">
-                                                        <span class="absolute -inset-2.5"/>
-                                                        <span class="sr-only">Close panel</span>
-                                                        <XMarkIcon
-                                                            class="size-6"
-                                                            aria-hidden="true"/>
-                                                    </div>
-                                                </div>
+                                                    <XMarkIcon
+                                                        class="size-5"
+                                                        aria-hidden="true"/>
+                                                </button>
                                             </div>
                                         </div>
                                         <!-- Divider container -->
                                         <div
-                                            class="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 px-4 sm:px-6 sm:py-5">
+                                            class="px-5 py-6 sm:px-7">
                                             <slot/>
                                         </div>
                                     </div>

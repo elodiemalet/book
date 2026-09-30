@@ -1,27 +1,26 @@
 <template>
-    <div class="space-y-8">
-        <div>
+    <form
+        class="flex flex-col gap-6"
+        @submit.prevent="submit"
+    >
+        <div v-if="title || description">
             <h3
                 v-if="title"
-                class="text-base/7 font-semibold text-gray-900">{{ title }}</h3>
+                class="text-base font-semibold text-atelier-ink">{{ title }}</h3>
             <p
                 v-if="description"
-                class="mt-1 text-sm/6 text-gray-600">{{ description }}</p>
+                class="mt-1 text-sm text-atelier-muted">{{ description }}</p>
         </div>
         <slot/>
-        <div class="mt-2 flex items-center justify-end gap-x-6">
-            <CancelButton
-                @click="cancel"
-            >
+        <div class="flex items-center justify-end gap-2">
+            <CancelButton @click="cancel">
                 Annuler
             </CancelButton>
-            <BaseButton
-                @click="submit"
-            >
-                Sauvegarder
+            <BaseButton @click="submit">
+                Enregistrer
             </BaseButton>
         </div>
-    </div>
+    </form>
 </template>
 <script lang="ts">
 import {defineComponent} from "vue";

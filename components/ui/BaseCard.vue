@@ -1,6 +1,6 @@
 <template>
-    <div class="overflow-hidden rounded-lg bg-white shadow">
-        <div class="px-4 py-5 sm:p-6">
+    <div class="overflow-hidden rounded-[10px] border border-atelier-line bg-atelier-panel">
+        <div class="px-4 py-4 sm:px-5">
             <slot/>
         </div>
     </div>

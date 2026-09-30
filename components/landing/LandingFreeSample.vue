@@ -42,12 +42,12 @@
                         :aria-invalid="status === 'invalid' || undefined"
                         :aria-describedby="status === 'invalid' || status === 'error' ? 'free-sample-error' : 'free-sample-note'"
                         class="h-12.5 w-full rounded-md border bg-atelier-ground px-4 text-[15px] text-atelier-ink placeholder:text-atelier-subtle focus:border-lilas focus:ring-3 focus:ring-lilas-soft focus:outline-none"
-                        :class="status === 'invalid' ? 'border-[#ff8f87]' : 'border-atelier-line-strong'"
+                        :class="status === 'invalid' ? 'border-danger' : 'border-atelier-line-strong'"
                     >
                     <p
                         v-if="status === 'invalid' || status === 'error'"
                         id="free-sample-error"
-                        class="text-sm text-[#ff8f87]"
+                        class="text-sm text-danger"
                         role="alert"
                     >
                         {{ status === 'invalid' ? 'Merci d\'indiquer une adresse e-mail valide.' : 'L\'envoi n\'a pas abouti. Réessayez dans un instant.' }}
