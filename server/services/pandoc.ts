@@ -6,14 +6,28 @@ import tmp from 'tmp';
 const execFile = promisify(_execFile);
 const unlink = promisify(fs.unlink);
 
-// Filtre Lua : supprime images et figures (avec leurs légendes), garde seulement le texte des liens
+// Filtre Lua : supprime images et figures (avec leurs légendes) et séparateurs (« * * * », « --- »),
+// garde seulement le texte des liens
 const STRIP_MEDIA_FILTER = `
 function Image() return {} end
 function Figure() return {} end
+function HorizontalRule() return {} end
 function Link(el) return el.content end
 `;
 
+// Extension du fichier → lecteur Pandoc, quand ils diffèrent.
+// Markdown : un retour à la ligne reste un retour à la ligne (vers) et les apostrophes ne sont pas modifiées.
+const PANDOC_READERS: Record<string, string> = {
+    md: 'markdown+hard_line_breaks-smart',
+    markdown: 'markdown+hard_line_breaks-smart',
+};
+
 export async function extractWithPandoc(file: Buffer, fromFormat: string): Promise<string> {
+    // Texte brut : Pandoc n'a pas de lecteur « txt », et il n'y a rien à convertir
+    if (fromFormat === 'txt') {
+        return file.toString('utf8').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    }
+
     // 1. On crée deux fichiers temporaires : l'ODT d'entrée et le MD intermédiaire
     const tmpIn = tmp.fileSync({postfix: `.${fromFormat}`});
     const tmpMd = tmp.fileSync({postfix: `.md`});
@@ -29,7 +43,7 @@ export async function extractWithPandoc(file: Buffer, fromFormat: string): Promi
 
         // 3. Étape 1 : ODT → Markdown avec hard_line_breaks et wrap=preserve, sans images ni liens
         await execFile('pandoc', [
-            `--from=${fromFormat}`,                 // ex. odt
+            `--from=${PANDOC_READERS[fromFormat] ?? fromFormat}`, // ex. odt
             '--to=markdown+hard_line_breaks',
             `--lua-filter=${filterPath}`,
             '--wrap=preserve',
