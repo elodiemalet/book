@@ -1,7 +1,7 @@
 <template>
     <button
         type="button"
-        class="rounded-md font-semibold shadow-xs disabled:cursor-not-allowed"
+        class="inline-flex items-center justify-center rounded-md font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lilas disabled:cursor-not-allowed disabled:opacity-50"
         :class="
             [
                 severityClass,
@@ -17,7 +17,7 @@
                 class="animate-spin h-5 w-5 mr-2"
                 aria-hidden="true"
             />
-            <span>
+            <span class="inline-flex items-center">
                 <slot>{{ label }}</slot>
             </span>
         </span>
@@ -61,44 +61,34 @@ export default defineComponent({
         sizeClass() {
             switch (this.size) {
                 case 'xs':
-                    return 'px-2 py-1 text-xs';
+                    return 'h-7 px-2 text-xs';
                 case 'sm':
-                    return 'px-2 py-1 text-sm';
+                    return 'h-8 px-2.5 text-[13px]';
                 case 'md':
-                    return 'px-2.5 py-1.5 text-sm';
+                    return 'h-9 px-3 text-sm';
                 case 'lg':
-                    return 'px-3 py-2 text-sm';
+                    return 'h-10 px-4 text-sm';
                 case 'xl':
-                    return 'px-3.5 py-2.5 text-sm';
+                    return 'h-12 px-5 text-[15px]';
                 default:
-                    return 'px-3 py-2 ';
+                    return 'h-10 px-4 text-sm';
             }
         },
         severityClass() {
-
-
-            switch (this.severity) {
-                case 'info':
-                    return this.outlined ?
-                        'border text-purple-800 border-purple-600 bg-white hover:bg-purple-50' :
-                        'bg-purple-600 hover:bg-purple-500 text-white'
-                case 'danger':
-                    return this.outlined ?
-                        'border text-red-800 border-red-600 bg-white hover:bg-red-50' :
-                        'bg-red-600 hover:bg-red-500 text-white';
-                case 'success':
-                    return this.outlined ?
-                        'border text-green-800 border-green-600 bg-white hover:bg-green-50' :
-                        'bg-green-600 hover:bg-green-500 text-white';
-                case 'warning':
-                    return this.outlined ?
-                        'border text-yellow-800 border-yellow-600 bg-white hover:bg-yellow-50' :
-                        'bg-yellow-600 hover:bg-yellow-500 text-white';
-                default:
-                    return this.outlined ?
-                        'border text-purple-800 border-purple-600 bg-white hover:bg-purple-50' :
-                        'bg-purple-600 hover:bg-purple-500 text-white'
-            }
+            const outlined: Record<string, string> = {
+                info: 'border border-atelier-line-strong text-atelier-ink hover:border-atelier-subtle hover:bg-atelier-hover',
+                danger: 'border border-danger/50 text-danger hover:bg-danger-soft',
+                success: 'border border-menthe/50 text-menthe hover:bg-menthe-soft',
+                warning: 'border border-warning/50 text-warning hover:bg-warning-soft',
+            };
+            const filled: Record<string, string> = {
+                info: 'bg-lilas text-atelier-panel hover:bg-lilas-light',
+                danger: 'bg-danger text-atelier-panel hover:bg-[#ffb0aa]',
+                success: 'bg-menthe text-atelier-panel hover:bg-[#a3e0cd]',
+                warning: 'bg-warning text-atelier-panel hover:bg-[#f7d99f]',
+            };
+            const map = this.outlined ? outlined : filled;
+            return map[this.severity] ?? map.info;
         },
     },
 });

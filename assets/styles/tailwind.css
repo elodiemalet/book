@@ -2,6 +2,40 @@
 @import "@nuxt/ui";
 @config "../../tailwind.config.js";
 
+/* ─── Design tokens « Nuit d'atelier » (landing et futures interfaces) ─── */
+@theme {
+    --color-atelier-ground: #252938;
+    --color-atelier-panel: #1c1f2b;
+    --color-atelier-hover: #2e3345;
+    --color-atelier-raised: #3a3f54;
+    --color-atelier-line: #343949;
+    --color-atelier-line-strong: #474c60;
+    --color-atelier-ink: #e6e7ee;
+    --color-atelier-muted: #9a9fb4;
+    --color-atelier-subtle: #8a8fa5;
+    --color-lilas: #b7a9ff;
+    --color-lilas-light: #d6ceff;
+    --color-lilas-soft: #353259;
+    --color-lilas-tint: #2b2a4a;
+    --color-menthe: #7fd1b9;
+    --color-menthe-soft: #22403a;
+    --color-danger: #ff8f87;
+    --color-danger-soft: #45262a;
+    --color-warning: #f2c879;
+    --color-warning-soft: #3f3522;
+    --color-page: #ffffff;
+    --color-page-ink: #242735;
+    --color-page-muted: #717787;
+
+    --font-fraunces: "Fraunces", Georgia, serif;
+    --font-newsreader: "Newsreader", Georgia, serif;
+    --font-instrument: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+    --shadow-page: 0 2px 4px rgb(0 0 0 / 0.3), 0 44px 80px -30px rgb(0 0 0 / 0.8);
+    --ease-atelier: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+
 @layer base {
 
     h1 {

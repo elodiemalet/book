@@ -1,11 +1,8 @@
 <template>
     <NuxtLayout name="admin-page">
-        <template #title>Ajouter un connecteur API</template>
+        <template #title>Importer du contenu</template>
         <template #actions>
-            <AdminNavTabs
-                :tabs="tabs"
-                class="mb-12"
-            />
+            <AdminNavTabs :tabs="tabs"/>
         </template>
         <ApiImportForm/>
     </NuxtLayout>
@@ -20,8 +17,8 @@ export default {
     data() {
         return {
             tabs: [
-                {name: 'Télécharger des fichiers ', route: '/admin/import', current: false},
-                {name: 'Connecter une api', route: '/admin/import/api', current: true},
+                {name: 'Télécharger des fichiers', route: '/admin/import', current: false},
+                {name: 'Connecter une API', route: '/admin/import/api', current: true},
             ],
         };
     },

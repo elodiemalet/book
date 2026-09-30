@@ -1,17 +1,18 @@
 <template>
     <button
         type="button"
-        class="rounded-full bg-lime-600 p-2 text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        class="inline-flex size-9 items-center justify-center rounded-md border border-atelier-line-strong text-atelier-muted transition-colors duration-150 hover:bg-atelier-hover hover:text-atelier-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lilas"
+        aria-label="Modifier"
         @click="$emit('click')"
     >
         <PencilIcon
-            class="size-5"
+            class="size-4"
             aria-hidden="true"/>
     </button>
 </template>
 
 <script lang="ts">
-import {PencilIcon} from '@heroicons/vue/20/solid';
+import {PencilIcon} from '@heroicons/vue/24/outline';
 
 export default defineComponent({
     name: "EditRoundButton",

@@ -1,172 +1,82 @@
 <template>
-    <div class="relative">
-        <template v-if="editor">
-            <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                <div class="px-3 py-2 border-b border-gray-200 dark:border-gray-600">
-                    <div class="flex flex-wrap items-center">
-                        <div class="flex items-center space-x-1 rtl:space-x-reverse flex-wrap">
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('heading', { level: 1 }) }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().toggleHeading({level: 1}).run()">
-                                <H1Icon
-                                    class="size-5 "
-                                    aria-hidden="true"/>
-                                <span class="sr-only">Heading 1</span>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('heading', { level: 2 }) }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().toggleHeading({level: 2}).run()">
-                                <H2Icon
-                                    class="size-5 "
-                                    aria-hidden="true"/>
-                                <span class="sr-only">Heading 2</span>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('heading', { level: 3 }) }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().toggleHeading({level: 3}).run()">
-                                <H3Icon
-                                    class="size-5 "
-                                    aria-hidden="true"/>
-                                <span class="sr-only">Heading 3</span>
-                            </div>
-                            <div class="px-1">
-                                <span class="block w-px h-4 bg-gray-300 dark:bg-gray-600"/>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('bold') }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().toggleBold().run()">
-                                <BoldIcon
-                                    class="size-5 "
-                                    aria-hidden="true"/>
-                                <span class="sr-only">Bold</span>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('italic') }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().toggleItalic().run()">
-                                <ItalicIcon
-                                    class="size-5 "
-                                    aria-hidden="true"/>
-                                <span class="sr-only">Italic</span>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('underline') }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().toggleUnderline().run()">
-                                <UnderlineIcon
-                                    class="size-5 "
-                                    aria-hidden="true"/>
-                                <span class="sr-only">Underline</span>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive('strike') }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="editor.chain().focus().toggleStrike().run()">
-                                <StrikethroughIcon
-                                    class="size-5 "
-                                    aria-hidden="true"/>
-                                <span class="sr-only">Strike</span>
-                            </div>
-                            <div class="px-1">
-                                <span class="block w-px h-4 bg-gray-300 dark:bg-gray-600"/>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive({ textAlign: 'left' }) }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="toggleLeftAlign()">
-                                <svg
-                                    class="w-5 h-5"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 6h8m-8 4h12M6 14h8m-8 4h12"/>
-                                </svg>
-                                <span class="sr-only">Align left</span>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive({ textAlign: 'center' }) }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="toggleCenterAlign()">
-                                <svg
-                                    class="w-5 h-5"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 6h8M6 10h12M8 14h8M6 18h12"/>
-                                </svg>
-                                <span class="sr-only">Align center</span>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive({ textAlign: 'right' }) }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="toggleRightAlign()">
-                                <svg
-                                    class="w-5 h-5"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M18 6h-8m8 4H6m12 4h-8m8 4H6"/>
-                                </svg>
-                                <span class="sr-only">Align right</span>
-                            </div>
-                            <div
-                                :class="{ 'text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-600': editor.isActive({ textAlign: 'justify' }) }"
-                                class="p-1.5 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                                @click="toggleJustify()">
-                                <svg
-                                    class="w-5 h-5"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M18 6H6m12 4H6m12 4H6m12 4H6"/>
-                                </svg>
-                                <span class="sr-only">Justify</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="flex flex-col gap-1.5">
+        <span
+            v-if="label"
+            :id="`${name}-label`"
+            class="text-[13px] text-atelier-muted">{{ label }}</span>
+        <div
+            v-if="editor"
+            class="overflow-hidden rounded-[10px] border border-atelier-line bg-atelier-ground"
+        >
+            <div
+                role="toolbar"
+                aria-label="Mise en forme du texte"
+                class="flex flex-wrap items-center gap-0.5 border-b border-atelier-line bg-atelier-panel px-3 py-2"
+            >
+                <button
+                    v-for="tool in markTools"
+                    :key="tool.name"
+                    type="button"
+                    class="inline-flex size-9 items-center justify-center rounded-md transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-lilas"
+                    :class="editor.isActive(tool.name) ? 'bg-lilas-soft text-lilas-light' : 'text-atelier-muted hover:bg-atelier-hover hover:text-atelier-ink'"
+                    :aria-label="tool.label"
+                    :aria-pressed="editor.isActive(tool.name)"
+                    :title="tool.label"
+                    @click="tool.run()"
+                >
+                    <component
+                        :is="tool.icon"
+                        class="size-5"
+                        aria-hidden="true"/>
+                </button>
+                <span
+                    class="mx-2 h-5 w-px bg-atelier-line"
+                    aria-hidden="true"/>
+                <button
+                    v-for="level in headingLevels"
+                    :key="level"
+                    type="button"
+                    class="inline-flex h-9 items-center justify-center rounded-md px-2 text-[13px] font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-lilas"
+                    :class="editor.isActive('heading', {level}) ? 'bg-lilas-soft text-lilas-light' : 'text-atelier-muted hover:bg-atelier-hover hover:text-atelier-ink'"
+                    :aria-label="`Titre de niveau ${level}`"
+                    :aria-pressed="editor.isActive('heading', {level})"
+                    @click="editor.chain().focus().toggleHeading({level}).run()"
+                >
+                    T{{ level }}
+                </button>
+                <span
+                    class="mx-2 h-5 w-px bg-atelier-line"
+                    aria-hidden="true"/>
+                <button
+                    v-for="align in alignTools"
+                    :key="align.value"
+                    type="button"
+                    class="inline-flex size-9 items-center justify-center rounded-md transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-lilas"
+                    :class="editor.isActive({textAlign: align.value}) ? 'bg-lilas-soft text-lilas-light' : 'text-atelier-muted hover:bg-atelier-hover hover:text-atelier-ink'"
+                    :aria-label="align.label"
+                    :aria-pressed="editor.isActive({textAlign: align.value})"
+                    :title="align.label"
+                    @click="toggleAlign(align.value)"
+                >
+                    <svg
+                        class="size-5"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                    ><path :d="align.path"/></svg>
+                </button>
+            </div>
+            <div class="flex justify-center px-4 py-8 sm:px-8">
                 <EditorContent
-                    class="block w-full min-h-8 rounded-md bg-white text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    class="text-editor-page w-full max-w-[640px] bg-page px-8 py-12 font-newsreader text-[17px] leading-relaxed text-page-ink shadow-page sm:px-16 sm:py-14"
+                    :aria-labelledby="label ? `${name}-label` : undefined"
                     :editor="editor"
                 />
             </div>
-        </template>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -177,9 +87,6 @@ import {
     ItalicIcon,
     UnderlineIcon,
     StrikethroughIcon,
-    H1Icon,
-    H2Icon,
-    H3Icon
 } from "@heroicons/vue/24/outline";
 import {Paragraph} from "@tiptap/extension-paragraph";
 import {Bold} from "@tiptap/extension-bold";
@@ -193,7 +100,7 @@ import {Heading} from "@tiptap/extension-heading";
 
 export default {
     name: "TextEditor",
-    components: {EditorContent, BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, H1Icon, H2Icon, H3Icon},
+    components: {EditorContent},
     props: {
         modelValue: {
             type: String,
@@ -211,12 +118,34 @@ export default {
             type: Number,
             default: 5,
         },
+        label: {
+            type: String,
+            default: '',
+        },
     },
     emits: ['update:modelValue'],
     data() {
         return {
-            editor: null,
+            editor: null as Editor | null,
+            headingLevels: [1, 2, 3] as (1 | 2 | 3)[],
+            alignTools: [
+                {value: 'left', label: 'Aligner à gauche', path: 'M21 6H3M15 12H3M17 18H3'},
+                {value: 'center', label: 'Centrer', path: 'M21 6H3M17 12H7M19 18H5'},
+                {value: 'right', label: 'Aligner à droite', path: 'M21 6H3M21 12H9M21 18H7'},
+                {value: 'justify', label: 'Justifier', path: 'M3 6h18M3 12h18M3 18h18'},
+            ],
         };
+    },
+    computed: {
+        markTools() {
+            const chain = () => this.editor!.chain().focus();
+            return [
+                {name: 'bold', label: 'Gras', icon: BoldIcon, run: () => chain().toggleBold().run()},
+                {name: 'italic', label: 'Italique', icon: ItalicIcon, run: () => chain().toggleItalic().run()},
+                {name: 'underline', label: 'Souligné', icon: UnderlineIcon, run: () => chain().toggleUnderline().run()},
+                {name: 'strike', label: 'Barré', icon: StrikethroughIcon, run: () => chain().toggleStrike().run()},
+            ];
+        },
     },
     mounted() {
         this.editor = new Editor({
@@ -238,40 +167,22 @@ export default {
                 }),
             ],
             onUpdate: () => {
-                this.$emit('update:modelValue', this.editor.getHTML());
+                this.$emit('update:modelValue', this.editor!.getHTML());
             },
         });
     },
     beforeUnmount() {
-        this.editor.destroy();
+        this.editor?.destroy();
     },
     methods: {
-        toggleLeftAlign() {
-            if (this.editor.isActive({textAlign: 'left'})) {
-                this.editor.chain().focus().unsetTextAlign().run();
-            } else {
-                this.editor.chain().focus().setTextAlign('left').run();
+        toggleAlign(value: string) {
+            if (!this.editor) {
+                return;
             }
-        },
-        toggleCenterAlign() {
-            if (this.editor.isActive({textAlign: 'center'})) {
+            if (this.editor.isActive({textAlign: value})) {
                 this.editor.chain().focus().unsetTextAlign().run();
             } else {
-                this.editor.chain().focus().setTextAlign('center').run();
-            }
-        },
-        toggleRightAlign() {
-            if (this.editor.isActive({textAlign: 'right'})) {
-                this.editor.chain().focus().unsetTextAlign().run();
-            } else {
-                this.editor.chain().focus().setTextAlign('right').run();
-            }
-        },
-        toggleJustify() {
-            if (this.editor.isActive({textAlign: 'justify'})) {
-                this.editor.chain().focus().unsetTextAlign().run();
-            } else {
-                this.editor.chain().focus().setTextAlign('justify').run();
+                this.editor.chain().focus().setTextAlign(value).run();
             }
         },
     }
@@ -279,9 +190,25 @@ export default {
 </script>
 
 <style>
-.tiptap {
-    padding: 5px;
-    min-height: 100px;
+.text-editor-page .tiptap {
+    min-height: 420px;
     outline: none !important;
+    white-space: pre-wrap;
+}
+
+.text-editor-page .tiptap h1,
+.text-editor-page .tiptap h2,
+.text-editor-page .tiptap h3 {
+    margin: 0 0 0.75em;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.text-editor-page .tiptap h1 { font-size: 1.75em; }
+.text-editor-page .tiptap h2 { font-size: 1.4em; font-style: italic; }
+.text-editor-page .tiptap h3 { font-size: 1.15em; }
+
+.text-editor-page .tiptap p + p {
+    margin-top: 0.4em;
 }
 </style>

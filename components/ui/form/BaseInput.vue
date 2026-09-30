@@ -1,35 +1,42 @@
 <template>
-    <div class="relative">
+    <div class="flex flex-col gap-1.5">
         <label
             v-if="label"
-            :for="name"
-            class="absolute -top-2 left-2 inline-block rounded-lg bg-white px-1 text-xs font-medium text-gray-900">
+            :for="inputId"
+            class="text-[13px] text-atelier-muted">
             {{ label }}
         </label>
-        <div class="mt-2 grid grid-cols-1">
+        <div class="grid grid-cols-1">
             <input
+                :id="inputId"
                 :value="modelValue"
                 :type="type"
                 :name="name"
-                class="col-start-1 row-start-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                :class="{'outline-red-600 text-red-900 ': error}"
+                class="col-start-1 row-start-1 block h-11 w-full rounded-md border bg-atelier-panel outline-none px-3 text-[15px] text-atelier-ink placeholder:text-atelier-subtle focus:border-lilas focus:ring-3 focus:ring-lilas-soft focus:outline-none"
+                :class="[
+                    error ? 'border-danger pr-10' : 'border-atelier-line-strong',
+                    serif ? 'font-fraunces text-lg' : '',
+                ]"
                 :placeholder="placeholder"
-                @input="$emit('update:modelValue', $event.target?.value)"
+                :aria-invalid="error ? true : undefined"
+                :aria-describedby="error ? `${inputId}-error` : undefined"
+                @input="$emit('update:modelValue', ($event.target as HTMLInputElement)?.value)"
             >
             <ExclamationCircleIcon
                 v-if="error"
-                class="pointer-events-none col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end text-red-500 sm:size-4"
+                class="pointer-events-none col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end text-danger"
                 aria-hidden="true"/>
         </div>
         <p
             v-if="error"
-            class="mt-1 text-sm text-red-600">{{ error }}</p>
+            :id="`${inputId}-error`"
+            class="text-sm text-danger">{{ error }}</p>
     </div>
 </template>
 
 <script lang="ts">
 
-import {ExclamationCircleIcon} from "@heroicons/vue/24/solid";
+import {ExclamationCircleIcon} from "@heroicons/vue/24/outline";
 
 export default {
     name: "BaseInput",
@@ -59,7 +66,16 @@ export default {
             type: String,
             default: '',
         },
+        serif: {
+            type: Boolean,
+            default: false,
+        },
     },
-    emits: ['update:modelValue']
+    emits: ['update:modelValue'],
+    computed: {
+        inputId(): string {
+            return `field-${this.name}`;
+        },
+    },
 };
 </script>

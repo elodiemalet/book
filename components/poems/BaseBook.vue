@@ -1,28 +1,37 @@
 <template>
-    <div
-        class="flex flex-wrap gap-4 justify-center h-full"
+    <section
+        aria-label="Aperçu du livre"
+        class="flex flex-col items-center gap-6"
     >
-        <div
+        <article
             v-for="(post, i) in posts"
             :key="i"
-            class="page-preview flex-1 h-fit p-4"
+            class="page-preview relative w-full max-w-[520px] bg-page px-8 pt-12 pb-16 font-newsreader text-page-ink shadow-page sm:px-14 sm:pt-16"
         >
-            <h2 class="title">{{ post.postTitle }}</h2>
+            <h2 class="title mb-6 text-2xl font-normal italic">{{ post.postTitle }}</h2>
             <SafeHtml
                 :raw-html="post.content"
-                class="p-4"/>
-            <p v-if="bookStore.config.showSignature">{{ formatSignature(post.author, post.publishDate) }}</p>
-
+                class="text-[17px] leading-relaxed"/>
+            <p
+                v-if="bookStore.config.showSignature"
+                class="mt-8 text-sm text-page-muted italic">{{ formatSignature(post.author, post.publishDate) }}</p>
+            <span class="absolute inset-x-0 bottom-5 text-center text-xs text-page-muted tabular-nums">{{ (page - 1) * limit + i + 1 }}</span>
+        </article>
+        <div class="flex flex-col items-center gap-3 sm:flex-row sm:gap-5">
+            <p class="text-[13px] text-atelier-muted tabular-nums">
+                <template v-if="limit === 1">Texte {{ page }} <span class="text-atelier-subtle">sur {{ totalRecords }}</span></template>
+                <template v-else>Page {{ page }} <span class="text-atelier-subtle">sur {{ countPage }}</span></template>
+            </p>
+            <BasePagination
+                :page="page"
+                :count-page="countPage"
+                :limit="limit"
+                @prev-page="prevPage"
+                @next-page="nextPage"
+                @page="setPage"
+            />
         </div>
-    </div>
-    <BasePagination
-        :page="page"
-        :count-page="countPage"
-        :limit="limit"
-        @prev-page="prevPage"
-        @next-page="nextPage"
-        @page="setPage"
-    />
+    </section>
 </template>
 
 <script lang="ts">

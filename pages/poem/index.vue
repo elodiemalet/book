@@ -17,6 +17,7 @@
             </div>
         </div>
         <BasePagination
+            tone="light"
             :page="page"
             :count-page="countPage"
             :limit="limit"

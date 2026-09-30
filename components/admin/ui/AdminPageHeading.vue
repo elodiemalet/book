@@ -1,86 +1,43 @@
 <template>
-    <div class="border-b border-gray-200 pb-6 ">
-        <div>
-            <nav
-                class="sm:hidden"
-                aria-label="Back">
-                <a
-                    href="#"
-                    class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
-                    <ChevronLeftIcon
-                        class="-ml-1 mr-1 size-5 shrink-0 text-gray-400"
-                        aria-hidden="true"/>
-                    Back
-                </a>
-            </nav>
-            <!--            <nav-->
-            <!--                class="hidden sm:flex"-->
-            <!--                aria-label="Breadcrumb">-->
-            <!--                <ol-->
-            <!--                    role="list"-->
-            <!--                    class="flex items-center space-x-4">-->
-            <!--                    <li>-->
-            <!--                        <div class="flex">-->
-            <!--                            <a-->
-            <!--                                href="#"-->
-            <!--                                class="text-sm font-medium text-gray-500 hover:text-gray-700">Jobs</a>-->
-            <!--                        </div>-->
-            <!--                    </li>-->
-            <!--                    <li>-->
-            <!--                        <div class="flex items-center">-->
-            <!--                            <ChevronRightIcon-->
-            <!--                                class="size-5 shrink-0 text-gray-400"-->
-            <!--                                aria-hidden="true"/>-->
-            <!--                            <a-->
-            <!--                                href="#"-->
-            <!--                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Engineering</a>-->
-            <!--                        </div>-->
-            <!--                    </li>-->
-            <!--                    <li>-->
-            <!--                        <div class="flex items-center">-->
-            <!--                            <ChevronRightIcon-->
-            <!--                                class="size-5 shrink-0 text-gray-400"-->
-            <!--                                aria-hidden="true"/>-->
-            <!--                            <a-->
-            <!--                                href="#"-->
-            <!--                                aria-current="page"-->
-            <!--                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Back End-->
-            <!--                                Developer</a>-->
-            <!--                        </div>-->
-            <!--                    </li>-->
-            <!--                </ol>-->
-            <!--            </nav>-->
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div class="min-w-0 flex-1">
+            <h1 class="font-fraunces text-4xl leading-tight font-light tracking-tight text-atelier-ink sm:text-[40px]">
+                <slot/>
+            </h1>
+            <p
+                v-if="$slots.subtitle"
+                class="mt-2 text-sm text-atelier-muted">
+                <slot name="subtitle"/>
+            </p>
         </div>
-        <div class="mt-2 md:flex md:items-center md:justify-between">
-            <div class="min-w-0 flex-1">
-                <h2 class="text-2xl/7 font-bold text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight py-4 ">
-                    <slot/>
-                </h2>
-            </div>
-            <div class="mt-4 flex space-x-3 shrink-0 md:ml-4 md:mt-0 self-start">
-                <BaseButton
-                    v-if="editUrl"
-                    @click="navigateTo(editUrl)"
-                >
-                    Modifier
-                </BaseButton>
-                <BaseButton
-                    v-if="addUrl"
-                    @click="navigateTo(addUrl)"
-                >
-                    Ajouter
-                </BaseButton>
-            </div>
+        <div class="flex shrink-0 gap-2">
+            <slot name="buttons"/>
+            <BaseButton
+                v-if="editUrl"
+                outlined
+                @click="navigateTo(editUrl)"
+            >
+                Modifier
+            </BaseButton>
+            <BaseButton
+                v-if="addUrl"
+                @click="navigateTo(addUrl)"
+            >
+                <PlusIcon
+                    class="mr-2 -ml-1 size-4"
+                    aria-hidden="true"/>
+                {{ addLabel }}
+            </BaseButton>
         </div>
     </div>
 </template>
 
 <script>
-import {ChevronLeftIcon} from '@heroicons/vue/20/solid';
+import {PlusIcon} from '@heroicons/vue/24/outline';
 import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 
 export default {
-    components: {BaseButton, ChevronLeftIcon},
+    components: {BaseButton, PlusIcon},
     props: {
         title: {
             type: String,
@@ -93,7 +50,11 @@ export default {
         addUrl: {
             type: String,
             default: '',
-        }
+        },
+        addLabel: {
+            type: String,
+            default: 'Ajouter',
+        },
     },
 };
 </script>

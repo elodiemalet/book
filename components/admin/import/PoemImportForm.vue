@@ -1,152 +1,149 @@
 <template>
-    <div>
-        <h3 class="text-base/7 font-semibold text-gray-900">Import</h3>
-        <p class="mt-1 text-sm/6 text-gray-600">Importez des fichiers JSON, CSV, texte, HTML, Markdown, ODT ou
-            MS Word contenant les textes à importer</p>
-    </div>
-    <form class="mx-auto flex flex-col gap-4 justify-center">
-        <div class="space-y-12">
-
-            <BaseDropzone
-                v-model:files="files"
-                :max-size="1024 * 50"
-                :max-files="20"
-                :accept="['application/json', 'text/csv', 'text/plain', 'text/html', 'text/markdown', 'application/vnd.oasis.opendocument.text', 'application/msword']"
-            />
-            <div class="mt-2 flex items-center justify-end gap-x-6">
-                <CancelButton
-                    @click="cancel"
-                >
-                    Annuler
-                </CancelButton>
-                <BaseButton
-                    :loading="submitting"
-                    :disabled="files.length === 0 || submitting"
-                    @click="startQueue"
-                >
-                    Importer
-                </BaseButton>
+    <div class="grid grid-cols-1 gap-12 xl:grid-cols-2">
+        <section
+            aria-labelledby="import-files-title"
+            class="flex flex-col gap-5"
+        >
+            <div>
+                <h2
+                    id="import-files-title"
+                    class="text-base font-semibold text-atelier-ink">Fichiers</h2>
+                <p class="mt-1.5 text-sm leading-relaxed text-atelier-muted">
+                    Chaque fichier est converti puis analysé : titre, auteur, date et contenu sont extraits automatiquement.
+                </p>
             </div>
-        </div>
-    </form>
-
-    <!-- Queue display -->
-    <div
-        v-if="queue.length > 0"
-        class="mt-8 space-y-3"
-    >
-        <div class="border-b border-gray-200 pb-3 flex items-center justify-between">
-            <h3 class="text-base font-semibold text-gray-900">File d'import</h3>
-            <span class="text-sm text-gray-500">
-                {{ completedCount }}/{{ queue.length }} traité{{ completedCount > 1 ? 's' : '' }}
-            </span>
-        </div>
-
-        <!-- Progress bar -->
-        <div class="w-full bg-gray-200 rounded-full h-2">
-            <div
-                class="h-2 rounded-full transition-all duration-300"
-                :class="hasErrors ? 'bg-amber-500' : 'bg-indigo-600'"
-                :style="{ width: progressPercent + '%' }"
-            />
-        </div>
-
-        <ul class="divide-y divide-gray-100">
-            <li
-                v-for="item in queue"
-                :key="item.id"
-                class="flex items-center justify-between py-3 px-4 rounded-md mb-2"
-                :class="{
-                    'bg-white': item.status === 'pending',
-                    'bg-indigo-50': item.status === 'processing',
-                    'bg-green-50': item.status === 'done',
-                    'bg-red-50': item.status === 'error',
-                }"
+            <form
+                class="flex flex-col gap-5"
+                @submit.prevent="startQueue"
             >
-                <div class="flex items-center gap-3 min-w-0">
-                    <!-- Status icon -->
-                    <div class="shrink-0">
+                <BaseDropzone
+                    v-model:files="files"
+                    label="Fichiers à importer"
+                    :max-size="1024 * 50"
+                    :max-files="20"
+                    :accept="['application/json', 'text/csv', 'text/plain', 'text/html', 'text/markdown', 'application/vnd.oasis.opendocument.text', 'application/msword']"
+                />
+                <div class="flex items-center justify-end gap-2">
+                    <CancelButton
+                        v-if="files.length > 0"
+                        @click="cancel"
+                    >
+                        Annuler
+                    </CancelButton>
+                    <BaseButton
+                        :loading="submitting"
+                        :disabled="files.length === 0 || submitting"
+                        @click="startQueue"
+                    >
+                        {{ files.length > 1 ? `Importer ${files.length} fichiers` : 'Importer' }}
+                    </BaseButton>
+                </div>
+            </form>
+        </section>
+
+        <section
+            aria-labelledby="import-queue-title"
+            class="flex flex-col gap-4"
+        >
+            <div class="flex items-baseline justify-between gap-4">
+                <h2
+                    id="import-queue-title"
+                    class="text-base font-semibold text-atelier-ink">File d'import</h2>
+                <span
+                    v-if="queue.length > 0"
+                    class="text-[13px] text-atelier-muted tabular-nums">
+                    {{ completedCount }}/{{ queue.length }} traité{{ completedCount > 1 ? 's' : '' }}
+                </span>
+            </div>
+
+            <template v-if="queue.length > 0">
+                <div
+                    role="progressbar"
+                    :aria-valuenow="progressPercent"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-label="Progression de l'import"
+                    class="h-1 w-full rounded-full bg-atelier-line"
+                >
+                    <div
+                        class="h-1 rounded-full transition-all duration-300 motion-reduce:transition-none"
+                        :class="hasErrors ? 'bg-warning' : 'bg-lilas'"
+                        :style="{ width: progressPercent + '%' }"
+                    />
+                </div>
+
+                <ul
+                    role="list"
+                    class="flex flex-col gap-1.5"
+                >
+                    <li
+                        v-for="item in queue"
+                        :key="item.id"
+                        class="flex items-center gap-3 rounded-lg px-3.5 py-3 text-sm"
+                        :class="{
+                            'border border-atelier-line': item.status === 'pending',
+                            'bg-lilas-soft': item.status === 'processing',
+                            'bg-menthe-soft': item.status === 'done',
+                            'bg-danger-soft': item.status === 'error',
+                        }"
+                    >
                         <ClockIcon
                             v-if="item.status === 'pending'"
-                            class="size-5 text-gray-400"
+                            class="size-[18px] shrink-0 text-atelier-subtle"
+                            aria-hidden="true"
                         />
                         <ArrowPathIcon
                             v-else-if="item.status === 'processing'"
-                            class="size-5 text-indigo-600 animate-spin"
+                            class="size-[18px] shrink-0 animate-spin text-lilas-light motion-reduce:animate-none"
+                            aria-hidden="true"
                         />
                         <CheckCircleIcon
                             v-else-if="item.status === 'done'"
-                            class="size-5 text-green-600"
+                            class="size-[18px] shrink-0 text-menthe"
+                            aria-hidden="true"
                         />
                         <ExclamationCircleIcon
                             v-else-if="item.status === 'error'"
-                            class="size-5 text-red-600"
+                            class="size-[18px] shrink-0 text-danger"
+                            aria-hidden="true"
                         />
-                    </div>
-
-                    <div class="min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">{{ item.fileName }}</p>
-                        <p
-                            v-if="item.status === 'done' && item.result"
-                            class="text-xs text-green-700"
+                        <span class="min-w-0 flex-1 truncate text-atelier-ink">{{ item.fileName }}</span>
+                        <span
+                            class="shrink-0 text-[13px]"
+                            :class="{
+                                'text-atelier-subtle': item.status === 'pending',
+                                'text-lilas-light': item.status === 'processing',
+                                'text-menthe': item.status === 'done',
+                                'text-danger': item.status === 'error',
+                            }"
                         >
-                            <span
-                                v-if="item.result.posts.error > 0"
-                                class="text-red-600"
-                            >
-                                · {{ item.result.posts.error }} erreur{{ item.result.posts.error > 1 ? 's' : '' }}
-                            </span>
-                        </p>
-                        <p
-                            v-else-if="item.status === 'error'"
-                            class="text-xs text-red-600"
-                        >
-                            {{ item.errorMessage || 'Erreur lors de l\'import' }}
-                        </p>
-                        <p
-                            v-else-if="item.status === 'processing'"
-                            class="text-xs text-indigo-600"
-                        >
-                            Import en cours…
-                        </p>
-                    </div>
-                </div>
+                            <template v-if="item.status === 'done' && item.result">
+                                {{ item.result.posts.success }} texte{{ item.result.posts.success > 1 ? 's' : '' }} créé{{ item.result.posts.success > 1 ? 's' : '' }}<template v-if="item.result.posts.error > 0"> · {{ item.result.posts.error }} erreur{{ item.result.posts.error > 1 ? 's' : '' }}</template>
+                            </template>
+                            <template v-else-if="item.status === 'error'">{{ item.errorMessage || 'Erreur lors de l\'import' }}</template>
+                            <template v-else>{{ statusLabel(item.status) }}</template>
+                        </span>
+                    </li>
+                </ul>
 
-                <div class="shrink-0 ml-4">
-                    <span
-                        class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
-                        :class="{
-                            'bg-gray-100 text-gray-600': item.status === 'pending',
-                            'bg-indigo-100 text-indigo-700': item.status === 'processing',
-                            'bg-green-100 text-green-700': item.status === 'done',
-                            'bg-red-100 text-red-700': item.status === 'error',
-                        }"
-                    >
-                        {{ statusLabel(item.status) }}
-                    </span>
-                </div>
-            </li>
-        </ul>
-
-        <!-- Summary -->
-        <div
-            v-if="allDone"
-            class="rounded-lg px-4 py-4 mt-2"
-            :class="hasErrors
-                ? 'bg-amber-50 ring-1 ring-amber-200'
-                : 'bg-green-50 ring-1 ring-green-200'"
-        >
+                <p
+                    v-if="allDone"
+                    role="status"
+                    class="rounded-lg px-4 py-3 text-sm font-medium"
+                    :class="hasErrors ? 'bg-warning-soft text-warning' : 'bg-menthe-soft text-menthe'"
+                >
+                    Import terminé — {{ totalSuccess }} contenu{{ totalSuccess > 1 ? 's' : '' }}
+                    importé{{ totalSuccess > 1 ? 's' : '' }}<span v-if="totalErrors > 0">, {{ totalErrors }} erreur{{ totalErrors > 1 ? 's' : '' }}</span>
+                </p>
+            </template>
             <p
-                class="text-sm font-medium"
-                :class="hasErrors ? 'text-amber-800' : 'text-green-800'"
+                v-else
+                class="rounded-lg border border-dashed border-atelier-line px-4 py-10 text-center font-newsreader text-lg text-atelier-muted italic"
             >
-                Import terminé — {{ totalSuccess }} contenu{{ totalSuccess > 1 ? 's' : '' }}
-                importé{{ totalSuccess > 1 ? 's' : '' }}
-                <span v-if="totalErrors > 0">, {{ totalErrors }} erreur{{ totalErrors > 1 ? 's' : '' }}</span>
+                Aucun import en cours.
             </p>
-        </div>
+        </section>
     </div>
-
 </template>
 
 <script lang="ts">
@@ -218,7 +215,7 @@ export default defineComponent({
         statusLabel(status: string): string {
             const labels: Record<string, string> = {
                 pending: 'En attente',
-                processing: 'En cours',
+                processing: 'Analyse en cours…',
                 done: 'Terminé',
                 error: 'Erreur',
             };

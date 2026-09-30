@@ -1,17 +1,16 @@
 <template>
     <div
-        class="p-4 mb-4 text-sm rounded-lg"
+        class="rounded-lg px-4 py-3 text-sm"
         role="alert"
         :class="classes">
         <div class="flex justify-between items-center">
             <span class="font-medium">{{ title }}</span>
             <button
                 type="button"
-                class="ms-auto -mx-1.5 -my-1.5  rounded-lg p-1.5 inline-flex items-center justify-center h-8 w-8"
+                class="ms-auto -mr-1.5 inline-flex size-8 items-center justify-center rounded-md opacity-80 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-lilas"
                 data-dismiss-target="#alert-1"
-                aria-label="Close"
+                aria-label="Fermer"
                 @click="$emit('close')">
-                <span class="sr-only">Close</span>
                 <svg
                     class="w-3 h-3"
                     aria-hidden="true"
@@ -57,11 +56,11 @@ export default defineComponent({
     computed: {
         classes() {
             return {
-                'text-blue-800 bg-blue-50': this.severity === 'info',
-                'text-red-800 bg-red-50': this.severity === 'danger',
-                'text-green-800 bg-green-50': this.severity === 'success',
-                'text-yellow-800 bg-yellow-50': this.severity === 'warning',
-                'text-gray-800 bg-gray-50': this.severity === 'default',
+                'text-lilas-light bg-lilas-soft': this.severity === 'info',
+                'text-danger bg-danger-soft': this.severity === 'danger',
+                'text-menthe bg-menthe-soft': this.severity === 'success',
+                'text-warning bg-warning-soft': this.severity === 'warning',
+                'text-atelier-ink bg-atelier-hover': this.severity === 'default',
             };
         },
     },

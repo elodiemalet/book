@@ -1,6 +1,17 @@
 <template>
     <NuxtLayout name="admin-page">
-        <template #title>Ajouter un contenu</template>
+        <template #title>Nouveau contenu</template>
+        <template #subtitle>
+            <NuxtLink
+                to="/admin/content"
+                class="inline-flex items-center gap-1.5 text-atelier-muted hover:text-atelier-ink"
+            >
+                <ArrowLeftIcon
+                    class="size-4"
+                    aria-hidden="true"/>
+                Retour aux contenus
+            </NuxtLink>
+        </template>
         <BaseForm
             @cancel="cancel"
             @submit="submit"
@@ -9,6 +20,7 @@
                 v-model="post.postTitle"
                 name="postTitle"
                 label="Titre"
+                serif
             />
             <TextEditor
                 v-model="post.content"
@@ -24,9 +36,10 @@ import BaseForm from "~/components/ui/form/BaseForm.vue";
 import BaseInput from "~/components/ui/form/BaseInput.vue";
 import PostEntity, {type PostEntityInterface} from "~/entities/PostEntity";
 import TextEditor from "~/components/ui/form/TextEditor.vue";
+import {ArrowLeftIcon} from "@heroicons/vue/24/outline";
 
 export default {
-    components: {TextEditor, BaseForm, BaseInput},
+    components: {TextEditor, BaseForm, BaseInput, ArrowLeftIcon},
     setup() {
         const toast = useToast();
         return {

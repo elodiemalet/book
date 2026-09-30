@@ -1,13 +1,34 @@
 <template>
     <NuxtLayout name="admin-page">
-        <template #title>Liste des contenus</template>
+        <template #title>Contenus</template>
+        <template #subtitle>
+            {{ totalRecords }} texte{{ totalRecords > 1 ? 's' : '' }} dans le livre
+        </template>
+        <template #buttons>
+            <BaseButton @click="navigateTo('/admin/content/add')">
+                <PlusIcon
+                    class="mr-2 -ml-1 size-4"
+                    aria-hidden="true"/>
+                Ajouter un contenu
+            </BaseButton>
+        </template>
         <BaseTable
-            class="mt-8"
             :columns="columns"
             :rows="posts"
+            empty-label="Aucun texte pour l'instant : ajoutez-en un ou importez vos fichiers."
             @action="doAction"
-        />
+        >
+            <template #column-postTitle="{row}">
+                <NuxtLink
+                    :to="`/admin/content/${row.id}/edit`"
+                    class="font-newsreader text-[17px] text-atelier-ink hover:text-lilas-light"
+                >
+                    {{ row.postTitle }}
+                </NuxtLink>
+            </template>
+        </BaseTable>
         <BasePagination
+            class="mt-6 justify-end"
             :page="page"
             :count-page="countPage"
             :limit="limit"
@@ -19,15 +40,16 @@
 </template>
 
 <script lang="ts">
+import {PlusIcon} from "@heroicons/vue/24/outline";
 import BaseTable from "~/components/ui/BaseTable.vue";
+import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 import type {PostInterface} from "~/server/models/post";
 import PostEntity from "~/entities/PostEntity";
 import type {PostEntityInterface} from "~/entities/PostEntity";
 
 export default {
-    components: {BaseTable},
+    components: {BaseTable, BaseButton, PlusIcon},
     setup() {
-        useState("addUrl", () => "/admin/content/add");
         const toast = useToast();
         return {
             toast
@@ -36,8 +58,8 @@ export default {
     data() {
         return {
             columns: [
-                {name: 'Auteur', key: 'author', bold: true},
-                {name: 'Titre', key: 'postTitle'},
+                {name: 'Titre', key: 'postTitle', bold: true},
+                {name: 'Auteur', key: 'author'},
                 {name: 'Date', key: 'date', type: 'date'},
                 {name: '', key: 'actions', type: 'actions'},
             ],

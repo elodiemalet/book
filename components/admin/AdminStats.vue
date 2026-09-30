@@ -1,29 +1,21 @@
 <template>
-    <dl class="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
+    <dl class="grid grid-cols-1 border-t border-atelier-ink/80 sm:grid-cols-2 lg:grid-cols-4">
         <div
-            v-for="stat in stats"
-            :key="stat.id"
-            class="flex flex-col bg-gray-400/5 p-8">
-            <dt class="text-sm/6 font-semibold text-gray-600">{{ stat.name }}</dt>
-            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">{{
-                stat.value
-            }}
+            v-for="(stat, key) in stats"
+            :key="key"
+            class="flex flex-col gap-2.5 border-atelier-line py-6 not-first:border-t sm:not-first:border-t-0 sm:odd:pr-6 sm:even:pl-6 lg:border-r lg:px-6 lg:first:pl-0 lg:last:border-r-0"
+        >
+            <dt class="text-[13px] text-atelier-muted">{{ stat.name }}</dt>
+            <dd
+                class="order-first font-fraunces text-6xl leading-none font-light tracking-tight tabular-nums"
+                :class="stat.value ? 'text-atelier-ink' : 'text-atelier-subtle'"
+            >
+                {{ stat.value }}
             </dd>
         </div>
     </dl>
 </template>
 
-<script lang="ts">
-import {defineComponent} from "vue";
-
-export default defineComponent({
-    name: "AdminStats",
-    setup() {
-        const {data} = useFetch('/api/stats');
-        const stats = data.value;
-        return {
-            stats,
-        };
-    }
-});
+<script setup lang="ts">
+const {data: stats} = await useFetch('/api/stats');
 </script>
