@@ -76,7 +76,6 @@
         <FreeSample/>
         <BookPricing/>
         <SiteFooter/>
-        <UNotifications/>
     </FragmentContainer>
 </template>
 <script lang="ts">

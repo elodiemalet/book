@@ -187,7 +187,7 @@ export default {
                         id: 'error',
                         icon: 'i-material-symbols-file-download-off',
                         title: 'Erreur lors de l\'enregistrement de l\'image',
-                        color: 'red'
+                        color: 'error'
                     });
                 });
 

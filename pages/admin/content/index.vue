@@ -112,11 +112,11 @@ export default {
                     id: 'delete',
                     title: 'Confirmation de suppression',
                     description: `Supprimer « ${row.postTitle} » ? Cette action est définitive.`,
-                    color: 'red',
-                    timeout: 0,
+                    color: 'error',
+                    duration: 0,
                     actions: [
-                        {label: 'Supprimer', color: 'red', click: () => this.deletePost(row)},
-                        {label: 'Annuler', color: 'gray', variant: 'ghost'},
+                        {label: 'Supprimer', color: 'error', onClick: () => this.deletePost(row)},
+                        {label: 'Annuler', color: 'neutral', variant: 'ghost'},
                     ],
                 });
             }
@@ -128,7 +128,7 @@ export default {
                 this.toast.add({
                     id: 'error',
                     title: 'Erreur lors de la suppression du contenu',
-                    color: 'red',
+                    color: 'error',
                 });
                 return;
             }

@@ -1,3 +1,5 @@
+@reference "./tailwind.css";
+
 @media screen {
   html {
     min-height: 100vh;
@@ -48,11 +50,11 @@
 .page-book {
   font-family: Cormorant, serif;
   font-weight: 500;
-  //min-width: 210mm;
-  //width: 210mm;
-  //max-width: 210mm;
-  //min-height: 297mm;
-  //height: 297mm;
+  /* min-width: 210mm; */
+  /* width: 210mm; */
+  /* max-width: 210mm; */
+  /* min-height: 297mm; */
+  /* height: 297mm; */
   margin: 0;
   padding: 0;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
@@ -62,17 +64,17 @@
   font-family: Cormorant, serif;
   font-weight: 400;
 
-  //min-width: 210mm;
-  //width: 210mm;
-  //max-width: 210mm;
-  //min-height: 297mm;
+  /* min-width: 210mm; */
+  /* width: 210mm; */
+  /* max-width: 210mm; */
+  /* min-height: 297mm; */
 
   white-space: pre-line;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 
   background: white;
 
-  //padding: 40px 130px 40px 150px;
+  /* padding: 40px 130px 40px 150px; */
   margin-top: 20px;
   margin-bottom: 20px;
 

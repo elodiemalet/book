@@ -12,63 +12,61 @@
             <div>
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Métadonnées</h3>
                 <div class="space-y-4">
-                    <UFormGroup label="Titre du recueil">
+                    <UFormField label="Titre du recueil">
                         <UInput v-model="form.title" />
-                    </UFormGroup>
-                    <UFormGroup label="Auteur">
+                    </UFormField>
+                    <UFormField label="Auteur">
                         <UInput v-model="form.author" />
-                    </UFormGroup>
-                    <UFormGroup label="Années">
+                    </UFormField>
+                    <UFormField label="Années">
                         <UInput
                             v-model="form.years"
                             placeholder="2019 - 2024" />
-                    </UFormGroup>
-                    <UFormGroup label="Texte de dédicace">
+                    </UFormField>
+                    <UFormField label="Texte de dédicace">
                         <UTextarea
                             v-model="form.dedicationText"
                             :rows="6" />
-                    </UFormGroup>
-                    <UFormGroup label="Auteur de la dédicace">
+                    </UFormField>
+                    <UFormField label="Auteur de la dédicace">
                         <UInput v-model="form.dedicationAuthor" />
-                    </UFormGroup>
-                    <UFormGroup label="Texte de préface">
+                    </UFormField>
+                    <UFormField label="Texte de préface">
                         <UTextarea
                             v-model="form.prefaceText"
                             :rows="6" />
-                    </UFormGroup>
+                    </UFormField>
                 </div>
             </div>
 
             <div>
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Format et mise en page</h3>
                 <div class="space-y-4">
-                    <UFormGroup label="Format de page">
+                    <UFormField label="Format de page">
                         <USelect
                             v-model="form.pageFormat"
-                            :options="pageFormats"
-                            value-attribute="value"
-                            option-attribute="label"
+                            :items="pageFormats"
                         />
-                    </UFormGroup>
-                    <UFormGroup label="Lignes max par page">
+                    </UFormField>
+                    <UFormField label="Lignes max par page">
                         <UInput
                             v-model.number="form.maxLines"
                             type="number" />
-                    </UFormGroup>
-                    <UFormGroup label="Lignes max (première page du poème)">
+                    </UFormField>
+                    <UFormField label="Lignes max (première page du poème)">
                         <UInput
                             v-model.number="form.maxLinesFirstPage"
                             type="number" />
-                    </UFormGroup>
-                    <UFormGroup label="Numéro de page de départ">
+                    </UFormField>
+                    <UFormField label="Numéro de page de départ">
                         <UInput
                             v-model.number="form.pageStart"
                             type="number" />
-                    </UFormGroup>
+                    </UFormField>
                     <UCheckbox
                         v-model="form.showSignature"
                         label="Afficher l'auteur et la date sous chaque texte"
-                        help="À décocher pour un livre classique d'un seul auteur."
+                        description="À décocher pour un livre classique d'un seul auteur."
                     />
                 </div>
             </div>
@@ -167,7 +165,7 @@ export default {
                     id: 'config-error',
                     icon: 'i-heroicons-x-circle',
                     title: 'Erreur lors de l\'enregistrement',
-                    color: 'red',
+                    color: 'error',
                 });
             } finally {
                 this.saving = false;

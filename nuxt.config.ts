@@ -3,6 +3,9 @@ import vue from '@vitejs/plugin-vue';
 
 export default defineNuxtConfig({
     compatibilityDate: '2024-04-03',
+    // Structure Nuxt 3 conservée (pas de dossier app/)
+    srcDir: '.',
+    dir: {app: 'app'},
     devtools: {enabled: true},
     runtimeConfig: {
         pdfApiToken: process.env.PDF_API_TOKEN,
@@ -33,19 +36,13 @@ export default defineNuxtConfig({
             showURL: false
         },
     },
-    modules: ['@pinia/nuxt', '@nuxt/ui', 'nuxt-auth-utils', '@vueuse/nuxt', '@nuxtjs/tailwindcss'],
+    modules: ['@pinia/nuxt', '@nuxt/ui', 'nuxt-auth-utils', '@vueuse/nuxt'],
     css: [
         '~/assets/styles/fonts.scss',
         '~/assets/styles/tailwind.css',
-        '~/assets/styles/main.scss',
+        '~/assets/styles/main.css',
         '~/assets/styles/pageSize.scss',
     ],
-    postcss: {
-        plugins: {
-            tailwindcss: {},
-            autoprefixer: {},
-        },
-    },
     nitro: {
         sourcemap: false,
         rollupConfig: {

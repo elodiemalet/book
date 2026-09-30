@@ -249,7 +249,7 @@ export default defineComponent({
                 this.toast.add({
                     id: 'import-error',
                     title: 'Erreur lors de la soumission des fichiers',
-                    color: 'red',
+                    color: 'error',
                 });
             } finally {
                 this.submitting = false;
@@ -277,7 +277,7 @@ export default defineComponent({
                         this.toast.add({
                             id: 'import-done',
                             title: `Import terminé — ${this.totalSuccess} contenu${this.totalSuccess > 1 ? 's' : ''} importé${this.totalSuccess > 1 ? 's' : ''}`,
-                            color: this.hasErrors ? 'amber' : 'green',
+                            color: this.hasErrors ? 'warning' : 'success',
                         });
                     }
                 }

@@ -141,7 +141,7 @@ export default defineComponent({
                         toast.add({
                             id: 'error',
                             title: 'Erreur lors du téléchargement du fichier',
-                            color: 'red',
+                            color: 'error',
                             icon: 'i-material-symbols-file-download-off',
                         });
                         return;

@@ -85,7 +85,7 @@ export default {
                     id: 'error',
                     icon: 'i-material-symbols-send-off',
                     title: 'Une erreur est survenue',
-                    color: 'red',
+                    color: 'error',
 
                 });
                 return;

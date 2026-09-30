@@ -47,7 +47,7 @@ export default {
                     id: 'error',
                     icon: 'i-material-symbols-file-download-off',
                     title: 'Erreur lors de la connexion',
-                    color: 'red',
+                    color: 'error',
 
                 });
                 return;

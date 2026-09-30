@@ -1,7 +1,7 @@
 <template>
     <button
         type="button"
-        class="no-print mt-2 text-white bg-gradient-to-br from-purple-600 to-cyan-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg px-3 py-2 text-xs text-left me-2 mb-2"
+        class="no-print mt-2 text-white bg-linear-to-br from-purple-600 to-cyan-500 hover:bg-linear-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg px-3 py-2 text-xs text-left me-2 mb-2"
         @click="downloadBook">
         Télécharger le livre
     </button>
@@ -30,7 +30,7 @@ export default defineComponent({
                 if (error.value) {
                     this.toast.add({
                         id: 'error',
-                        color: 'red',
+                        color: 'error',
                         icon: 'i-material-symbols-file-download-off',
                         title: 'Erreur lors de la génération du PDF',
                     });
@@ -57,7 +57,7 @@ export default defineComponent({
                 } catch {
                     this.toast.add({
                         id: 'error',
-                        color: 'red',
+                        color: 'error',
                         icon: 'i-material-symbols-file-download-off',
                         title: 'Erreur lors de la génération du PDF',
                     });

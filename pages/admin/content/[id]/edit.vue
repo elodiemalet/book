@@ -54,7 +54,7 @@ export default {
                 id: 'error',
                 icon: 'i-material-symbols-file-download-off',
                 title: 'Erreur lors de la récupération du contenu',
-                color: 'red',
+                color: 'error',
 
             });
             return;
@@ -79,7 +79,7 @@ export default {
                     id: 'error',
                     icon: 'i-material-symbols-file-download-off',
                     title: 'Erreur lors de la modification du contenu',
-                    color: 'red',
+                    color: 'error',
 
                 });
                 return;

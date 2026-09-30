@@ -3,7 +3,6 @@
         <AdminSidebar>
             <slot/>
         </AdminSidebar>
-        <UNotifications/>
     </FragmentContainer>
 </template>
 <script setup lang="ts">
