@@ -12,6 +12,12 @@ export interface LandingTocPart {
     numeral: string;
 }
 
+// Réponse de /api/book-toc : les parties affichées, et le nombre de celles au-delà de la limite
+export interface LandingToc {
+    parts: LandingTocPart[];
+    hiddenCount: number;
+}
+
 export interface LandingOffer {
     id: string;
     name: string;

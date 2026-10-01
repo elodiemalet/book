@@ -2,6 +2,7 @@ import {describe, expect, it} from 'vitest';
 import {
     LANDING_TOC_DEFAULT_MAX_PARTS,
     groupByPart,
+    landingToc,
     landingTocLimit,
     layoutBook,
     paginateToc,
@@ -181,6 +182,22 @@ describe('tocParts', () => {
             {title: 'Matin', numeral: 'I'},
             {title: 'Soir', numeral: 'II'},
         ]);
+    });
+});
+
+describe('landingToc', () => {
+    const parts = [{id: 1, title: 'Un'}, {id: 2, title: 'Deux'}, {id: 3, title: 'Trois'}];
+    const posts = [{partId: 1}, {partId: 2}, {partId: 3}];
+
+    it('keeps only the first parts and counts the others, without their titles', () => {
+        expect(landingToc(posts, parts, 2)).toEqual({
+            parts: [{title: 'Un', numeral: 'I'}, {title: 'Deux', numeral: 'II'}],
+            hiddenCount: 1,
+        });
+    });
+
+    it('hides nothing when the limit is above the number of parts', () => {
+        expect(landingToc(posts, parts, 6).hiddenCount).toBe(0);
     });
 });
 

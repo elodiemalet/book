@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
         return;
     }
 
-    // Génération du PDF : la page du livre lit les textes avec le jeton, sans session
+    // Génération du PDF : la page du livre lit les textes et les parties avec le jeton, sans session
     if (acceptsBookToken(event.method, event.path)
         && hasValidBookToken(getHeader(event, BOOK_TOKEN_HEADER), useRuntimeConfig().pdfApiToken)) {
         return;

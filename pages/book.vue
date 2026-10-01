@@ -141,14 +141,12 @@ export default {
     methods: {
         async getPosts() {
             // Tout le livre : sans « limit », l'API ne renvoie que les 10 derniers textes.
-            // Sans session (génération du PDF), le jeton de l'URL ouvre la lecture des textes.
+            // Sans session (génération du PDF), le jeton de l'URL ouvre la lecture des textes et des parties.
             const token = typeof this.$route.query.token === 'string' ? this.$route.query.token : '';
+            const headers = token ? {[BOOK_TOKEN_HEADER]: token} : {};
             const [data, parts] = await Promise.all([
-                $fetch<{ rows: PostInterface[] }>('/api/post', {
-                    query: {limit: 'all'},
-                    headers: token ? {[BOOK_TOKEN_HEADER]: token} : {},
-                }),
-                $fetch<BookPart[]>('/api/part'),
+                $fetch<{ rows: PostInterface[] }>('/api/post', {query: {limit: 'all'}, headers}),
+                $fetch<BookPart[]>('/api/part', {headers}),
             ]);
             this.posts = data.rows.map((post: PostInterface) => PostEntity.hydrateFromDatabase(post));
             const layout = layoutBook(this.posts, parts, this.bookStore.layoutOptions);

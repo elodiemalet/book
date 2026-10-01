@@ -25,8 +25,8 @@
                 :heading="content.toc.heading"
                 :heading-emphasis="content.toc.headingEmphasis"
                 :intro="content.toc.intro"
-                :parts="tocParts.slice(0, tocMaxParts)"
-                :hidden-count="Math.max(0, tocParts.length - tocMaxParts)"
+                :parts="tocParts"
+                :hidden-count="tocHiddenCount"
             />
             <LandingFreeSample
                 :number="sectionNumber('extrait')"
@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import {useBookStore} from "~/stores/bookStore";
-import {landingContent, type LandingContent, type LandingTocPart} from "~/utils/landingContent";
+import {landingContent, type LandingContent, type LandingToc, type LandingTocPart} from "~/utils/landingContent";
 import LandingNav from "~/components/landing/LandingNav.vue";
 import LandingHero from "~/components/landing/LandingHero.vue";
 import LandingTestimonial from "~/components/landing/LandingTestimonial.vue";
@@ -83,12 +83,11 @@ const [, {data: siteContent}] = await Promise.all([
 ]);
 const content = computed<LandingContent>(() => siteContent.value ?? landingContent);
 
-// Sommaire : les parties du livre (titres et numéros), calculées par le serveur
-const {data: tocGroups} = await useAsyncData('landing-toc', () => $fetch<LandingTocPart[]>('/api/book-toc'));
+// Sommaire : les premières parties du livre (titres et numéros) et le nombre des autres, calculés par le serveur
+const {data: toc} = await useAsyncData('landing-toc', () => $fetch<LandingToc>('/api/book-toc'));
 // Sans partie, la section est masquée
-const tocParts = computed<LandingTocPart[]>(() => tocGroups.value ?? []);
-// Nombre de parties affichées (réglé dans la configuration du livre)
-const tocMaxParts = computed(() => Math.max(1, bookStore.config.landingTocMaxParts || 6));
+const tocParts = computed<LandingTocPart[]>(() => toc.value?.parts ?? []);
+const tocHiddenCount = computed(() => toc.value?.hiddenCount ?? 0);
 
 const bookTitle = computed(() => bookStore.config.title || 'Le livre');
 const bookAuthor = computed(() => bookStore.config.author || '');

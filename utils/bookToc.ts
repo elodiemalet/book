@@ -205,3 +205,10 @@ export function landingTocLimit(value: unknown): number {
     }
     return Math.max(1, Math.floor(number));
 }
+
+// Sommaire de la page d'accueil : les premières parties seulement. Les autres ne sont que comptées,
+// leurs titres ne quittent pas le serveur.
+export function landingToc(posts: PartMember[], parts: BookPart[], maxParts: number): { parts: { title: string; numeral: string }[]; hiddenCount: number } {
+    const all = tocParts(posts, parts);
+    return {parts: all.slice(0, maxParts), hiddenCount: Math.max(0, all.length - maxParts)};
+}

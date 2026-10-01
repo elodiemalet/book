@@ -1,6 +1,6 @@
 import Part from "~/server/models/part";
 
-// Public : le livre et la page d'accueil en ont besoin pour composer le sommaire
+// Le livre et l'admin en ont besoin (session, ou jeton du PDF). La page d'accueil passe par /api/book-toc.
 export default defineEventHandler(async () => {
     return await Part.findAll({order: [['position', 'ASC'], ['id', 'ASC']]});
 });
