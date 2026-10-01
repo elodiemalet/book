@@ -35,7 +35,13 @@ export default defineEventHandler(async (event) => {
     const previousUrl = typeof storedAuthor.portraitUrl === 'string' ? storedAuthor.portraitUrl : null;
 
     const content = mergeLandingContent({...stored, author: {...storedAuthor, portraitUrl: url}});
-    await SiteConfig.upsert({id: 1, content});
+    try {
+        await SiteConfig.upsert({id: 1, content});
+    } catch (error) {
+        // Ne laisse pas de fichier orphelin si l'enregistrement échoue.
+        await fs.unlink(join(process.cwd(), 'public', url)).catch(() => undefined);
+        throw error;
+    }
 
     // Supprime l'ancienne photo envoyée (jamais l'image de repli du dépôt).
     if (previousUrl?.startsWith('/uploads/author-portrait-') && previousUrl !== url) {
