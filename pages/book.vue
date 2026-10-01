@@ -1,8 +1,15 @@
 <template>
+    <p
+        v-if="loadError"
+        class="p-8 text-center"
+        role="alert"
+        :data-book-error="loadError"
+    >{{ loadError }}</p>
     <div
-        v-if="loaded && bookStore.configLoaded"
+        v-else-if="loaded && bookStore.configLoaded"
         class="flex flex-col items-center w-full book"
-        :class="bookStore.bookCssClass">
+        :class="bookStore.bookCssClass"
+        :data-book-texts="posts.length">
         <CoverPage/>
         <BasePage>
             <!--            Page de faux-titre : Contient simplement le titre du recueil ou une citation évocatrice.-->
@@ -120,6 +127,9 @@ export default {
             tocPages: [] as TocLine[][],
             firstTocPage: 0,
             loaded: false,
+            // Affiché à la place du livre. Le générateur de PDF lit data-book-error et data-book-texts
+            // pour refuser d'imprimer un livre en échec ou vide.
+            loadError: '',
             totalPages: 0,
         };
     },
@@ -135,8 +145,15 @@ export default {
         },
     },
     async mounted() {
-        await this.bookStore.fetchConfig();
-        this.getPosts();
+        try {
+            await this.bookStore.fetchConfig();
+            await this.getPosts();
+        } catch (error) {
+            const status = (error as { statusCode?: number })?.statusCode;
+            this.loadError = status === 401
+                ? 'Accès refusé : connectez-vous, ou vérifiez le lien du livre.'
+                : 'Impossible de charger le livre. Réessayez dans un instant.';
+        }
     },
     methods: {
         async getPosts() {

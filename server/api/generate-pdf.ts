@@ -17,7 +17,9 @@ export default defineEventHandler(async (event/**/) => {
         setHeader(event, 'Content-Disposition', `attachment; filename="${fileName}"`);
 
         return pdfBuffer;
-    } catch {
+    } catch (error) {
+        // La raison (livre vide, chargement refusé…) n'apparaît que dans les logs du serveur
+        console.error('Génération du PDF impossible :', error);
         throw createError({
             statusCode: 500,
             statusMessage: 'Error generating PDF',

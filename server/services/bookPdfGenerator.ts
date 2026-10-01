@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import {PDFDocument} from 'pdf-lib';
+import {bookRenderProblem} from './bookRenderCheck';
 
 export async function generatePdfFromEvent(token: string, protocol: string, host: string) {
 
@@ -17,10 +18,17 @@ export async function generatePdfFromEvent(token: string, protocol: string, host
         await page.emulateMediaType('print');
         await page.goto(url, {waitUntil: 'networkidle0'});
 
-        expectedPages = await page.$$eval('.page', (els) => els.length);
-        if (expectedPages === 0) {
-            throw new Error(`Book page rendered no .page element (${page.url().split('?')[0]})`);
+        // Un livre en échec ou sans texte ne s'imprime pas (sinon : un PDF réduit à la couverture)
+        const render = await page.evaluate(() => ({
+            pages: document.querySelectorAll('.page').length,
+            texts: Number(document.querySelector('[data-book-texts]')?.getAttribute('data-book-texts') ?? 0),
+            error: document.querySelector('[data-book-error]')?.getAttribute('data-book-error') ?? null,
+        }));
+        const problem = bookRenderProblem(render);
+        if (problem) {
+            throw new Error(`${problem} (${page.url().split('?')[0]})`);
         }
+        expectedPages = render.pages;
 
         pdfBuffer = await page.pdf({
             printBackground: true,
