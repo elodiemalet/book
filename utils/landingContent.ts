@@ -3,15 +3,13 @@
 // Les textes ci-dessous sont les valeurs par défaut. L'en-tête, l'auteur (photo comprise) et le pied de page
 // se modifient dans l'admin (Configuration) et sont enregistrés en base (SiteConfigs) ; le reste se modifie ici.
 
-export interface LandingTocItem {
-    title: string;
-    kind?: 'poème' | 'récit';
-    page: number;
-}
-
+// Le sommaire affiché n'est pas écrit ici : il est calculé à partir des textes du livre
+// (voir utils/bookToc.ts). Seules les parties sont affichées, dans la limite réglée dans la configuration
+// du livre (landingTocMaxParts) ; sans partie, la section est masquée.
 export interface LandingTocPart {
     title: string;
-    items: LandingTocItem[];
+    // Chiffre romain de la partie
+    numeral: string;
 }
 
 export interface LandingOffer {
@@ -44,7 +42,6 @@ export interface LandingContent {
         heading: string;
         headingEmphasis: string;
         intro: string;
-        parts: LandingTocPart[];
     };
     freeSample: {
         heading: string;
@@ -75,43 +72,7 @@ export const landingContent: LandingContent = {
     toc: {
         heading: 'Le sommaire,',
         headingEmphasis: 'partie par partie.',
-        intro: 'Poèmes et récits se répondent d\'une partie à l\'autre. Chacun tient en quelques pages.',
-        parts: [
-            {
-                title: 'Commencer',
-                items: [
-                    {title: 'Introduction au projet', page: 1},
-                    {title: 'Présentation des objectifs', page: 5},
-                    {title: 'Premiers éléments de contenu', page: 10},
-                ],
-            },
-            {
-                title: 'Fondamentaux',
-                items: [
-                    {title: 'Organisation du texte', page: 14},
-                    {title: 'Structuration des idées', page: 18},
-                    {title: 'Hiérarchisation de l\'information', page: 23},
-                    {title: 'Rythme et fluidité de lecture', page: 28},
-                ],
-            },
-            {
-                title: 'Enrichir le contenu',
-                items: [
-                    {title: 'Ajout de visuels ou illustrations', page: 34},
-                    {title: 'Séparer pour mieux raconter', page: 39},
-                    {title: 'Créer des respirations dans le texte', page: 45},
-                    {title: 'Personnaliser le ton', page: 52},
-                ],
-            },
-            {
-                title: 'Préparer la version finale',
-                items: [
-                    {title: 'Relire et ajuster', page: 58},
-                    {title: 'Définir le sommaire', page: 64},
-                    {title: 'Exporter votre e-book', page: 70},
-                ],
-            },
-        ],
+        intro: 'Les grandes parties du recueil, dans l\'ordre du livre.',
     },
     freeSample: {
         heading: 'Un extrait,',

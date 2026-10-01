@@ -12,6 +12,7 @@ describe('isPublicRoute', () => {
 
     it.each([
         ['GET', '/api/book-config'],
+        ['GET', '/api/book-toc'],
         ['GET', '/api/image'],
         ['GET', '/api/part'],
         ['POST', '/api/login'],

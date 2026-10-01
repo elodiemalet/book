@@ -179,3 +179,11 @@ export function layoutBook(posts: PostEntity[], parts: BookPart[], options: Book
         firstTocPage: options.tocPosition === 'start' ? options.pageStart : firstBodyPage + bodyPages.length,
     };
 }
+
+// Le sommaire de la page d'accueil : les parties qui contiennent des textes, avec leur numéro.
+// Il suffit de la partie de chaque texte : le contenu des textes n'a pas à être lu.
+export function tocParts(posts: PartMember[], parts: BookPart[]): { title: string; numeral: string }[] {
+    return groupByPart(posts, parts)
+        .filter(section => section.part)
+        .map(section => ({title: section.part?.title ?? '', numeral: section.numeral}));
+}

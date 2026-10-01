@@ -18,6 +18,7 @@ export default defineEventHandler(async () => {
             showSignature: true,
             showToc: false,
             tocPosition: 'start',
+            landingTocMaxParts: 6,
         };
     }
 

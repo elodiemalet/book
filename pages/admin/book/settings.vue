@@ -110,6 +110,7 @@
                                 >
                                 <span class="flex flex-col gap-0.5">
                                     <span class="text-sm text-atelier-ink">Ajouter un sommaire au livre</span>
+                                    <span class="text-[13px] text-atelier-subtle">Ses parties apparaissent aussi sur la page d'accueil.</span>
                                 </span>
                             </label>
                             <div class="flex flex-col gap-1.5">
@@ -130,6 +131,18 @@
                                         class="pointer-events-none col-start-1 row-start-1 mr-3 size-4 self-center justify-self-end text-atelier-subtle"
                                         aria-hidden="true"/>
                                 </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-toc-landing-max"
+                                    :class="labelClass">Parties sur l'accueil</label>
+                                <input
+                                    id="cfg-toc-landing-max"
+                                    v-model.number="form.landingTocMaxParts"
+                                    type="number"
+                                    min="1"
+                                    :disabled="!form.showToc"
+                                    :class="[fieldClass, 'tabular-nums disabled:cursor-not-allowed disabled:opacity-50']">
                             </div>
                         </template>
 
@@ -281,6 +294,7 @@ export default {
                 showSignature: true,
                 showToc: false,
                 tocPosition: 'start',
+                landingTocMaxParts: 6,
             },
             pageFormats: [
                 {label: 'Poche (108 × 175 mm)', value: 'poche'},
@@ -338,6 +352,7 @@ export default {
                 this.form.showSignature = data.showSignature ?? true;
                 this.form.showToc = data.showToc ?? false;
                 this.form.tocPosition = data.tocPosition === 'end' ? 'end' : 'start';
+                this.form.landingTocMaxParts = data.landingTocMaxParts || 6;
             }
         },
         async save() {

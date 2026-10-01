@@ -59,6 +59,8 @@ export interface BookConfigState {
     // Sommaire : facultatif, au début (après la préface) ou à la fin (avant la page de fin)
     showToc: boolean;
     tocPosition: TocPosition;
+    // Nombre maximum de parties listées dans le sommaire de la page d'accueil
+    landingTocMaxParts: number;
 }
 
 export const useBookStore = defineStore('bookStore', {
@@ -78,6 +80,7 @@ export const useBookStore = defineStore('bookStore', {
             showSignature: true,
             showToc: false,
             tocPosition: 'start',
+            landingTocMaxParts: 6,
         } as BookConfigState,
         configLoaded: false,
     }),

@@ -4,6 +4,7 @@ import {
     layoutBook,
     paginateToc,
     tocLinesFromBody,
+    tocParts,
     tocTitle,
     type BookLayoutOptions,
     type TocLine,
@@ -162,5 +163,15 @@ describe('layoutBook', () => {
 
     it('has no table of contents page when the book has no text', () => {
         expect(layoutBook([], [], options()).tocPages).toEqual([]);
+    });
+});
+
+describe('tocParts', () => {
+    it('lists the parts that hold texts, numbered as in the book, from the part of each text only', () => {
+        const parts = [{id: 10, title: 'Matin'}, {id: 20, title: 'Vide'}, {id: 30, title: 'Soir'}];
+        expect(tocParts([{partId: 30}, {partId: null}, {partId: 10}], parts)).toEqual([
+            {title: 'Matin', numeral: 'I'},
+            {title: 'Soir', numeral: 'II'},
+        ]);
     });
 });
