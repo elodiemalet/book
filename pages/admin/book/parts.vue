@@ -422,8 +422,9 @@ const onDragOverPost = (event: DragEvent, part: PartInterface | null, index: num
     if (draggedId.value === null) {
         return;
     }
-    const row = event.currentTarget as HTMLElement;
-    const after = event.offsetY > row.offsetHeight / 2;
+    // Mesuré sur la ligne entière : offsetY dépendrait de l'élément survolé (titre, flèches, liste)
+    const row = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const after = event.clientY > row.top + row.height / 2;
     dropTarget.value = {key: sectionKey(part), index: after ? index + 1 : index};
 };
 
