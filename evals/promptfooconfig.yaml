@@ -69,3 +69,11 @@ tests:
       - type: javascript
         value: (output.content.match(/Reste encore un peu, reste encore un peu\./g) || []).length === 3
         metric: refrain
+
+  - description: Texte brut avec en-tête auteur/date et characteres speciaux
+    vars:
+      file: evals/fixtures/special-chars.odt
+      title: Jerusalema !
+      author: Thierry Titiyab Malet
+      date: '2024-09-17'
+      content: file://attendu/special-chars.txt

@@ -2,11 +2,12 @@
 // Chaque cas de test fournit dans ses vars : title, author, date, content (résultat attendu).
 
 // Différences de mise en forme qu'on accepte : fins de ligne, espaces en fin de ligne,
-// lignes vides en trop, apostrophes typographiques (Pandoc transforme ' en ’).
+// lignes vides en trop, apostrophes typographiques (Pandoc transforme ' en ’), espaces insécables.
 function normalize(text) {
     return String(text ?? '')
         .replace(/\r\n?/g, '\n')
         .replace(/[’‘]/g, "'")
+        .replace(/[\u00a0\u202f]/g, ' ')
         .replace(/[ \t]+$/gm, '')
         .replace(/\n{3,}/g, '\n\n')
         .trim();
