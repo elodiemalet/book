@@ -4,7 +4,6 @@
 export const PUBLIC_ROUTES = new Set([
     'GET /api/book-config',
     'GET /api/image',
-    'GET /api/post',
     'POST /api/login',
     'POST /api/prospect',
     'GET /api/site-config',

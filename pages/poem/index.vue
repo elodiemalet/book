@@ -87,3 +87,8 @@ export default {
     }
 };
 </script>
+
+<script setup lang="ts">
+// Les textes ne sont plus lisibles sans session : même accès que le livre
+definePageMeta({middleware: ['protect-book']});
+</script>

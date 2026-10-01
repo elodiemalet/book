@@ -54,6 +54,7 @@ import EndPage from "~/components/poems/bookPages/concludingPages/EndPage.vue";
 import type {PostInterface} from "~/server/models/post";
 import PostEntity from "~/entities/PostEntity";
 import {useBookStore} from "~/stores/bookStore";
+import {BOOK_TOKEN_HEADER} from "~/utils/bookAccess";
 
 export default {
     components: {
@@ -112,8 +113,13 @@ export default {
     },
     methods: {
         getPosts() {
-            fetch('/api/post')
-                .then(response => response.json())
+            // Tout le livre : sans « limit », l'API ne renvoie que les 10 derniers textes.
+            // Sans session (génération du PDF), le jeton de l'URL ouvre la lecture des textes.
+            const token = typeof this.$route.query.token === 'string' ? this.$route.query.token : '';
+            $fetch<{ rows: PostInterface[] }>('/api/post', {
+                query: {limit: 'all'},
+                headers: token ? {[BOOK_TOKEN_HEADER]: token} : {},
+            })
                 .then(data => {
                     this.posts = data.rows.map((post: PostInterface) => {
                         return PostEntity.hydrateFromDatabase(post);

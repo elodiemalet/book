@@ -13,7 +13,6 @@ describe('isPublicRoute', () => {
     it.each([
         ['GET', '/api/book-config'],
         ['GET', '/api/image'],
-        ['GET', '/api/post'],
         ['POST', '/api/login'],
         ['POST', '/api/prospect'],
         ['GET', '/api/site-config'],
@@ -22,10 +21,12 @@ describe('isPublicRoute', () => {
     });
 
     it('ignores the query string when matching', () => {
-        expect(isPublicRoute('GET', '/api/post?limit=10&page=2')).toBe(true);
+        expect(isPublicRoute('GET', '/api/image?id=3')).toBe(true);
     });
 
     it.each([
+        ['GET', '/api/post'],
+        ['GET', '/api/post?limit=all'],
         ['GET', '/api/post/1'],
         ['POST', '/api/post'],
         ['PUT', '/api/book-config'],
