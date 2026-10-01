@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     await fs.writeFile(join(process.cwd(), 'public', url), file.data);
 
     const config = await SiteConfig.findOne();
-    const stored = (config?.content || {}) as Record<string, unknown>;
+    const stored = (config?.get('content') || {}) as Record<string, unknown>;
     const storedAuthor = (stored.author || {}) as Record<string, unknown>;
     const previousUrl = typeof storedAuthor.portraitUrl === 'string' ? storedAuthor.portraitUrl : null;
 

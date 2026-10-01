@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     await requireUserSession(event);
 
     const body = await readBody(event);
-    const current = mergeLandingContent((await SiteConfig.findOne())?.content);
+    const current = mergeLandingContent((await SiteConfig.findOne())?.get('content'));
 
     // Normalise le contenu reçu (seules les clés connues sont conservées).
     // La photo ne change que via /api/site-portrait : on garde celle déjà enregistrée.

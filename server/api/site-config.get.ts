@@ -3,5 +3,5 @@ import {mergeLandingContent} from "~/utils/landingContent";
 
 export default defineEventHandler(async () => {
     const config = await SiteConfig.findOne();
-    return mergeLandingContent(config?.content);
+    return mergeLandingContent(config?.get('content'));
 });

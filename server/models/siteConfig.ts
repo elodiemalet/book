@@ -2,12 +2,14 @@ import {Model, DataTypes} from 'sequelize';
 import db from "~/server/utils/db";
 
 export default class SiteConfig extends Model {
-    public id!: number;
-    public content!: Record<string, unknown>;
+    // `declare` et non `public …!` : un vrai champ de classe masquerait les accesseurs de Sequelize
+    // (instance.content vaudrait toujours undefined).
+    declare id: number;
+    declare content: Record<string, unknown>;
 
     // timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+    declare readonly createdAt: Date;
+    declare readonly updatedAt: Date;
 }
 
 SiteConfig.init(
