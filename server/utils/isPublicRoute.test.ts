@@ -16,6 +16,7 @@ describe('isPublicRoute', () => {
         ['GET', '/api/post'],
         ['POST', '/api/login'],
         ['POST', '/api/prospect'],
+        ['GET', '/api/site-config'],
     ])('treats %s %s as public', (method, path) => {
         expect(isPublicRoute(method, path)).toBe(true);
     });
@@ -28,6 +29,8 @@ describe('isPublicRoute', () => {
         ['GET', '/api/post/1'],
         ['POST', '/api/post'],
         ['PUT', '/api/book-config'],
+        ['PUT', '/api/site-config'],
+        ['POST', '/api/site-portrait'],
         ['GET', '/api/stats'],
         ['POST', '/api/generate-pdf'],
         ['GET', '/api/config/api-token'],
