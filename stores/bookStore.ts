@@ -1,4 +1,5 @@
 import type {AttachmentEntityInterface} from "~/entities/AttachmentEntity";
+import type {BookLayoutOptions, TocPosition} from "~/utils/bookToc";
 
 export const PAGE_FORMAT_SIZES: Record<string, string> = {
     poche: '108mm 175mm',
@@ -55,6 +56,9 @@ export interface BookConfigState {
     pageStart: number;
     // Auteur et date sous chaque texte (inutile pour un livre d'un seul auteur)
     showSignature: boolean;
+    // Sommaire : facultatif, au début (après la préface) ou à la fin (avant la page de fin)
+    showToc: boolean;
+    tocPosition: TocPosition;
 }
 
 export const useBookStore = defineStore('bookStore', {
@@ -72,6 +76,8 @@ export const useBookStore = defineStore('bookStore', {
             maxLinesFirstPage: 32,
             pageStart: 6,
             showSignature: true,
+            showToc: false,
+            tocPosition: 'start',
         } as BookConfigState,
         configLoaded: false,
     }),
@@ -89,6 +95,20 @@ export const useBookStore = defineStore('bookStore', {
             return Math.min(this.config.maxLinesFirstPage, this.formatMaxLines.maxLinesFirstPage);
         },
         maxCharsPerLine: (state) => (PAGE_FORMAT_LIMITS[state.config.pageFormat] || PAGE_FORMAT_LIMITS.a4).maxCharsPerLine,
+        // Tout ce qu'il faut pour paginer le livre et calculer le sommaire (livre et page d'accueil)
+        layoutOptions(): BookLayoutOptions {
+            return {
+                limits: {
+                    maxLines: this.effectiveMaxLines,
+                    maxLinesFirstPage: this.effectiveMaxLinesFirstPage,
+                    maxCharsPerLine: this.maxCharsPerLine,
+                    showSignature: this.config.showSignature,
+                },
+                pageStart: this.config.pageStart,
+                showToc: this.config.showToc,
+                tocPosition: this.config.tocPosition,
+            };
+        },
     },
     actions: {
         async fetchImagePages() {

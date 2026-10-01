@@ -14,6 +14,8 @@ export interface BookConfigInterface {
     maxLinesFirstPage: number;
     pageStart: number;
     showSignature: boolean;
+    showToc: boolean;
+    tocPosition: 'start' | 'end';
     createdAt: Date;
     updatedAt: Date;
 }
@@ -31,6 +33,8 @@ export default class BookConfig extends Model {
     public maxLinesFirstPage!: number;
     public pageStart!: number;
     public showSignature!: boolean;
+    public showToc!: boolean;
+    public tocPosition!: 'start' | 'end';
 
     // timestamps
     public readonly createdAt!: Date;
@@ -92,6 +96,17 @@ BookConfig.init(
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: true,
+        },
+        showToc: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
+        tocPosition: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 'start',
+            validate: {isIn: [['start', 'end']]},
         },
     },
     {

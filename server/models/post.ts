@@ -11,6 +11,8 @@ export interface PostInterface {
     attachments: string;
     externalId: string;
     publishDate: Date;
+    // Partie du livre (null = sans partie, au début du livre)
+    partId: number | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -31,6 +33,7 @@ export default class Post extends Model {
     public attachments!: string;
     public externalId!: string;
     public publishDate!: Date;
+    public partId!: number | null;
 
     // timestamps
     public readonly createdAt!: Date;
@@ -67,6 +70,10 @@ Post.init(
         },
         publishDate: {
             type: DataTypes.DATE,
+            allowNull: true,
+        },
+        partId: {
+            type: DataTypes.INTEGER,
             allowNull: true,
         },
     },

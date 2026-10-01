@@ -97,6 +97,42 @@
                             </div>
                         </template>
 
+                        <template v-else-if="section.id === 'toc'">
+                            <label
+                                for="cfg-toc"
+                                class="flex cursor-pointer items-start gap-3 sm:col-span-2"
+                            >
+                                <input
+                                    id="cfg-toc"
+                                    v-model="form.showToc"
+                                    type="checkbox"
+                                    class="mt-0.5 size-[18px] shrink-0 accent-lilas"
+                                >
+                                <span class="flex flex-col gap-0.5">
+                                    <span class="text-sm text-atelier-ink">Ajouter un sommaire au livre</span>
+                                </span>
+                            </label>
+                            <div class="flex flex-col gap-1.5">
+                                <label
+                                    for="cfg-toc-position"
+                                    :class="labelClass">Emplacement</label>
+                                <div class="grid grid-cols-1">
+                                    <select
+                                        id="cfg-toc-position"
+                                        v-model="form.tocPosition"
+                                        :disabled="!form.showToc"
+                                        :class="[fieldClass, 'col-start-1 row-start-1 appearance-none pr-9 disabled:cursor-not-allowed disabled:opacity-50']"
+                                    >
+                                        <option value="start">Au début du livre</option>
+                                        <option value="end">À la fin du livre</option>
+                                    </select>
+                                    <ChevronUpDownIcon
+                                        class="pointer-events-none col-start-1 row-start-1 mr-3 size-4 self-center justify-self-end text-atelier-subtle"
+                                        aria-hidden="true"/>
+                                </div>
+                            </div>
+                        </template>
+
                         <template v-else>
                             <div class="flex flex-col gap-1.5 sm:col-span-2">
                                 <label
@@ -224,6 +260,7 @@ export default {
             sections: [
                 {id: 'meta', title: 'Métadonnées', hint: 'Page de titre et couverture.'},
                 {id: 'texts', title: 'Dédicace et préface', hint: 'Pages liminaires, avant le premier texte.'},
+                {id: 'toc', title: 'Sommaire', hint: 'Les parties et leur numéro de page (les textes, si le livre n\'a pas de partie).'},
                 {id: 'layout', title: 'Format et mise en page', hint: 'Appliqué à l\'aperçu et au PDF.'},
             ],
             tabs: [
@@ -242,6 +279,8 @@ export default {
                 maxLinesFirstPage: 32,
                 pageStart: 6,
                 showSignature: true,
+                showToc: false,
+                tocPosition: 'start',
             },
             pageFormats: [
                 {label: 'Poche (108 × 175 mm)', value: 'poche'},
@@ -297,6 +336,8 @@ export default {
                 this.form.maxLinesFirstPage = data.maxLinesFirstPage || 32;
                 this.form.pageStart = data.pageStart || 6;
                 this.form.showSignature = data.showSignature ?? true;
+                this.form.showToc = data.showToc ?? false;
+                this.form.tocPosition = data.tocPosition === 'end' ? 'end' : 'start';
             }
         },
         async save() {

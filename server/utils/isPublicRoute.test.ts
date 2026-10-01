@@ -13,6 +13,7 @@ describe('isPublicRoute', () => {
     it.each([
         ['GET', '/api/book-config'],
         ['GET', '/api/image'],
+        ['GET', '/api/part'],
         ['POST', '/api/login'],
         ['POST', '/api/prospect'],
         ['GET', '/api/site-config'],
@@ -29,6 +30,9 @@ describe('isPublicRoute', () => {
         ['GET', '/api/post?limit=all'],
         ['GET', '/api/post/1'],
         ['POST', '/api/post'],
+        ['POST', '/api/part'],
+        ['PUT', '/api/part/order'],
+        ['DELETE', '/api/part/1'],
         ['PUT', '/api/book-config'],
         ['PUT', '/api/site-config'],
         ['POST', '/api/site-portrait'],

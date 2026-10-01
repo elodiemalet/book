@@ -29,19 +29,45 @@
                 class="text-left">{{ paragraph }}</p>
 
         </BasePage>
-        <PoemPage
-            v-for="(page, i) in pages"
-            :id="page.id"
-            :key="page.id + '-' + i"
-            :next-page-id="pages[i + 1]?.id"
-            :prev-page-id="pages[i - 1]?.id"
-            :title="page.postTitle"
-            :content="page.content"
-            :page="i + pageStart"
-            :date="page.publishDate"
-            :author="page.author"
-            :show-signature="bookStore.config.showSignature"
-        />
+        <template v-if="tocPosition === 'start'">
+            <TocPage
+                v-for="(lines, i) in tocPages"
+                :key="'toc-' + i"
+                :lines="lines"
+                :is-first="i === 0"
+                :page="firstTocPage + i"
+            />
+        </template>
+        <template
+            v-for="(page, i) in bodyPages"
+            :key="'body-' + page.number">
+            <PartPage
+                v-if="page.type === 'part'"
+                :numeral="page.numeral"
+                :title="page.title"
+            />
+            <PoemPage
+                v-else
+                :id="page.post.id"
+                :next-page-id="textPostId(bodyPages[i + 1])"
+                :prev-page-id="textPostId(bodyPages[i - 1])"
+                :title="page.post.postTitle"
+                :content="page.post.content"
+                :page="page.number"
+                :date="page.post.publishDate"
+                :author="page.post.author"
+                :show-signature="bookStore.config.showSignature"
+            />
+        </template>
+        <template v-if="tocPosition === 'end'">
+            <TocPage
+                v-for="(lines, i) in tocPages"
+                :key="'toc-' + i"
+                :lines="lines"
+                :is-first="i === 0"
+                :page="firstTocPage + i"
+            />
+        </template>
         <EndPage/>
     </div>
 </template>
@@ -51,14 +77,19 @@ import CoverPage from "~/components/poems/bookPages/preliminaryPages/CoverPage.v
 import PoemPage from "~/components/poems/bookPages/PoemPage.vue";
 import BasePage from "~/components/poems/bookPages/BasePage.vue";
 import EndPage from "~/components/poems/bookPages/concludingPages/EndPage.vue";
+import TocPage from "~/components/poems/bookPages/TocPage.vue";
+import PartPage from "~/components/poems/bookPages/PartPage.vue";
 import type {PostInterface} from "~/server/models/post";
 import PostEntity from "~/entities/PostEntity";
 import {useBookStore} from "~/stores/bookStore";
+import {layoutBook, type BodyPage, type BookPart, type TocLine, type TocPosition} from "~/utils/bookToc";
 import {BOOK_TOKEN_HEADER} from "~/utils/bookAccess";
 
 export default {
     components: {
         EndPage,
+        TocPage,
+        PartPage,
         PoemPage,
         BasePage,
         CoverPage,
@@ -85,20 +116,16 @@ export default {
         return {
             bookStore,
             posts: [] as PostEntity[],
-            pages: [] as PostEntity[],
+            bodyPages: [] as BodyPage[],
+            tocPages: [] as TocLine[][],
+            firstTocPage: 0,
             loaded: false,
             totalPages: 0,
         };
     },
     computed: {
-        pageStart(): number {
-            return this.bookStore.config.pageStart;
-        },
-        maxLines(): number {
-            return this.bookStore.effectiveMaxLines;
-        },
-        maxLinesFirstPage(): number {
-            return this.bookStore.effectiveMaxLinesFirstPage;
+        tocPosition(): TocPosition {
+            return this.bookStore.config.tocPosition;
         },
         dedicationParagraphs(): string[] {
             return (this.bookStore.config.dedicationText || '').split('\n').filter((p: string) => p.trim() !== '');
@@ -112,27 +139,28 @@ export default {
         this.getPosts();
     },
     methods: {
-        getPosts() {
+        async getPosts() {
             // Tout le livre : sans « limit », l'API ne renvoie que les 10 derniers textes.
             // Sans session (génération du PDF), le jeton de l'URL ouvre la lecture des textes.
             const token = typeof this.$route.query.token === 'string' ? this.$route.query.token : '';
-            $fetch<{ rows: PostInterface[] }>('/api/post', {
-                query: {limit: 'all'},
-                headers: token ? {[BOOK_TOKEN_HEADER]: token} : {},
-            })
-                .then(data => {
-                    this.posts = data.rows.map((post: PostInterface) => {
-                        return PostEntity.hydrateFromDatabase(post);
-                    });
-                    this.pages = paginatePosts(this.posts, {
-                        maxLines: this.maxLines,
-                        maxLinesFirstPage: this.maxLinesFirstPage,
-                        maxCharsPerLine: this.bookStore.maxCharsPerLine,
-                        showSignature: this.bookStore.config.showSignature,
-                    });
-                    this.totalPages = this.pages.length;
-                    this.loaded = true;
-                });
+            const [data, parts] = await Promise.all([
+                $fetch<{ rows: PostInterface[] }>('/api/post', {
+                    query: {limit: 'all'},
+                    headers: token ? {[BOOK_TOKEN_HEADER]: token} : {},
+                }),
+                $fetch<BookPart[]>('/api/part'),
+            ]);
+            this.posts = data.rows.map((post: PostInterface) => PostEntity.hydrateFromDatabase(post));
+            const layout = layoutBook(this.posts, parts, this.bookStore.layoutOptions);
+            this.bodyPages = layout.bodyPages;
+            this.tocPages = layout.tocPages;
+            this.firstTocPage = layout.firstTocPage;
+            this.totalPages = layout.bodyPages.length;
+            this.loaded = true;
+        },
+        // Id du texte d'une page voisine (undefined pour une page de partie ou hors du livre)
+        textPostId(page: BodyPage | undefined) {
+            return page?.type === 'text' ? page.post.id : undefined;
         },
     }
 };
