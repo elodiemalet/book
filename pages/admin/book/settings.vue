@@ -259,6 +259,7 @@ import {ChevronUpDownIcon} from "@heroicons/vue/24/outline";
 import AdminNavTabs from "~/components/admin/ui/AdminNavTabs.vue";
 import BaseButton from "~/components/ui/buttons/BaseButton.vue";
 import {PAGE_FORMAT_LIMITS, PAGE_FORMAT_SIZES} from "~/stores/bookStore";
+import {landingTocLimit} from "~/utils/bookToc";
 
 export default {
     components: {AdminNavTabs, BaseButton, ChevronUpDownIcon},
@@ -353,11 +354,13 @@ export default {
                 this.form.showSignature = data.showSignature ?? true;
                 this.form.showToc = data.showToc ?? false;
                 this.form.tocPosition = data.tocPosition === 'end' ? 'end' : 'start';
-                this.form.landingTocMaxParts = data.landingTocMaxParts || 6;
+                this.form.landingTocMaxParts = landingTocLimit(data.landingTocMaxParts);
             }
         },
         async save() {
             this.saving = true;
+            // Champ vidé ou à 0 : le formulaire affiche la valeur réellement enregistrée
+            this.form.landingTocMaxParts = landingTocLimit(this.form.landingTocMaxParts);
             try {
                 await $fetch('/api/book-config', {
                     method: 'PUT',

@@ -1,6 +1,8 @@
 import {describe, expect, it} from 'vitest';
 import {
+    LANDING_TOC_DEFAULT_MAX_PARTS,
     groupByPart,
+    landingTocLimit,
     layoutBook,
     paginateToc,
     tocLinesFromBody,
@@ -179,5 +181,24 @@ describe('tocParts', () => {
             {title: 'Matin', numeral: 'I'},
             {title: 'Soir', numeral: 'II'},
         ]);
+    });
+});
+
+describe('landingTocLimit', () => {
+    it('keeps a positive whole number', () => {
+        expect(landingTocLimit(4)).toBe(4);
+        expect(landingTocLimit('4')).toBe(4);
+    });
+
+    it('raises zero, negative and decimal values to a whole number of at least 1', () => {
+        expect(landingTocLimit(0)).toBe(1);
+        expect(landingTocLimit(-3)).toBe(1);
+        expect(landingTocLimit(2.7)).toBe(2);
+    });
+
+    it('falls back to the default when the value is empty or not a number', () => {
+        expect(landingTocLimit('')).toBe(LANDING_TOC_DEFAULT_MAX_PARTS);
+        expect(landingTocLimit(undefined)).toBe(LANDING_TOC_DEFAULT_MAX_PARTS);
+        expect(landingTocLimit('abc')).toBe(LANDING_TOC_DEFAULT_MAX_PARTS);
     });
 });

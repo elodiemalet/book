@@ -192,3 +192,16 @@ export function tocParts(posts: PartMember[], parts: BookPart[]): { title: strin
         .filter(section => section.part)
         .map(section => ({title: section.part?.title ?? '', numeral: section.numeral}));
 }
+
+// Nombre de parties affichées par défaut sur la page d'accueil
+export const LANDING_TOC_DEFAULT_MAX_PARTS = 6;
+
+// Nombre de parties à afficher sur la page d'accueil : un entier d'au moins 1.
+// Champ vide ou valeur illisible : la valeur par défaut.
+export function landingTocLimit(value: unknown): number {
+    const number = typeof value === 'number' ? value : (typeof value === 'string' && value.trim() !== '' ? Number(value) : NaN);
+    if (!Number.isFinite(number)) {
+        return LANDING_TOC_DEFAULT_MAX_PARTS;
+    }
+    return Math.max(1, Math.floor(number));
+}
