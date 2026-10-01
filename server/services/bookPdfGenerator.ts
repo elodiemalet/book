@@ -2,9 +2,10 @@ import puppeteer from 'puppeteer';
 import {PDFDocument} from 'pdf-lib';
 import {bookRenderProblem} from './bookRenderCheck';
 
-export async function generatePdfFromEvent(token: string, protocol: string, host: string) {
+// excerpt : n'imprime que les premiers textes du livre (l'extrait gratuit)
+export async function generatePdfFromEvent(token: string, protocol: string, host: string, {excerpt = false} = {}) {
 
-    const url = `${protocol}://${host}/book?token=${token}`;
+    const url = `${protocol}://${host}/book?token=${token}${excerpt ? '&extrait=1' : ''}`;
 
     const browser = await puppeteer.launch({
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,

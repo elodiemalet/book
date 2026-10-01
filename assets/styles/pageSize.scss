@@ -42,6 +42,21 @@
   page-break-inside: avoid;
 }
 
+// Filigrane de l'extrait gratuit : tout en haut de la marge, au-dessus du titre courant.
+// Ni sur les images (couverture), ni sur la dernière page de l'extrait.
+.book.excerpt .page:not(.image-page):not(.excerpt-end)::before {
+  content: 'Extrait gratuit';
+  position: absolute;
+  top: 2mm;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 6pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b8b8b8;
+}
+
 // ───────────────────────────────────────────────────────
 // 2. DONNÉES DES FORMATS
 //    taille papier + marges intérieures + positions

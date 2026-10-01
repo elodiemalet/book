@@ -83,7 +83,7 @@ export const landingContent: LandingContent = {
     freeSample: {
         heading: 'Un extrait,',
         headingEmphasis: 'offert.',
-        intro: 'Laissez votre adresse : vous recevrez par e-mail un extrait du livre en PDF, avec deux chapitres choisis.',
+        intro: 'Laissez votre adresse : vous recevrez par e-mail un extrait du livre en PDF, avec les premiers textes du recueil.',
         note: 'Un seul e-mail, aucune inscription à une newsletter.',
     },
     author: {

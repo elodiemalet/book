@@ -83,6 +83,24 @@ export function groupByPart<T extends PartMember>(posts: T[], parts: BookPart[])
     return sections;
 }
 
+// Nombre de textes de l'extrait gratuit envoyé par e-mail depuis la page d'accueil
+export const EXCERPT_TEXT_COUNT = 5;
+
+// L'extrait : les premiers textes, dans l'ordre du livre (textes sans partie, puis partie par partie)
+export function excerptPosts<T extends PartMember>(posts: T[], parts: BookPart[], count: number): T[] {
+    return groupByPart(posts, parts).flatMap(section => section.posts).slice(0, count);
+}
+
+// Phrase de la dernière page de l'extrait. Vide quand l'extrait contient tout le livre.
+export function excerptRemainingLabel(remaining: number): string {
+    if (remaining <= 0) {
+        return '';
+    }
+    return remaining === 1
+        ? 'Encore un texte vous attend dans le livre complet.'
+        : `Encore ${remaining} textes vous attendent dans le livre complet.`;
+}
+
 // Le sommaire se lit dans les pages du corps. Un livre en parties ne liste que ses parties ;
 // sinon, une ligne par texte (sa première page).
 export function tocLinesFromBody(bodyPages: BodyPage[]): TocLine[] {

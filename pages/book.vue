@@ -8,7 +8,7 @@
     <div
         v-else-if="loaded && bookStore.configLoaded"
         class="flex flex-col items-center w-full book"
-        :class="bookStore.bookCssClass"
+        :class="[bookStore.bookCssClass, {excerpt: isExcerpt}]"
         :data-book-texts="posts.length">
         <CoverPage/>
         <BasePage>
@@ -16,6 +16,9 @@
             <h1 class="title">{{ bookStore.config.title }}</h1>
             <h3 class="title">{{ bookStore.config.author }}</h3>
             <h4 class="title">{{ bookStore.config.years }}</h4>
+            <p
+                v-if="isExcerpt"
+                class="title italic">— Extrait —</p>
         </BasePage>
         <BasePage v-if="bookStore.config.dedicationText">
 
@@ -75,7 +78,10 @@
                 :page="firstTocPage + i"
             />
         </template>
-        <EndPage/>
+        <ExcerptEndPage
+            v-if="isExcerpt"
+            :remaining="excerptRemaining"/>
+        <EndPage v-else/>
     </div>
 </template>
 
@@ -84,17 +90,19 @@ import CoverPage from "~/components/poems/bookPages/preliminaryPages/CoverPage.v
 import PoemPage from "~/components/poems/bookPages/PoemPage.vue";
 import BasePage from "~/components/poems/bookPages/BasePage.vue";
 import EndPage from "~/components/poems/bookPages/concludingPages/EndPage.vue";
+import ExcerptEndPage from "~/components/poems/bookPages/concludingPages/ExcerptEndPage.vue";
 import TocPage from "~/components/poems/bookPages/TocPage.vue";
 import PartPage from "~/components/poems/bookPages/PartPage.vue";
 import type {PostInterface} from "~/server/models/post";
 import PostEntity from "~/entities/PostEntity";
 import {useBookStore} from "~/stores/bookStore";
-import {layoutBook, type BodyPage, type BookPart, type TocLine, type TocPosition} from "~/utils/bookToc";
+import {EXCERPT_TEXT_COUNT, excerptPosts, layoutBook, type BodyPage, type BookPart, type TocLine, type TocPosition} from "~/utils/bookToc";
 import {BOOK_TOKEN_HEADER} from "~/utils/bookAccess";
 
 export default {
     components: {
         EndPage,
+        ExcerptEndPage,
         TocPage,
         PartPage,
         PoemPage,
@@ -109,7 +117,11 @@ export default {
         const bookStore = useBookStore();
         const bookCssClass = computed(() => bookStore.bookCssClass);
         const pageStyle = computed(() => `@page { size: ${bookStore.pageSize}; margin: 0; }`);
+        // Repris par Chrome comme titre du PDF
+        const isExcerpt = Boolean(useRoute().query.extrait);
+        const title = computed(() => isExcerpt ? `${bookStore.config.title} — extrait` : bookStore.config.title);
         useHead({
+            title,
             bodyAttrs: {
                 class: bookCssClass,
                 'data-theme': 'dark'
@@ -131,9 +143,15 @@ export default {
             // pour refuser d'imprimer un livre en échec ou vide.
             loadError: '',
             totalPages: 0,
+            // Textes du livre absents de l'extrait
+            excerptRemaining: 0,
         };
     },
     computed: {
+        // ?extrait=1 : seulement les premiers textes (PDF envoyé aux prospects)
+        isExcerpt(): boolean {
+            return Boolean(this.$route.query.extrait);
+        },
         tocPosition(): TocPosition {
             return this.bookStore.config.tocPosition;
         },
@@ -165,7 +183,9 @@ export default {
                 $fetch<{ rows: PostInterface[] }>('/api/post', {query: {limit: 'all'}, headers}),
                 $fetch<BookPart[]>('/api/part', {headers}),
             ]);
-            this.posts = data.rows.map((post: PostInterface) => PostEntity.hydrateFromDatabase(post));
+            const posts = data.rows.map((post: PostInterface) => PostEntity.hydrateFromDatabase(post));
+            this.posts = this.isExcerpt ? excerptPosts(posts, parts, EXCERPT_TEXT_COUNT) : posts;
+            this.excerptRemaining = posts.length - this.posts.length;
             const layout = layoutBook(this.posts, parts, this.bookStore.layoutOptions);
             this.bodyPages = layout.bodyPages;
             this.tocPages = layout.tocPages;

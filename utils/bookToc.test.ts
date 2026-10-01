@@ -1,6 +1,8 @@
 import {describe, expect, it} from 'vitest';
 import {
     LANDING_TOC_DEFAULT_MAX_PARTS,
+    excerptPosts,
+    excerptRemainingLabel,
     groupByPart,
     landingToc,
     landingTocLimit,
@@ -66,6 +68,33 @@ describe('groupByPart', () => {
         const withPosition = (id: number, position: number) => Object.assign(post(id, `T${id}`, 1, 10), {position});
         const sections = groupByPart([withPosition(1, 2), withPosition(2, 0), withPosition(3, 1), withPosition(4, 1)], parts);
         expect(sections[0]?.posts.map(p => p.id)).toEqual([2, 3, 4, 1]);
+    });
+});
+
+describe('excerptPosts', () => {
+    const parts = [{id: 10, title: 'Matin'}, {id: 30, title: 'Soir'}];
+
+    it('keeps the first texts in book order, across parts', () => {
+        const posts = [post(1, 'A', 1, 30), post(2, 'B', 1), post(3, 'C', 1, 10), post(4, 'D', 1, 10)];
+        expect(excerptPosts(posts, parts, 3).map(p => p.id)).toEqual([2, 3, 4]);
+    });
+
+    it('keeps the whole book when it has fewer texts than the excerpt', () => {
+        expect(excerptPosts([post(1, 'A', 1)], parts, 5).map(p => p.id)).toEqual([1]);
+    });
+});
+
+describe('excerptRemainingLabel', () => {
+    it('counts the texts left out of the excerpt', () => {
+        expect(excerptRemainingLabel(32)).toBe('Encore 32 textes vous attendent dans le livre complet.');
+    });
+
+    it('uses the singular for a single text', () => {
+        expect(excerptRemainingLabel(1)).toBe('Encore un texte vous attend dans le livre complet.');
+    });
+
+    it('says nothing when the excerpt is the whole book', () => {
+        expect(excerptRemainingLabel(0)).toBe('');
     });
 });
 

@@ -16,7 +16,7 @@ export async function sendSiteMail({to}: { to: string; }) {
     const protocol: string = 'http';
     const host = 'localhost:3000';
 
-    const pdfBuffer = await generatePdfFromEvent(token, protocol, host);
+    const pdfBuffer = await generatePdfFromEvent(token, protocol, host, {excerpt: true});
     const buffer = Buffer.from(pdfBuffer.buffer);
 
     const dataUrl = getDataUrl('logo.png');
@@ -48,7 +48,7 @@ export async function sendSiteMail({to}: { to: string; }) {
         html: pageHtml,
         attachments: [
             {
-                filename: 'book.pdf',
+                filename: 'extrait.pdf',
                 contentType: 'application/pdf',
                 content: buffer,
                 contentDisposition: 'attachment',
