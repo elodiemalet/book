@@ -13,6 +13,8 @@ export interface PostInterface {
     publishDate: Date;
     // Partie du livre (null = sans partie, au début du livre)
     partId: number | null;
+    // Ordre du texte dans sa partie (croissant)
+    position: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -34,6 +36,7 @@ export default class Post extends Model {
     public externalId!: string;
     public publishDate!: Date;
     public partId!: number | null;
+    public position!: number;
 
     // timestamps
     public readonly createdAt!: Date;
@@ -75,6 +78,11 @@ Post.init(
         partId: {
             type: DataTypes.INTEGER,
             allowNull: true,
+        },
+        position: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
         },
     },
     {

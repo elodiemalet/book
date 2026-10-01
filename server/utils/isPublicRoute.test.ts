@@ -31,6 +31,7 @@ describe('isPublicRoute', () => {
         ['GET', '/api/post?limit=all'],
         ['GET', '/api/post/1'],
         ['POST', '/api/post'],
+        ['PUT', '/api/post/order'],
         ['POST', '/api/part'],
         ['PUT', '/api/part/order'],
         ['DELETE', '/api/part/1'],

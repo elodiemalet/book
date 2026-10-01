@@ -58,6 +58,12 @@ describe('groupByPart', () => {
         const sections = groupByPart([post(1, 'A', 1, 99)], parts);
         expect(sections[0]?.part).toBeNull();
     });
+
+    it('orders the texts of a part by position, keeping the given order for equal positions', () => {
+        const withPosition = (id: number, position: number) => Object.assign(post(id, `T${id}`, 1, 10), {position});
+        const sections = groupByPart([withPosition(1, 2), withPosition(2, 0), withPosition(3, 1), withPosition(4, 1)], parts);
+        expect(sections[0]?.posts.map(p => p.id)).toEqual([2, 3, 4, 1]);
+    });
 });
 
 describe('tocLinesFromBody', () => {

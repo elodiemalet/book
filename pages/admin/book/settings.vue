@@ -278,6 +278,7 @@ export default {
             ],
             tabs: [
                 {name: 'Mon livre', route: '/admin/book', current: false},
+                {name: 'Parties', route: '/admin/book/parts', current: false},
                 {name: 'Configuration', route: '/admin/book/settings', current: true},
             ],
             form: {

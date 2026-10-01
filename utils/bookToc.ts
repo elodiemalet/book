@@ -55,20 +55,25 @@ export function tocTitle(postTitle: string): string {
     return (postTitle.split('_')[0] ?? '').trim();
 }
 
+// Ordre des textes dans une partie : par position, puis dans l'ordre reçu (le plus récent d'abord)
+export function sortByPosition<T extends { position?: number }>(posts: T[]): T[] {
+    return [...posts].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+}
+
 // Répartit les textes par partie, dans l'ordre du livre. Les textes sans partie (ou rattachés
 // à une partie inconnue) viennent en tête. Une partie vide n'apparaît pas et n'est pas numérotée.
 export function groupByPart<T extends PartMember>(posts: T[], parts: BookPart[]): BookSection<T>[] {
     const knownIds = new Set(parts.map(part => part.id));
     const sections: BookSection<T>[] = [];
 
-    const loose = posts.filter(post => post.partId === null || post.partId === undefined || !knownIds.has(post.partId));
+    const loose = sortByPosition(posts).filter(post => post.partId === null || post.partId === undefined || !knownIds.has(post.partId));
     if (loose.length) {
         sections.push({part: null, numeral: '', posts: loose});
     }
 
     let partNumber = 0;
     for (const part of parts) {
-        const partPosts = posts.filter(post => post.partId === part.id);
+        const partPosts = sortByPosition(posts.filter(post => post.partId === part.id));
         if (partPosts.length) {
             partNumber++;
             sections.push({part, numeral: toRoman(partNumber), posts: partPosts});
