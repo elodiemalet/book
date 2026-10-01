@@ -12,7 +12,8 @@ const localTransporter = nodemailer.createTransport({
 });
 
 export async function sendSiteMail({to}: { to: string; }) {
-    const token = 'mon-token-perso';
+    // Le même jeton que le téléchargement du livre depuis l'admin (PDF_API_TOKEN)
+    const token = useRuntimeConfig().pdfApiToken;
     const protocol: string = 'http';
     const host = 'localhost:3000';
 
