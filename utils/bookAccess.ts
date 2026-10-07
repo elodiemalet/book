@@ -1,3 +1,7 @@
+// Le PDF est généré en ouvrant /book?token=… dans un navigateur sans session : la page transmet
+// ce jeton à l'API dans cet en-tête pour lire les textes du livre.
+export const BOOK_TOKEN_HEADER = 'x-book-token';
+
 export interface BookAccessContext {
     loggedIn: boolean;
     // True on the client while hydrating a page the server already rendered

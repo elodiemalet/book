@@ -10,6 +10,8 @@ export interface PostEntityInterface {
     date: Date;
     publishDate: Date;
     attachments?: [];
+    partId?: number | null;
+    position?: number;
 }
 
 export default class PostEntity implements PostEntityInterface {
@@ -21,8 +23,12 @@ export default class PostEntity implements PostEntityInterface {
     public date: Date;
     public publishDate: Date;
     public attachments?: [];
+    // Partie du livre (null = sans partie)
+    public partId: number | null;
+    // Ordre du texte dans sa partie (croissant ; à égalité, le plus récent d'abord)
+    public position: number;
 
-    constructor(id: number | null, postTitle: string, author: string, content: string, timestamp: number, publishDate: Date, attachments?: []) {
+    constructor(id: number | null, postTitle: string, author: string, content: string, timestamp: number, publishDate: Date, attachments?: [], partId: number | null = null, position: number = 0) {
         this.id = id;
         this.postTitle = postTitle;
         this.author = author;
@@ -31,6 +37,8 @@ export default class PostEntity implements PostEntityInterface {
         this.date = new Date(timestamp);
         this.publishDate = publishDate;
         this.attachments = attachments;
+        this.partId = partId;
+        this.position = position;
     }
 
     public static hydrateFromDatabase(data: PostInterface) {
@@ -41,6 +49,9 @@ export default class PostEntity implements PostEntityInterface {
             data.content,
             new Date(data.createdAt).getTime(),
             new Date(data.publishDate),
+            undefined,
+            data.partId ?? null,
+            data.position ?? 0,
         );
     }
 

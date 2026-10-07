@@ -57,7 +57,7 @@ export default defineComponent({
                 return null;
             },
             validator: (value: string) => {
-                return ['cover', 'title', 'copyright', 'dedication_page', 'table_of_contents', 'preface_introduction', 'chapters', 'interlude_boxed_section', 'appendices', 'author_notes', 'index', 'acknowledgments_page', 'publisher_page', 'advertisements_other_books', 'back_cover'].includes(value);
+                return ['cover', 'title', 'copyright', 'dedication_page', 'table_of_contents', 'preface_introduction', 'chapters', 'interlude_boxed_section', 'appendices', 'author_notes', 'index', 'acknowledgments_page', 'publisher_page', 'advertisements_other_books', 'back_cover', 'author_portrait'].includes(value);
             },
         },
         image: {
@@ -84,9 +84,15 @@ export default defineComponent({
     computed: {
         title(): string {
             const verb = this.image ? 'Remplacer' : 'Ajouter';
+            if (this.pageType === 'author_portrait') {
+                return `${verb} la photo de l'auteur`;
+            }
             return this.pageType === 'back_cover' ? `${verb} la page de fin` : `${verb} la page de couverture`;
         },
         description(): string {
+            if (this.pageType === 'author_portrait') {
+                return 'Portrait affiché dans la section « L\'auteur » de la page d\'accueil (cadrage vertical 4:5).';
+            }
             return this.pageType === 'back_cover'
                 ? 'Cette image ferme le livre, après le dernier texte.'
                 : 'Cette image ouvre le livre et sert de couverture sur la page d\'accueil.';

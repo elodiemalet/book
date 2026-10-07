@@ -95,6 +95,7 @@ export default {
             toast,
             tabs: [
                 {name: 'Mon livre', route: '/admin/book', current: true},
+                {name: 'Parties', route: '/admin/book/parts', current: false},
                 {name: 'Configuration', route: '/admin/book/settings', current: false},
             ],
             images: [] as AttachmentEntityInterface[],

@@ -1,0 +1,79 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# Vérifie que l'import d'un fichier produit le bon post (titre, auteur, date, contenu).
+# Lancer depuis la racine du projet : npm run eval   (puis npm run eval:view pour le détail)
+description: Import de fichiers → post formaté
+
+# Le provider lit lui-même le fichier indiqué dans vars.file : le prompt n'est qu'une étiquette
+prompts:
+  - '{{file}}'
+
+providers:
+  - file://provider.ts
+
+evaluateOptions:
+  maxConcurrency: 2 # évite les erreurs 429 de Gemini
+
+defaultTest:
+  assert:
+    - type: javascript
+      value: file://assertions.js:titre
+      metric: titre
+    - type: javascript
+      value: file://assertions.js:auteur
+      metric: auteur
+    - type: javascript
+      value: file://assertions.js:date
+      metric: date
+    - type: javascript
+      value: file://assertions.js:contenu
+      metric: contenu
+    - type: javascript
+      value: file://assertions.js:sansResidus
+      metric: residus
+
+# Pour ajouter un cas : déposer le fichier dans evals/fixtures/, écrire le contenu attendu
+# dans evals/attendu/ (npx tsx evals/voir-texte.ts <fichier> montre ce que reçoit l'IA).
+tests:
+  - description: ODT simple, auteur et date en fin de texte
+    vars:
+      file: evals/fixtures/simple.odt
+      title: Mon poeme
+      author: Elodie
+      date: '2012-01-13'
+      content: file://attendu/simple.txt
+
+  - description: HTML avec lien, image légendée et « Voir la vidéo »
+    vars:
+      file: evals/fixtures/html-liens-images.html
+      title: Le jardin d'hiver
+      author: Marc Lenoir
+      date: '2022-07-07'
+      content: file://attendu/html-liens-images.txt
+
+  - description: Markdown avec gras, italique, séparateurs et signature
+    vars:
+      file: evals/fixtures/markdown-signature.md
+      title: Les heures bleues
+      author: Claire Dubois
+      date: '2024-03-03'
+      content: file://attendu/markdown-signature.txt
+
+  - description: Texte brut avec en-tête auteur/date et refrain répété
+    vars:
+      file: evals/fixtures/refrain-entete.txt
+      title: La chanson du quai
+      author: Jeanne Roux
+      date: '2023-05-12'
+      content: file://attendu/refrain-entete.txt
+    assert:
+      - type: javascript
+        value: (output.content.match(/Reste encore un peu, reste encore un peu\./g) || []).length === 3
+        metric: refrain
+
+  - description: Texte brut avec en-tête auteur/date et characteres speciaux
+    vars:
+      file: evals/fixtures/special-chars.odt
+      title: Jerusalema !
+      author: Thierry Titiyab Malet
+      date: '2024-09-17'
+      content: file://attendu/special-chars.txt

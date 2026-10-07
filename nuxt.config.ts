@@ -13,7 +13,14 @@ export default defineNuxtConfig({
     },
     app: {
         head: {
+            meta: [
+                {name: 'theme-color', content: '#1C1F2B'},
+            ],
             link: [
+                {rel: 'icon', href: '/favicon.ico', sizes: '48x48'},
+                {rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml'},
+                {rel: 'apple-touch-icon', href: '/apple-touch-icon.png'},
+                {rel: 'manifest', href: '/site.webmanifest'},
                 {
                     rel: 'preconnect',
                     href: 'https://cdn.fontshare.com',

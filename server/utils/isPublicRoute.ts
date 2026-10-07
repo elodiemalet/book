@@ -3,10 +3,11 @@
 // /api/v1/* is excluded: it has its own token-based middleware (jwt-authenticated.ts).
 export const PUBLIC_ROUTES = new Set([
     'GET /api/book-config',
+    'GET /api/book-toc',
     'GET /api/image',
-    'GET /api/post',
     'POST /api/login',
     'POST /api/prospect',
+    'GET /api/site-config',
 ]);
 
 export function isPublicRoute(method: string, path: string): boolean {

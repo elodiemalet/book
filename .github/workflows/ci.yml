@@ -19,6 +19,12 @@ jobs:
 
       - run: npm run lint
 
+      # Les tests d'import (.docx, .odt, .md) passent par pandoc. Celui d'Ubuntu (3.1) lit les légendes
+      # d'images comme du texte : on prend la version de la prod (pandoc-cli d'Alpine).
+      - run: |
+          curl -sSL -o pandoc.deb https://github.com/jgm/pandoc/releases/download/3.10/pandoc-3.10-1-amd64.deb
+          sudo dpkg -i pandoc.deb
+
       - run: npm run test
 
       - run: npm run build

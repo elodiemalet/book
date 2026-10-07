@@ -17,96 +17,38 @@
             </p>
         </div>
 
+        <!-- Uniquement les titres des parties, sans leurs textes -->
         <div class="lg:col-span-7 lg:col-start-6">
-            <div
-                v-for="(part, partIndex) in parts"
-                :key="part.title"
-                class="border-t border-atelier-line last:border-b"
-            >
-                <h3>
-                    <button
-                        type="button"
-                        class="flex w-full items-baseline gap-5 rounded-md px-3 py-5 text-left transition-colors duration-150 hover:bg-atelier-hover"
-                        :aria-expanded="isOpen(partIndex)"
-                        :aria-controls="`sommaire-partie-${partIndex}`"
-                        @click="toggle(partIndex)"
-                    >
-                        <span class="w-9 shrink-0 font-fraunces text-[15px] text-menthe">{{ toRoman(partIndex + 1) }}</span>
-                        <span class="flex-1 font-fraunces text-2xl font-normal text-atelier-ink italic sm:text-[28px]">{{ part.title }}</span>
-                        <span class="text-sm text-atelier-muted tabular-nums">{{ part.items.length }} textes</span>
-                        <ChevronDownIcon
-                            class="size-4 self-center text-atelier-subtle transition-transform duration-200 ease-atelier motion-reduce:transition-none"
-                            :class="{ 'rotate-180': isOpen(partIndex) }"
-                            aria-hidden="true"
-                        />
-                    </button>
-                </h3>
-                <ol
-                    v-show="isOpen(partIndex)"
-                    :id="`sommaire-partie-${partIndex}`"
-                    class="flex flex-col gap-1 pr-3 pb-6 pl-3 sm:pl-[68px]"
+            <ol class="border-b border-atelier-line">
+                <li
+                    v-for="part in parts"
+                    :key="part.numeral"
+                    class="flex items-baseline gap-5 border-t border-atelier-line px-3 py-5"
                 >
-                    <li
-                        v-for="item in part.items"
-                        :key="item.title"
-                        class="flex items-baseline gap-3 py-1 font-newsreader text-lg text-atelier-ink"
-                    >
-                        <span>{{ item.title }}</span>
-                        <span
-                            v-if="item.kind"
-                            class="font-instrument text-[11px] tracking-wide"
-                            :class="item.kind === 'poème' ? 'text-menthe' : 'text-lilas'"
-                        >{{ item.kind }}</span>
-                        <span
-                            class="flex-1 -translate-y-1 border-b border-dotted border-atelier-line-strong"
-                            aria-hidden="true"
-                        />
-                        <span class="text-base text-atelier-muted tabular-nums">
-                            <span class="sr-only">page </span>{{ item.page }}
-                        </span>
-                    </li>
-                </ol>
-            </div>
+                    <span class="w-9 shrink-0 font-fraunces text-[15px] text-menthe">{{ part.numeral }}</span>
+                    <span class="flex-1 font-fraunces text-2xl font-normal text-atelier-ink italic sm:text-[28px]">{{ part.title }}</span>
+                </li>
+            </ol>
+            <p
+                v-if="hiddenCount > 0"
+                class="px-3 pt-5 font-newsreader text-lg text-atelier-muted italic"
+            >
+                … et {{ hiddenCount }} autre{{ hiddenCount > 1 ? 's' : '' }} partie{{ hiddenCount > 1 ? 's' : '' }} à découvrir dans le livre.
+            </p>
         </div>
     </section>
 </template>
 
 <script setup lang="ts">
-import ChevronDownIcon from "@heroicons/vue/24/outline/ChevronDownIcon";
 import type {LandingTocPart} from "~/utils/landingContent";
 
-defineProps<{
+withDefaults(defineProps<{
     number: string;
     heading: string;
     headingEmphasis: string;
     intro: string;
     parts: LandingTocPart[];
-}>();
-
-const openParts = ref(new Set<number>([0]));
-
-const isOpen = (index: number) => openParts.value.has(index);
-
-const toggle = (index: number) => {
-    const next = new Set(openParts.value);
-    if (next.has(index)) {
-        next.delete(index);
-    } else {
-        next.add(index);
-    }
-    openParts.value = next;
-};
-
-const toRoman = (value: number) => {
-    const numerals: [number, string][] = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
-    let rest = value;
-    let result = '';
-    for (const [amount, numeral] of numerals) {
-        while (rest >= amount) {
-            result += numeral;
-            rest -= amount;
-        }
-    }
-    return result;
-};
+    // Parties du livre non affichées (au-delà de la limite)
+    hiddenCount?: number;
+}>(), {hiddenCount: 0});
 </script>

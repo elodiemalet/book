@@ -12,22 +12,32 @@ describe('isPublicRoute', () => {
 
     it.each([
         ['GET', '/api/book-config'],
+        ['GET', '/api/book-toc'],
         ['GET', '/api/image'],
-        ['GET', '/api/post'],
         ['POST', '/api/login'],
         ['POST', '/api/prospect'],
+        ['GET', '/api/site-config'],
     ])('treats %s %s as public', (method, path) => {
         expect(isPublicRoute(method, path)).toBe(true);
     });
 
     it('ignores the query string when matching', () => {
-        expect(isPublicRoute('GET', '/api/post?limit=10&page=2')).toBe(true);
+        expect(isPublicRoute('GET', '/api/image?id=3')).toBe(true);
     });
 
     it.each([
+        ['GET', '/api/post'],
+        ['GET', '/api/post?limit=all'],
         ['GET', '/api/post/1'],
         ['POST', '/api/post'],
+        ['PUT', '/api/post/order'],
+        ['GET', '/api/part'],
+        ['POST', '/api/part'],
+        ['PUT', '/api/part/order'],
+        ['DELETE', '/api/part/1'],
         ['PUT', '/api/book-config'],
+        ['PUT', '/api/site-config'],
+        ['POST', '/api/site-portrait'],
         ['GET', '/api/stats'],
         ['POST', '/api/generate-pdf'],
         ['GET', '/api/config/api-token'],

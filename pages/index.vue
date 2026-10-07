@@ -20,14 +20,16 @@
                 :testimonial="content.testimonial"
             />
             <TableOfContents
-                number="01"
+                v-if="tocParts.length"
+                :number="sectionNumber('sommaire')"
                 :heading="content.toc.heading"
                 :heading-emphasis="content.toc.headingEmphasis"
                 :intro="content.toc.intro"
-                :parts="content.toc.parts"
+                :parts="tocParts"
+                :hidden-count="tocHiddenCount"
             />
             <LandingFreeSample
-                number="02"
+                :number="sectionNumber('extrait')"
                 :heading="content.freeSample.heading"
                 :heading-emphasis="content.freeSample.headingEmphasis"
                 :intro="content.freeSample.intro"
@@ -35,7 +37,7 @@
                 :author="bookAuthor"
             />
             <Author
-                number="03"
+                :number="sectionNumber('auteur')"
                 :label="content.author.label"
                 :name="bookAuthor || content.author.label"
                 :bio="content.author.bio"
@@ -43,7 +45,7 @@
                 :link="content.author.link"
             />
             <BookPricing
-                number="04"
+                :number="sectionNumber('livre')"
                 :heading="content.pricing.heading"
                 :heading-emphasis="content.pricing.headingEmphasis"
                 :intro="content.pricing.intro"
@@ -59,7 +61,7 @@
 
 <script setup lang="ts">
 import {useBookStore} from "~/stores/bookStore";
-import {landingContent} from "~/utils/landingContent";
+import {landingContent, type LandingContent, type LandingToc, type LandingTocPart} from "~/utils/landingContent";
 import LandingNav from "~/components/landing/LandingNav.vue";
 import LandingHero from "~/components/landing/LandingHero.vue";
 import LandingTestimonial from "~/components/landing/LandingTestimonial.vue";
@@ -69,32 +71,45 @@ import Author from "~/components/landing/Author.vue";
 import BookPricing from "~/components/landing/BookPricing.vue";
 import LandingFooter from "~/components/landing/LandingFooter.vue";
 
-const content = landingContent;
 const bookStore = useBookStore();
 
 bookStore.fetchImagePages();
-await useAsyncData('landing-book-config', async () => {
-    await bookStore.fetchConfig();
-    return true;
-});
+const [, {data: siteContent}] = await Promise.all([
+    useAsyncData('landing-book-config', async () => {
+        await bookStore.fetchConfig();
+        return true;
+    }),
+    useAsyncData('landing-site-config', () => $fetch<LandingContent>('/api/site-config')),
+]);
+const content = computed<LandingContent>(() => siteContent.value ?? landingContent);
+
+// Sommaire : les premières parties du livre (titres et numéros) et le nombre des autres, calculés par le serveur
+const {data: toc} = await useAsyncData('landing-toc', () => $fetch<LandingToc>('/api/book-toc'));
+// Sans partie, la section est masquée
+const tocParts = computed<LandingTocPart[]>(() => toc.value?.parts ?? []);
+const tocHiddenCount = computed(() => toc.value?.hiddenCount ?? 0);
 
 const bookTitle = computed(() => bookStore.config.title || 'Le livre');
 const bookAuthor = computed(() => bookStore.config.author || '');
 const coverImage = computed(() => bookStore.getImagePageByType('cover'));
-const minPrice = computed(() => Math.min(...content.pricing.offers.map(offer => offer.price)));
+const minPrice = computed(() => Math.min(...content.value.pricing.offers.map(offer => offer.price)));
 
-const sections = [
-    {id: 'sommaire', label: 'Sommaire'},
+const sections = computed(() => [
+    ...(tocParts.value.length ? [{id: 'sommaire', label: 'Sommaire'}] : []),
     {id: 'extrait', label: 'Extrait gratuit'},
-    {id: 'auteur', label: content.author.label},
+    {id: 'auteur', label: content.value.author.label},
     {id: 'livre', label: 'Obtenir le livre'},
-];
+]);
+
+// Numéros « 01 », « 02 »… : ils suivent les sections affichées (le sommaire peut être masqué)
+const sectionNumber = (id: string) =>
+    String(sections.value.findIndex(section => section.id === id) + 1).padStart(2, '0');
 
 useHead({
     title: () => bookAuthor.value ? `${bookTitle.value} — ${bookAuthor.value}` : bookTitle.value,
     htmlAttrs: {lang: 'fr'},
     meta: [
-        {name: 'description', content: content.pitch},
+        {name: 'description', content: () => content.value.pitch},
     ],
 });
 </script>

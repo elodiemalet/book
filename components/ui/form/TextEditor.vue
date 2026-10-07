@@ -97,6 +97,8 @@ import {Underline} from '@tiptap/extension-underline';
 import {TextAlign} from '@tiptap/extension-text-align';
 import {Strike} from "@tiptap/extension-strike";
 import {Heading} from "@tiptap/extension-heading";
+import {HardBreak} from "@tiptap/extension-hard-break";
+import {editorHtmlToText, textToEditorHtml} from "~/utils/editorContent";
 
 export default {
     name: "TextEditor",
@@ -149,12 +151,13 @@ export default {
     },
     mounted() {
         this.editor = new Editor({
-            content: this.modelValue,
+            content: textToEditorHtml(this.modelValue),
             injectCSS: false,
             extensions: [
                 Document,
                 Paragraph,
                 Text,
+                HardBreak,
                 Bold,
                 Italic,
                 Underline,
@@ -167,7 +170,7 @@ export default {
                 }),
             ],
             onUpdate: () => {
-                this.$emit('update:modelValue', this.editor!.getHTML());
+                this.$emit('update:modelValue', editorHtmlToText(this.editor!.getHTML()));
             },
         });
     },
@@ -208,7 +211,7 @@ export default {
 .text-editor-page .tiptap h2 { font-size: 1.4em; font-style: italic; }
 .text-editor-page .tiptap h3 { font-size: 1.15em; }
 
-.text-editor-page .tiptap p + p {
-    margin-top: 0.4em;
+.text-editor-page .tiptap p {
+    margin: 0;
 }
 </style>

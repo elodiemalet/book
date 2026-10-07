@@ -41,3 +41,43 @@ describe.skipIf(!hasPandoc())('extractWithPandoc', () => {
         expect(text).toContain('12/03/2021 - J.D.');
     });
 });
+
+describe.skipIf(!hasPandoc())('extractWithPandoc (Markdown)', () => {
+    it('lit les .md en gardant les vers, les apostrophes et sans les séparateurs', async () => {
+        const markdown = [
+            '# Titre',
+            '',
+            "*Premier* vers d'un poème,",
+            'second **vers**.',
+            '',
+            '* * *',
+            '',
+            'Dernier vers.',
+        ].join('\n');
+
+        const text = await extractWithPandoc(Buffer.from(markdown), 'md');
+
+        expect(text).toContain("Premier vers d'un poème,\nsecond vers.");
+        expect(text).toContain('Dernier vers.');
+        expect(text).not.toMatch(/[-*]{3,}/);
+    });
+});
+
+describe('extractWithPandoc (texte brut)', () => {
+    it('renvoie le contenu d’un .txt tel quel, fins de ligne normalisées', async () => {
+        const text = await extractWithPandoc(Buffer.from('﻿Titre\r\n\r\n*Vers* un,\r\nvers deux.'), 'txt');
+
+        expect(text).toBe('Titre\n\n*Vers* un,\nvers deux.');
+    });
+
+    it.skipIf(!hasPandoc())('regroupe en strophes les vers d’un ODT/DOCX séparés par des paragraphes « * »', async () => {
+        const dir = tmp.dirSync({unsafeCleanup: true});
+        fs.writeFileSync(`${dir.name}/doc.md`, ['Titre', '*', 'Vers un', 'Vers deux', '*', 'Vers trois', 'Vers quatre'].join('\n\n').replace(/^\*$/gm, '\\*'));
+        execFileSync('pandoc', ['doc.md', '-o', 'doc.docx'], {cwd: dir.name});
+
+        const text = await extractWithPandoc(fs.readFileSync(`${dir.name}/doc.docx`), 'docx');
+        dir.removeCallback();
+
+        expect(text.trim()).toBe('Titre\n\nVers un\nVers deux\n\nVers trois\nVers quatre');
+    });
+});
