@@ -70,7 +70,7 @@ async function getPostsFromTextFiles(files: MultiPartData[]) {
 async function importPosts(posts: PostInterface[]): Promise<ImportResult> {
 
     const resultImport = await Promise.all(posts.map(async (post) => {
-        const isValid = await getPostSchemaValidator().isValid(post);
+        const isValid = getPostSchemaValidator().safeParse(post).success;
         if (!isValid) {
             console.error('invalid post', post);
             return false;

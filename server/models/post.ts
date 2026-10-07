@@ -1,7 +1,7 @@
 import {Model, DataTypes} from 'sequelize';
 import db from "~/server/utils/db";
 
-import * as Yup from "yup";
+import {z} from "zod";
 
 export interface PostInterface {
     id: number;
@@ -20,10 +20,10 @@ export interface PostInterface {
 }
 
 export function getPostSchemaValidator() {
-    return Yup.object().shape({
-        postTitle: Yup.string().required('Post title is required'),
-        author: Yup.string().required('Author is required'),
-        content: Yup.string().required('Content is required'),
+    return z.object({
+        postTitle: z.string().min(1, 'Post title is required'),
+        author: z.string().min(1, 'Author is required'),
+        content: z.string().min(1, 'Content is required'),
     });
 }
 
