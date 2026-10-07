@@ -70,7 +70,7 @@ describe('extractWithPandoc (texte brut)', () => {
         expect(text).toBe('Titre\n\n*Vers* un,\nvers deux.');
     });
 
-    it('regroupe en strophes les vers d’un ODT/DOCX séparés par des paragraphes « * »', async () => {
+    it.skipIf(!hasPandoc())('regroupe en strophes les vers d’un ODT/DOCX séparés par des paragraphes « * »', async () => {
         const dir = tmp.dirSync({unsafeCleanup: true});
         fs.writeFileSync(`${dir.name}/doc.md`, ['Titre', '*', 'Vers un', 'Vers deux', '*', 'Vers trois', 'Vers quatre'].join('\n\n').replace(/^\*$/gm, '\\*'));
         execFileSync('pandoc', ['doc.md', '-o', 'doc.docx'], {cwd: dir.name});

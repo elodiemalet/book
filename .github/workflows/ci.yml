@@ -19,6 +19,9 @@ jobs:
 
       - run: npm run lint
 
+      # Les tests d'import (.docx, .odt, .md) passent par pandoc
+      - run: sudo apt-get update && sudo apt-get install -y pandoc
+
       - run: npm run test
 
       - run: npm run build
